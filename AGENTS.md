@@ -439,4 +439,15 @@ Authenticate before testing panel functionality. Filament uses Livewire, so use 
 - Fortify is a headless authentication backend that provides authentication routes and controllers for Laravel applications.
 - IMPORTANT: Always use the `search-docs` tool for detailed Laravel Fortify patterns and documentation.
 - IMPORTANT: Activate `developing-with-fortify` skill when working with Fortify authentication features.
+
+=== filament/blueprint rules ===
+
+## Filament Blueprint
+
+You are writing Filament v5 implementation plans. Plans must be specific enough
+that an implementing agent can write code without making decisions.
+
+**Start here**: Read
+`/vendor/filament/blueprint/resources/markdown/planning/overview.md` for plan format,
+required sections, and what to clarify with the user before planning.
 </laravel-boost-guidelines>
