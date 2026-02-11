@@ -4,11 +4,18 @@
         "codex"
     ],
     "guidelines": true,
-    "herd_mcp": false,
+    "herd_mcp": true,
     "mcp": true,
+    "packages": [
+        "laravel/fortify",
+        "filament/filament"
+    ],
     "sail": false,
     "skills": [
         "wayfinder-development",
-        "pest-testing"
+        "pest-testing",
+        "inertia-react-development",
+        "tailwindcss-development",
+        "developing-with-fortify"
     ]
 }
