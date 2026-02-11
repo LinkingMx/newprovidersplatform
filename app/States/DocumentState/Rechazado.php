@@ -27,8 +27,8 @@ class Rechazado extends DocumentState
         return false;
     }
 
-    public function canTransitionTo(string $state): bool
+    public function canTransitionTo($newState, ...$transitionArgs): bool
     {
-        return $state === EnRevision::class;
+        return $newState === EnRevision::class;
     }
 }

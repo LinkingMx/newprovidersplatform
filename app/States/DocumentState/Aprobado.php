@@ -27,8 +27,8 @@ class Aprobado extends DocumentState
         return true;
     }
 
-    public function canTransitionTo(string $state): bool
+    public function canTransitionTo($newState, ...$transitionArgs): bool
     {
-        return $state === Rechazado::class;
+        return $newState === Rechazado::class;
     }
 }

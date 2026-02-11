@@ -27,8 +27,8 @@ class EnRevision extends DocumentState
         return false;
     }
 
-    public function canTransitionTo(string $state): bool
+    public function canTransitionTo($newState, ...$transitionArgs): bool
     {
-        return in_array($state, [Aprobado::class, Rechazado::class]);
+        return in_array($newState, [Aprobado::class, Rechazado::class]);
     }
 }
