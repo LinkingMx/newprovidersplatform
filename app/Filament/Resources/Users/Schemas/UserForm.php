@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
@@ -52,12 +51,6 @@ class UserForm
                             ->label('Activo')
                             ->helperText('Los usuarios inactivos no pueden acceder al sistema')
                             ->default(true),
-
-                        Select::make('roles')
-                            ->label('Roles')
-                            ->multiple()
-                            ->relationship('roles', 'name')
-                            ->preload(),
                     ])
                     ->columns(1),
             ]);

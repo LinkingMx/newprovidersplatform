@@ -59,7 +59,7 @@ class UsersTable
                 TrashedFilter::make()
                     ->label('Eliminados'),
             ])
-            ->recordActions([
+            ->actions([
                 EditAction::make(),
                 DeleteAction::make(),
                 ForceDeleteAction::make(),
