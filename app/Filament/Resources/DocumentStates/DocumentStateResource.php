@@ -4,6 +4,7 @@ namespace App\Filament\Resources\DocumentStates;
 
 use App\Filament\Resources\DocumentStates\Pages\ListDocumentStates;
 use App\Filament\Resources\DocumentStates\Tables\DocumentStatesTable;
+use App\Models\DocumentState;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
@@ -11,7 +12,7 @@ use Filament\Tables\Table;
 
 class DocumentStateResource extends Resource
 {
-    protected static ?string $model = null;
+    protected static ?string $model = DocumentState::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCircleStack;
 
