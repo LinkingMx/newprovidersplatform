@@ -12,7 +12,7 @@ class DocumentStatesTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->query(self::getStateQuery())
+            ->records(fn (): array => self::getStateRecords())
             ->columns([
                 TextColumn::make('nombre')
                     ->label('Nombre'),
@@ -31,7 +31,7 @@ class DocumentStatesTable
             ]);
     }
 
-    private static function getStateQuery()
+    private static function getStateRecords(): array
     {
         $states = [
             DocumentState\Pendiente::class,
@@ -40,43 +40,20 @@ class DocumentStatesTable
             DocumentState\Rechazado::class,
         ];
 
-        $records = collect();
+        $records = [];
 
         foreach ($states as $stateClass) {
             $transiciones = self::getTransicionesHtml($stateClass);
 
-            $records->push((object) [
-                'id' => sha1($stateClass),
+            $records[sha1($stateClass)] = [
                 'nombre' => $stateClass::getLabel(),
                 'por_defecto' => $stateClass::isDefaultState(),
                 'completado' => $stateClass::isCompletedState(),
                 'transiciones' => $transiciones,
-            ]);
+            ];
         }
 
-        // Create a dummy query that returns our records
-        $query = \DB::table('_states')->limit(0); // Get the builder without actual query
-        $query->getConnection()->getPdo(); // Ensure connection
-
-        return new class($records)
-        {
-            private $records;
-
-            public function __construct($records)
-            {
-                $this->records = $records;
-            }
-
-            public function get($columns = ['*'])
-            {
-                return $this->records;
-            }
-
-            public function __call($method, $arguments)
-            {
-                return $this;
-            }
-        };
+        return $records;
     }
 
     private static function getTransicionesHtml(string $stateClass): string
