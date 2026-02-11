@@ -6,21 +6,16 @@ use App\States\DocumentState;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Collection;
 
 class DocumentStatesTable
 {
     public static function configure(Table $table): Table
     {
-        $records = self::getStateRecords();
-
         return $table
-            ->query(self::createQuery($records))
+            ->query(self::getStateQuery())
             ->columns([
                 TextColumn::make('nombre')
-                    ->label('Nombre')
-                    ->sortable()
-                    ->searchable(),
+                    ->label('Nombre'),
 
                 IconColumn::make('por_defecto')
                     ->label('Por defecto')
@@ -36,7 +31,7 @@ class DocumentStatesTable
             ]);
     }
 
-    private static function getStateRecords(): Collection
+    private static function getStateQuery()
     {
         $states = [
             DocumentState\Pendiente::class,
@@ -59,18 +54,29 @@ class DocumentStatesTable
             ]);
         }
 
-        return $records;
-    }
+        // Create a dummy query that returns our records
+        $query = \DB::table('_states')->limit(0); // Get the builder without actual query
+        $query->getConnection()->getPdo(); // Ensure connection
 
-    private static function createQuery(Collection $records)
-    {
-        return app(\Illuminate\Database\Query\Builder::class)
-            ->select('*')
-            ->from('_states')
-            ->getQuery()
-            ->setBindings([])
-            ->getModel()
-            ->hydrate($records->all());
+        return new class($records)
+        {
+            private $records;
+
+            public function __construct($records)
+            {
+                $this->records = $records;
+            }
+
+            public function get($columns = ['*'])
+            {
+                return $this->records;
+            }
+
+            public function __call($method, $arguments)
+            {
+                return $this;
+            }
+        };
     }
 
     private static function getTransicionesHtml(string $stateClass): string
