@@ -143,6 +143,35 @@ npm run dev                                   # Development watch mode for Vite
 - **Styling**: Tailwind CSS v4, check existing components for patterns
 
 ### Database & Models
+
+#### SoftDeletes Convention (CRITICAL)
+- **ALL models MUST use SoftDeletes** — this is a project-wide standard
+- Add `use Illuminate\Database\Eloquent\SoftDeletes;` trait to every model
+- Add `$table->softDeletes();` to every migration
+- Rationale: Maintains audit trails, enables data recovery, supports compliance
+- Exception: Only skip SoftDeletes for pivot tables or system tables with explicit approval
+
+**Example Model:**
+```php
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class User extends Model
+{
+    use HasFactory, SoftDeletes;
+}
+```
+
+**Example Migration:**
+```php
+Schema::create('users', function (Blueprint $table) {
+    $table->id();
+    // ... other columns
+    $table->timestamps();
+    $table->softDeletes(); // ALWAYS include this
+});
+```
+
+#### Other Model Guidelines
 - **Migrations**: In `database/migrations/` with timestamp prefixes
 - **Models**: Use constructor property promotion, explicit type hints
 - **Relationships**: Always use proper relationship methods with return types
