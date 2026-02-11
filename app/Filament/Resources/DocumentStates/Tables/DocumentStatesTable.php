@@ -38,11 +38,19 @@ class DocumentStatesTable
                             $state = json_decode($state, true);
                         }
 
-                        return $state
-                            ? implode(', ', array_map(fn (string $t) => "<span class='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200'>$t</span>", $state))
-                            : '—';
+                        if (! $state) {
+                            return '—';
+                        }
+
+                        $badges = array_map(
+                            fn (string $t) => "<span class='inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800'>$t</span>",
+                            $state
+                        );
+
+                        return implode(' <span class="text-gray-400">→</span> ', $badges);
                     })
-                    ->html(),
+                    ->html()
+                    ->wrap(),
             ]);
     }
 }
