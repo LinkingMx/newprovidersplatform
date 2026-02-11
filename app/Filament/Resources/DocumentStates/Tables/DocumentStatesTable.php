@@ -33,10 +33,15 @@ class DocumentStatesTable
 
                 TextColumn::make('transiciones_permitidas')
                     ->label('Transiciones permitidas')
-                    ->formatStateUsing(fn (?array $state) => $state
-                        ? implode(', ', array_map(fn (string $t) => "<span class='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200'>$t</span>", $state))
-                        : '—'
-                    )
+                    ->formatStateUsing(function ($state) {
+                        if (is_string($state)) {
+                            $state = json_decode($state, true);
+                        }
+
+                        return $state
+                            ? implode(', ', array_map(fn (string $t) => "<span class='inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200'>$t</span>", $state))
+                            : '—';
+                    })
                     ->html(),
             ]);
     }
