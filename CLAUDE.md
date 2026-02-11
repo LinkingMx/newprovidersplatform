@@ -1,3 +1,162 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Quick Start Commands
+
+```bash
+# Setup the project
+composer run setup
+
+# Development mode (runs server, queue, logs, and Vite)
+composer run dev
+
+# Running tests
+php artisan test                              # Run all tests
+php artisan test --compact                    # Run tests with minimal output
+php artisan test --compact --filter=TestName  # Run specific test
+
+# Code formatting and linting
+vendor/bin/pint --dirty --format agent        # Format dirty files only
+npm run format                                # Format frontend code with Prettier
+npm run lint                                  # Lint frontend code
+npm run lint -- --fix                         # Auto-fix lint issues
+
+# Building and compilation
+npm run build                                 # Production build
+npm run dev                                   # Development watch mode for Vite
+
+# Access the application
+# - Main app: https://newprovidersplatform.test
+# - Admin panel: https://newprovidersplatform.test/admin
+```
+
+## Project Architecture Overview
+
+### Backend Structure (Laravel 12)
+- **Routing**: Web routes in `routes/web.php`, console commands in `routes/console.php`
+- **Config**: Middleware and exception handling in `bootstrap/app.php`
+- **Service Providers**: Custom providers in `app/Providers/` (Filament provider in `Filament/`)
+- **Models**: Single `User.php` model currently in `app/Models/`
+- **Authentication**: Fortify + Filament for admin, Inertia for frontend
+
+### Frontend Structure (React + Inertia)
+- **Pages**: React pages in `resources/js/pages/` (automatically discovered by Inertia)
+- **Components**: Reusable components in `resources/js/components/`
+- **Layouts**: Page layouts in `resources/js/layouts/`
+- **Routes**: Wayfinder generates TypeScript route helpers from Laravel routes
+- **Styling**: Tailwind CSS v4 with custom configuration
+- **Build Tool**: Vite with React compiler plugin
+
+### Admin Panel (Filament v5)
+- **Panel Configuration**: `app/Providers/Filament/AdminPanelProvider.php`
+- **Discovery**: Auto-discovers resources, pages, and widgets in `app/Filament/`
+- **Security**: Filament Shield for RBAC (role-based access control)
+- **Styling**: Filament components use native Tailwind, Amber primary color
+
+### Testing
+- **Framework**: Pest v4 (modern PHPUnit alternative)
+- **Location**: Tests in `tests/` with Feature and Unit subdirectories
+- **Database**: SQLite in-memory for tests
+- **Examples**: `tests/Feature/ExampleTest.php` and `tests/Unit/ExampleTest.php`
+
+## Key Directories & Their Purpose
+
+| Directory | Purpose |
+|-----------|---------|
+| `app/Models` | Eloquent models |
+| `app/Http/Controllers` | HTTP controllers (route handlers) |
+| `app/Http/Middleware` | Custom middleware (HandleAppearance, HandleInertiaRequests) |
+| `app/Http/Requests` | Form request validation classes |
+| `app/Providers` | Service providers (Filament, custom providers) |
+| `app/Policies` | Authorization policies for model authorization |
+| `app/Filament/Resources` | Filament CRUD resources (auto-discovered) |
+| `app/Filament/Pages` | Filament pages (auto-discovered) |
+| `app/Filament/Widgets` | Filament dashboard widgets (auto-discovered) |
+| `resources/js/pages` | Inertia page components (auto-discovered by router) |
+| `resources/js/components` | Reusable React components |
+| `resources/js/actions` | Wayfinder-generated controller actions |
+| `resources/js/routes` | Wayfinder-generated route helpers |
+| `database/migrations` | Database schema migrations |
+| `database/factories` | Model factories for testing and seeding |
+| `database/seeders` | Database seeders |
+| `tests/Feature` | Feature tests (HTTP, UI, workflows) |
+| `tests/Unit` | Unit tests (models, logic) |
+
+## Common Development Tasks
+
+### Creating a New Filament Resource
+1. Create model: `php artisan make:model ModelName -mfsr --no-interaction`
+2. Create resource: `php artisan make:filament-resource ModelName --no-interaction`
+3. Update resource in `app/Filament/Resources/ModelNameResource.php`
+4. Follow Spanish labels convention (see Filament Guidelines section below)
+5. Add form sections using `Section::make()` with proper field icons and placeholders
+6. Create tests: `php artisan test --compact --filter=ModelName`
+
+### Adding Frontend Pages
+1. Create React component in `resources/js/pages/PageName.tsx`
+2. Add route in `routes/web.php` using `Inertia::render('PageName')`
+3. Use Wayfinder for backend route imports: `import RouteName from '@/routes/...';`
+4. Use Tailwind CSS v4 utilities for styling
+5. Import layouts from `resources/js/layouts/`
+6. Changes appear live during `composer run dev`
+
+### Writing Tests with Pest
+- Feature tests: `php artisan make:test --pest FeatureName`
+- Unit tests: `php artisan make:test --pest --unit UnitName`
+- Always authenticate before testing Filament: `actingAs(User::factory()->create())`
+- Use factories for test data: `User::factory()->create(['email' => 'test@example.com'])`
+- Run: `php artisan test --compact --filter=FeatureName`
+
+### Debugging & Development
+- **PHP Code**: Use `tinker` tool or `dd()` function in code
+- **Database Queries**: Use `database-query` or `tinker` tools
+- **Frontend Console**: Check browser developer tools for errors
+- **Backend Logs**: View in `storage/logs/laravel.log`
+- **React Issues**: Use React DevTools browser extension
+
+## Development Workflow
+
+1. **Branch**: `git checkout -b feature/description` or `fix/issue-description`
+2. **Test First**: Write failing test: `php artisan make:test --pest FeatureName`
+3. **Implement**: Add code to make test pass
+4. **Test**: `php artisan test --compact --filter=FeatureName`
+5. **Format**: `vendor/bin/pint --dirty --format agent` and `npm run format`
+6. **Commit**: Clear, descriptive message
+7. **Verify**: All tests pass locally before pushing
+
+## Project-Specific Guidelines
+
+### Filament Admin Panel
+- **Path**: `/admin` (authentication required)
+- **Theme**: Amber primary color (configured in AdminPanelProvider)
+- **Labels**: ALL navigation and form labels must be in Spanish
+- **Resources**: Check existing `app/Filament/Resources/` for patterns
+- **Discovery**: Filament auto-discovers resources, pages, and widgets
+
+### Frontend (React + Inertia)
+- **Entry Point**: `resources/js/app.tsx` and `resources/js/ssr.tsx`
+- **No Blade**: All pages use Inertia, no Blade templates needed
+- **Type Safety**: Run `npm run types` to validate TypeScript
+- **Components**: Reusable UI components in `resources/js/components/`
+- **Layouts**: Page layouts provide consistent structure
+- **Styling**: Tailwind CSS v4, check existing components for patterns
+
+### Database & Models
+- **Migrations**: In `database/migrations/` with timestamp prefixes
+- **Models**: Use constructor property promotion, explicit type hints
+- **Relationships**: Always use proper relationship methods with return types
+- **Factories**: Create useful factories in `database/factories/`
+- **No Raw SQL**: Use Eloquent queries unless very complex
+
+### Authentication & Authorization
+- **Fortify**: Handles login, registration, password reset, 2FA
+- **Policies**: Use `app/Policies/` for model authorization
+- **Filament Shield**: Manages admin panel permissions
+- **Routes**: Public routes in `routes/web.php`, protected with middleware
+
+---
+
 <laravel-boost-guidelines>
 === foundation rules ===
 
@@ -9,17 +168,25 @@ The Laravel Boost guidelines are specifically curated by Laravel maintainers for
 
 This application is a Laravel application and its main Laravel ecosystems package & versions are below. You are an expert with them all. Ensure you abide by these specific packages & versions.
 
-- php - 8.4.17
+- php - 8.3.30
+- filament/filament (FILAMENT) - v5
 - inertiajs/inertia-laravel (INERTIA) - v2
 - laravel/fortify (FORTIFY) - v1
 - laravel/framework (LARAVEL) - v12
 - laravel/prompts (PROMPTS) - v0
 - laravel/wayfinder (WAYFINDER) - v0
+- livewire/livewire (LIVEWIRE) - v4
 - laravel/mcp (MCP) - v0
 - laravel/pint (PINT) - v1
 - laravel/sail (SAIL) - v1
 - pestphp/pest (PEST) - v4
 - phpunit/phpunit (PHPUNIT) - v12
+- @inertiajs/react (INERTIA) - v2
+- react (REACT) - v19
+- tailwindcss (TAILWINDCSS) - v4
+- @laravel/vite-plugin-wayfinder (WAYFINDER) - v0
+- eslint (ESLINT) - v9
+- prettier (PRETTIER) - v3
 
 ## Skills Activation
 
@@ -27,6 +194,9 @@ This project has domain-specific skills available. You MUST activate the relevan
 
 - `wayfinder-development` — Activates whenever referencing backend routes in frontend components. Use when importing from @/actions or @/routes, calling Laravel routes from TypeScript, or working with Wayfinder route functions.
 - `pest-testing` — Tests applications using the Pest 4 PHP framework. Activates when writing tests, creating unit or feature tests, adding assertions, testing Livewire components, browser testing, debugging test failures, working with datasets or mocking; or when the user mentions test, spec, TDD, expects, assertion, coverage, or needs to verify functionality works.
+- `inertia-react-development` — Develops Inertia.js v2 React client-side applications. Activates when creating React pages, forms, or navigation; using &lt;Link&gt;, &lt;Form&gt;, useForm, or router; working with deferred props, prefetching, or polling; or when user mentions React with Inertia, React pages, React forms, or React navigation.
+- `tailwindcss-development` — Styles applications using Tailwind CSS v4 utilities. Activates when adding styles, restyling components, working with gradients, spacing, layout, flex, grid, responsive design, dark mode, colors, typography, or borders; or when the user mentions CSS, styling, classes, Tailwind, restyle, hero section, cards, buttons, or any visual/UI changes.
+- `developing-with-fortify` — Laravel Fortify headless authentication backend development. Activate when implementing authentication features including login, registration, password reset, email verification, two-factor authentication (2FA/TOTP), profile updates, headless auth, authentication scaffolding, or auth guards in Laravel applications.
 
 ## Conventions
 
@@ -153,6 +323,7 @@ protected function isAccessible(User $user, ?string $path = null): bool
 - Inertia creates fully client-side rendered SPAs without modern SPA complexity, leveraging existing server-side patterns.
 - Components live in `resources/js/pages` (unless specified in `vite.config.js`). Use `Inertia::render()` for server-side routing instead of Blade views.
 - ALWAYS use `search-docs` tool for version-specific Inertia documentation and updated code examples.
+- IMPORTANT: Activate `inertia-react-development` when working with Inertia client-side patterns.
 
 === inertia-laravel/v2 rules ===
 
@@ -270,4 +441,161 @@ Wayfinder generates TypeScript functions for Laravel routes. Import from `@/acti
 - Do NOT delete tests without approval.
 - CRITICAL: ALWAYS use `search-docs` tool for version-specific Pest documentation and updated code examples.
 - IMPORTANT: Activate `pest-testing` every time you're working with a Pest or testing-related task.
+
+=== inertia-react/core rules ===
+
+# Inertia + React
+
+- IMPORTANT: Activate `inertia-react-development` when working with Inertia React client-side patterns.
+
+=== tailwindcss/core rules ===
+
+# Tailwind CSS
+
+- Always use existing Tailwind conventions; check project patterns before adding new ones.
+- IMPORTANT: Always use `search-docs` tool for version-specific Tailwind CSS documentation and updated code examples. Never rely on training data.
+- IMPORTANT: Activate `tailwindcss-development` every time you're working with a Tailwind CSS or styling-related task.
+
+=== filament/filament rules ===
+
+## Filament
+
+- Filament is used by this application. Follow existing conventions for how and where it's implemented.
+- Filament is a Server-Driven UI (SDUI) framework for Laravel that lets you define user interfaces in PHP using structured configuration objects. Built on Livewire, Alpine.js, and Tailwind CSS.
+- Use the `search-docs` tool for official documentation on Artisan commands, code examples, testing, relationships, and idiomatic practices.
+
+### Artisan
+
+- Use Filament-specific Artisan commands to create files. Find them with `list-artisan-commands` or `php artisan --help`.
+- Inspect required options and always pass `--no-interaction`.
+
+### Patterns
+
+Use static `make()` methods to initialize components. Most configuration methods accept a `Closure` for dynamic values.
+
+Use `Get $get` to read other form field values for conditional logic:
+
+<code-snippet name="Conditional form field" lang="php">
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Utilities\Get;
+
+Select::make('type')
+    ->options(CompanyType::class)
+    ->required()
+    ->live(),
+
+TextInput::make('company_name')
+    ->required()
+    ->visible(fn (Get $get): bool => $get('type') === 'business'),
+
+</code-snippet>
+
+Use `state()` with a `Closure` to compute derived column values:
+
+<code-snippet name="Computed table column" lang="php">
+use Filament\Tables\Columns\TextColumn;
+
+TextColumn::make('full_name')
+    ->state(fn (User $record): string => "{$record->first_name} {$record->last_name}"),
+
+</code-snippet>
+
+Actions encapsulate a button with optional modal form and logic:
+
+<code-snippet name="Action with modal form" lang="php">
+use Filament\Actions\Action;
+use Filament\Forms\Components\TextInput;
+
+Action::make('updateEmail')
+    ->form([
+        TextInput::make('email')->email()->required(),
+    ])
+    ->action(fn (array $data, User $record): void => $record->update($data)),
+
+</code-snippet>
+
+### Testing
+
+Authenticate before testing panel functionality. Filament uses Livewire, so use `livewire()` or `Livewire::test()`:
+
+<code-snippet name="Filament Table Test" lang="php">
+    livewire(ListUsers::class)
+        ->assertCanSeeTableRecords($users)
+        ->searchTable($users->first()->name)
+        ->assertCanSeeTableRecords($users->take(1))
+        ->assertCanNotSeeTableRecords($users->skip(1));
+
+</code-snippet>
+
+<code-snippet name="Filament Create Resource Test" lang="php">
+    livewire(CreateUser::class)
+        ->fillForm([
+            'name' => 'Test',
+            'email' => 'test@example.com',
+        ])
+        ->call('create')
+        ->assertNotified()
+        ->assertRedirect();
+
+    assertDatabaseHas(User::class, [
+        'name' => 'Test',
+        'email' => 'test@example.com',
+    ]);
+
+</code-snippet>
+
+<code-snippet name="Testing Validation" lang="php">
+    livewire(CreateUser::class)
+        ->fillForm([
+            'name' => null,
+            'email' => 'invalid-email',
+        ])
+        ->call('create')
+        ->assertHasFormErrors([
+            'name' => 'required',
+            'email' => 'email',
+        ])
+        ->assertNotNotified();
+
+</code-snippet>
+
+<code-snippet name="Calling Actions" lang="php">
+    use Filament\Actions\DeleteAction;
+    use Filament\Actions\Testing\TestAction;
+
+    livewire(EditUser::class, ['record' => $user->id])
+        ->callAction(DeleteAction::class)
+        ->assertNotified()
+        ->assertRedirect();
+
+    livewire(ListUsers::class)
+        ->callAction(TestAction::make('promote')->table($user), [
+            'role' => 'admin',
+        ])
+        ->assertNotified();
+
+</code-snippet>
+
+### Common Mistakes
+
+**Commonly Incorrect Namespaces:**
+- Form fields (TextInput, Select, etc.): `Filament\Forms\Components\`
+- Infolist entries (for read-only views) (TextEntry, IconEntry, etc.): `Filament\Infolists\Components\`
+- Layout components (Grid, Section, Fieldset, Tabs, Wizard, etc.): `Filament\Schemas\Components\`
+- Schema utilities (Get, Set, etc.): `Filament\Schemas\Components\Utilities\`
+- Actions: `Filament\Actions\` (no `Filament\Tables\Actions\` etc.)
+- Icons: `Filament\Support\Icons\Heroicon` enum (e.g., `Heroicon::PencilSquare`)
+
+**Recent breaking changes to Filament:**
+- File visibility is `private` by default. Use `->visibility('public')` for public access.
+- `Grid`, `Section`, and `Fieldset` no longer span all columns by default.
+
+=== laravel/fortify rules ===
+
+# Laravel Fortify
+
+- Fortify is a headless authentication backend that provides authentication routes and controllers for Laravel applications.
+- IMPORTANT: Always use the `search-docs` tool for detailed Laravel Fortify patterns and documentation.
+- IMPORTANT: Activate `developing-with-fortify` skill when working with Fortify authentication features.
 </laravel-boost-guidelines>
