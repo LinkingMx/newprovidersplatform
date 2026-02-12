@@ -85,7 +85,7 @@ export default function Onboarding({ supplier }: Props) {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         if (confirmed) {
-            post(route('supplier.onboarding.submit'));
+            post('/supplier/onboarding/submit');
         }
     };
 
@@ -417,11 +417,15 @@ export default function Onboarding({ supplier }: Props) {
                                             <Checkbox
                                                 id="confirm"
                                                 checked={confirmed}
-                                                onCheckedChange={(checked) =>
+                                                onCheckedChange={(checked) => {
                                                     setConfirmed(
                                                         checked === true,
-                                                    )
-                                                }
+                                                    );
+                                                    setData(
+                                                        'confirm',
+                                                        checked === true,
+                                                    );
+                                                }}
                                             />
                                             <Label
                                                 htmlFor="confirm"
