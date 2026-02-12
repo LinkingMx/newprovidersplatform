@@ -3,6 +3,7 @@
 use App\Http\Controllers\Supplier\LoginController;
 use App\Http\Controllers\Supplier\OnboardingController;
 use App\Http\Controllers\Supplier\SetPasswordController;
+use App\Http\Middleware\RedirectIfSupplierAuthenticated;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -18,7 +19,7 @@ Route::get('dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Supplier Routes
-Route::middleware('guest:supplier')->group(function () {
+Route::middleware(RedirectIfSupplierAuthenticated::class)->group(function () {
     Route::get('/supplier/login', [LoginController::class, 'show'])
         ->name('supplier.login');
     Route::post('/supplier/login', [LoginController::class, 'store'])

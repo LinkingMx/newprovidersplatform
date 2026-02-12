@@ -72,7 +72,7 @@ test('authenticated supplier is redirected from login page', function () {
     $response = $this->actingAs($supplier, 'supplier')
         ->get('/supplier/login');
 
-    $response->assertRedirect('/dashboard');
+    $response->assertRedirect(route('supplier.dashboard'));
 });
 
 test('supplier can logout', function () {
