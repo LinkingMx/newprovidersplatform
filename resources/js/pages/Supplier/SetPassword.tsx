@@ -96,13 +96,16 @@ export default function SetPassword({ token, error: initialError }: Props) {
                                         : 'border-gray-300'
                                 }`}
                                 placeholder="Mínimo 10 caracteres"
-                                disabled={false}
                                 autoComplete="new-password"
                             />
                             <button
                                 type="button"
-                                onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                                onMouseDown={(e) => {
+                                    e.preventDefault();
+                                    setShowPassword(!showPassword);
+                                }}
+                                className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600 pointer-events-auto"
+                                tabIndex={-1}
                             >
                                 {showPassword ? (
                                     <svg
@@ -167,13 +170,16 @@ export default function SetPassword({ token, error: initialError }: Props) {
                                         : 'border-gray-300'
                                 }`}
                                 placeholder="Repite tu contraseña"
-                                disabled={false}
                                 autoComplete="new-password"
                             />
                             <button
                                 type="button"
-                                onClick={() => setShowConfirm(!showConfirm)}
-                                className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                                onMouseDown={(e) => {
+                                    e.preventDefault();
+                                    setShowConfirm(!showConfirm);
+                                }}
+                                className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600 pointer-events-auto"
+                                tabIndex={-1}
                             >
                                 {showConfirm ? (
                                     <svg
