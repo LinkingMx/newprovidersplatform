@@ -20,7 +20,7 @@ class OnboardingController
         }
 
         if ($supplier->isActive()) {
-            return redirect()->route('supplier.dashboard')
+            return redirect()->route('dashboard')
                 ->with('message', 'Tu perfil ya está completado');
         }
 
@@ -84,7 +84,7 @@ class OnboardingController
         // Enqueue verification job
         dispatch(new SupplierVerificationJob($supplier));
 
-        return redirect()->route('supplier.dashboard')
+        return redirect()->route('dashboard')
             ->with('message', 'Perfil completado. Estamos verificando tu información.');
     }
 }

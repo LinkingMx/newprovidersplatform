@@ -1,10 +1,15 @@
-import { usePage } from '@inertiajs/react';
+import { usePage, Link } from '@inertiajs/react';
 
 interface Supplier {
     id: number;
     name: string;
     email: string;
-    status: 'registered' | 'profile_completed' | 'active';
+    status:
+        | 'created'
+        | 'invited'
+        | 'registered'
+        | 'profile_completed'
+        | 'active';
     address_street: string | null;
     address_city: string | null;
     clabe_interbancaria: string | null;
@@ -13,6 +18,20 @@ interface Supplier {
 }
 
 const statusConfig = {
+    created: {
+        color: 'bg-gray-100',
+        textColor: 'text-gray-900',
+        badge: 'bg-gray-200 text-gray-800',
+        label: 'Creado',
+        description: 'Tu cuenta ha sido creada. Establece tu contraseña.',
+    },
+    invited: {
+        color: 'bg-purple-100',
+        textColor: 'text-purple-900',
+        badge: 'bg-purple-200 text-purple-800',
+        label: 'Invitado',
+        description: 'Completa el registro para activar tu cuenta.',
+    },
     registered: {
         color: 'bg-blue-100',
         textColor: 'text-blue-900',
@@ -47,8 +66,8 @@ export default function Dashboard() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12 px-4">
-            <div className="max-w-4xl mx-auto">
+        <div className="min-h-screen bg-gray-50 px-4 py-12">
+            <div className="mx-auto max-w-4xl">
                 {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-gray-900">
@@ -60,7 +79,7 @@ export default function Dashboard() {
                 </div>
 
                 {/* Status Card */}
-                <div className={`${config.color} rounded-lg shadow p-6 mb-8`}>
+                <div className={`${config.color} mb-8 rounded-lg p-6 shadow`}>
                     <div className="flex items-center justify-between">
                         <div>
                             <h2
@@ -73,7 +92,7 @@ export default function Dashboard() {
                             </p>
                         </div>
                         <div
-                            className={`${config.badge} px-4 py-2 rounded-full font-semibold text-sm`}
+                            className={`${config.badge} rounded-full px-4 py-2 text-sm font-semibold`}
                         >
                             {config.label}
                         </div>
@@ -81,7 +100,7 @@ export default function Dashboard() {
 
                     {/* Progress Bar */}
                     <div className="mt-4">
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="mb-2 flex items-center justify-between">
                             <span
                                 className={`text-xs font-medium ${config.textColor}`}
                             >
@@ -90,21 +109,28 @@ export default function Dashboard() {
                             <span
                                 className={`text-xs font-medium ${config.textColor}`}
                             >
-                                {supplier.status === 'registered'
-                                    ? '33%'
-                                    : supplier.status === 'profile_completed'
-                                      ? '67%'
-                                      : '100%'}
+                                {supplier.status === 'created' ||
+                                supplier.status === 'invited'
+                                    ? '0%'
+                                    : supplier.status === 'registered'
+                                      ? '33%'
+                                      : supplier.status === 'profile_completed'
+                                        ? '67%'
+                                        : '100%'}
                             </span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="h-2 w-full rounded-full bg-gray-200">
                             <div
                                 className={`h-2 rounded-full transition-all ${
-                                    supplier.status === 'registered'
-                                        ? 'bg-blue-500 w-1/3'
-                                        : supplier.status === 'profile_completed'
-                                          ? 'bg-yellow-500 w-2/3'
-                                          : 'bg-green-500 w-full'
+                                    supplier.status === 'created' ||
+                                    supplier.status === 'invited'
+                                        ? 'w-0 bg-gray-500'
+                                        : supplier.status === 'registered'
+                                          ? 'w-1/3 bg-blue-500'
+                                          : supplier.status ===
+                                              'profile_completed'
+                                            ? 'w-2/3 bg-yellow-500'
+                                            : 'w-full bg-green-500'
                                 }`}
                             />
                         </div>
@@ -113,8 +139,8 @@ export default function Dashboard() {
                     {/* CTA Button */}
                     {supplier.status === 'registered' && (
                         <a
-                            href={route('supplier.onboarding')}
-                            className="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition"
+                            href="/supplier/onboarding"
+                            className="mt-4 inline-block rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700"
                         >
                             Completar perfil
                         </a>
@@ -122,10 +148,10 @@ export default function Dashboard() {
                 </div>
 
                 {/* Content Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                     {/* Personal Information */}
-                    <div className="bg-white rounded-lg shadow p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    <div className="rounded-lg bg-white p-6 shadow">
+                        <h3 className="mb-4 text-lg font-semibold text-gray-900">
                             Información Personal
                         </h3>
                         <div className="space-y-4">
@@ -162,7 +188,9 @@ export default function Dashboard() {
                                         CLABE
                                     </label>
                                     <p className="mt-1 font-mono text-gray-900">
-                                        {maskClabe(supplier.clabe_interbancaria)}
+                                        {maskClabe(
+                                            supplier.clabe_interbancaria,
+                                        )}
                                     </p>
                                 </div>
                             )}
@@ -170,8 +198,8 @@ export default function Dashboard() {
                     </div>
 
                     {/* Branches */}
-                    <div className="bg-white rounded-lg shadow p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    <div className="rounded-lg bg-white p-6 shadow">
+                        <h3 className="mb-4 text-lg font-semibold text-gray-900">
                             Mis Sucursales
                         </h3>
                         {supplier.branches && supplier.branches.length > 0 ? (
@@ -179,7 +207,7 @@ export default function Dashboard() {
                                 {supplier.branches.map((branch) => (
                                     <div
                                         key={branch.id}
-                                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                                        className="flex items-center justify-between rounded-lg bg-gray-50 p-3"
                                     >
                                         <div>
                                             <p className="font-medium text-gray-900">
@@ -188,7 +216,7 @@ export default function Dashboard() {
                                             <p className="text-xs text-gray-500">
                                                 Asignada:{' '}
                                                 {new Date(
-                                                    branch.created_at
+                                                    branch.created_at,
                                                 ).toLocaleDateString('es-MX')}
                                             </p>
                                         </div>
@@ -196,7 +224,7 @@ export default function Dashboard() {
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-center py-6">
+                            <div className="py-6 text-center">
                                 <svg
                                     className="mx-auto h-12 w-12 text-gray-400"
                                     fill="none"
@@ -219,31 +247,31 @@ export default function Dashboard() {
                 </div>
 
                 {/* Actions */}
-                <div className="mt-8 bg-white rounded-lg shadow p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                <div className="mt-8 rounded-lg bg-white p-6 shadow">
+                    <h3 className="mb-4 text-lg font-semibold text-gray-900">
                         Acciones
                     </h3>
                     <div className="flex flex-col gap-2">
-                        <a
-                            href={route('supplier.logout')}
+                        <Link
+                            href="/supplier/auth/logout"
                             method="post"
                             as="button"
-                            className="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg font-medium transition text-left"
+                            className="rounded-lg px-4 py-2 text-left font-medium text-red-600 transition hover:bg-red-50"
                         >
                             Cerrar Sesión
-                        </a>
+                        </Link>
                     </div>
                 </div>
 
                 {/* Help Section */}
-                <div className="mt-8 bg-blue-50 rounded-lg p-6 border border-blue-200">
-                    <h3 className="text-lg font-semibold text-blue-900 mb-2">
+                <div className="mt-8 rounded-lg border border-blue-200 bg-blue-50 p-6">
+                    <h3 className="mb-2 text-lg font-semibold text-blue-900">
                         ¿Necesitas ayuda?
                     </h3>
-                    <p className="text-sm text-blue-800 mb-4">
+                    <p className="mb-4 text-sm text-blue-800">
                         Si tienes dudas o necesitas asistencia, contáctanos en:
                     </p>
-                    <ul className="text-sm text-blue-800 space-y-2">
+                    <ul className="space-y-2 text-sm text-blue-800">
                         <li>
                             📧 Email:{' '}
                             <a

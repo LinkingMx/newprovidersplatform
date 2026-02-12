@@ -1,15 +1,15 @@
 <?php
 
-use App\Models\User;
+use App\Models\Supplier;
 
 test('guests are redirected to the login page', function () {
     $response = $this->get(route('dashboard'));
-    $response->assertRedirect(route('login'));
+    $response->assertRedirect('/');
 });
 
-test('authenticated users can visit the dashboard', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
+test('authenticated suppliers can visit the dashboard', function () {
+    $supplier = Supplier::factory()->active()->create();
+    $this->actingAs($supplier, 'supplier');
 
     $response = $this->get(route('dashboard'));
     $response->assertOk();

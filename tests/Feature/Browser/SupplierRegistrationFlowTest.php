@@ -98,7 +98,7 @@ describe('Supplier Registration Flow', function () {
 
             $response = $this->get('/supplier/set-password?token='.$invitation->token);
 
-            $response->assertRedirect('/supplier/dashboard');
+            $response->assertRedirect('/dashboard');
         });
     });
 
@@ -124,7 +124,7 @@ describe('Supplier Registration Flow', function () {
             $response = $this->actingAs($supplier, 'supplier')
                 ->get('/supplier/onboarding');
 
-            $response->assertRedirect('/supplier/dashboard');
+            $response->assertRedirect('/dashboard');
         });
 
         it('requires all address fields', function () {
@@ -248,7 +248,7 @@ describe('Supplier Registration Flow', function () {
                     'confirm' => 'on',
                 ]);
 
-            $response->assertRedirect('/supplier/dashboard');
+            $response->assertRedirect('/dashboard');
             $supplier->refresh();
             expect($supplier->status)->toBe('profile_completed');
             expect($supplier->address_street)->toBe('Calle Principal 123');
@@ -367,7 +367,7 @@ describe('Supplier Registration Flow', function () {
 
     describe('Dashboard Endpoint', function () {
         it('requires supplier authentication', function () {
-            $response = $this->get('/supplier/dashboard');
+            $response = $this->get('/dashboard');
 
             $response->assertRedirect();
         });
@@ -376,7 +376,7 @@ describe('Supplier Registration Flow', function () {
             $supplier = Supplier::factory()->registered()->create();
 
             $response = $this->actingAs($supplier, 'supplier')
-                ->get('/supplier/dashboard');
+                ->get('/dashboard');
 
             $response->assertSuccessful();
         });
@@ -419,14 +419,14 @@ describe('Supplier Registration Flow', function () {
                     'confirm' => 'on',
                 ]);
 
-            $onboardingResponse->assertRedirect('/supplier/dashboard');
+            $onboardingResponse->assertRedirect('/dashboard');
             $supplier->refresh();
             expect($supplier->status)->toBe('profile_completed');
             expect($supplier->address_street)->toBe('Calle Principal 456');
 
             // Step 4: Dashboard access
             $dashboardResponse = $this->actingAs($supplier, 'supplier')
-                ->get('/supplier/dashboard');
+                ->get('/dashboard');
 
             $dashboardResponse->assertSuccessful();
 
