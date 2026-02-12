@@ -5,6 +5,7 @@ use App\Http\Controllers\Supplier\LoginController;
 use App\Http\Controllers\Supplier\OnboardingController;
 use App\Http\Controllers\Supplier\ResetPasswordController;
 use App\Http\Controllers\Supplier\SetPasswordController;
+use App\Http\Controllers\Supplier\SupplierDocumentController;
 use App\Http\Middleware\RedirectIfSupplierAuthenticated;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -15,8 +16,32 @@ Route::get('/', function () {
 
 // Proveedor Dashboard
 Route::get('dashboard', function () {
+    $supplier = auth('supplier')->user()->load('branches');
+    $documents = $supplier->documents()
+        ->with(['documentType', 'documentState'])
+        ->get()
+        ->map(fn ($doc) => [
+            'id' => $doc->id,
+            'document_type' => [
+                'id' => $doc->documentType->id,
+                'nombre' => $doc->documentType->nombre,
+            ],
+            'document_state' => [
+                'id' => $doc->documentState->id,
+                'nombre' => $doc->documentState->nombre,
+                'etiqueta' => $doc->documentState->etiqueta,
+                'color' => $doc->documentState->color,
+            ],
+            'archivo_nombre' => $doc->archivo_nombre,
+            'has_file' => $doc->archivo_path !== null,
+            'can_upload' => in_array($doc->document_state_id, [1, 4]),
+            'notas' => $doc->notas,
+            'uploaded_at' => $doc->uploaded_at?->toISOString(),
+        ]);
+
     return Inertia::render('Supplier/Dashboard', [
-        'supplier' => auth('supplier')->user()->load('branches'),
+        'supplier' => $supplier,
+        'documents' => $documents,
     ]);
 })->middleware('auth:supplier')->name('dashboard');
 
@@ -45,6 +70,11 @@ Route::middleware('auth:supplier')->group(function () {
         ->name('supplier.onboarding');
     Route::post('/supplier/onboarding/submit', [OnboardingController::class, 'submit'])
         ->name('supplier.onboarding.submit');
+
+    Route::post('/supplier/documents/{supplierDocument}/upload', [SupplierDocumentController::class, 'upload'])
+        ->name('supplier.documents.upload');
+    Route::get('/supplier/documents/{supplierDocument}/download', [SupplierDocumentController::class, 'download'])
+        ->name('supplier.documents.download');
 
     Route::post('/supplier/auth/logout', function () {
         auth('supplier')->logout();

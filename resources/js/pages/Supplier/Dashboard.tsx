@@ -1,4 +1,6 @@
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { FormEvent, useRef, useState } from 'react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -9,12 +11,43 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 
 interface Branch {
     id: number;
     name: string;
     created_at: string;
+}
+
+interface DocumentType {
+    id: number;
+    nombre: string;
+}
+
+interface DocumentState {
+    id: number;
+    nombre: string;
+    etiqueta: string;
+    color: string;
+}
+
+interface SupplierDocument {
+    id: number;
+    document_type: DocumentType;
+    document_state: DocumentState;
+    archivo_nombre: string | null;
+    has_file: boolean;
+    can_upload: boolean;
+    notas: string | null;
+    uploaded_at: string | null;
 }
 
 interface Supplier {
@@ -81,6 +114,13 @@ const steps = [
     { label: 'Verificación', icon: ShieldIcon },
     { label: 'Activo', icon: CheckCircleIcon },
 ];
+
+const stateColorMap: Record<string, string> = {
+    gray: 'bg-gray-100 text-gray-700 border-gray-200',
+    blue: 'bg-blue-100 text-blue-700 border-blue-200',
+    green: 'bg-green-100 text-green-700 border-green-200',
+    red: 'bg-red-100 text-red-700 border-red-200',
+};
 
 function getInitials(name: string): string {
     return name
@@ -300,10 +340,118 @@ function HeadphonesIcon({ className }: { className?: string }) {
     );
 }
 
+function DocumentIcon({ className }: { className?: string }) {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className={className}
+        >
+            <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+            />
+        </svg>
+    );
+}
+
+function UploadIcon({ className }: { className?: string }) {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className={className}
+        >
+            <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
+            />
+        </svg>
+    );
+}
+
+function DownloadIcon({ className }: { className?: string }) {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className={className}
+        >
+            <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+            />
+        </svg>
+    );
+}
+
+function AlertCircleIcon({ className }: { className?: string }) {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className={className}
+        >
+            <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+            />
+        </svg>
+    );
+}
+
 export default function Dashboard() {
-    const { supplier } = usePage<{ supplier: Supplier }>().props;
+    const { supplier, documents } = usePage<{
+        supplier: Supplier;
+        documents: SupplierDocument[];
+    }>().props;
     const config = statusConfig[supplier.status];
     const currentStep = config.step;
+
+    const [uploadDoc, setUploadDoc] = useState<SupplierDocument | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const form = useForm<{ archivo: File | null }>({
+        archivo: null,
+    });
+
+    function handleUploadSubmit(e: FormEvent) {
+        e.preventDefault();
+        if (!uploadDoc || !form.data.archivo) return;
+
+        form.post(`/supplier/documents/${uploadDoc.id}/upload`, {
+            forceFormData: true,
+            onSuccess: () => {
+                setUploadDoc(null);
+                form.reset();
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = '';
+                }
+            },
+        });
+    }
+
+    function openUploadDialog(doc: SupplierDocument) {
+        form.reset();
+        form.clearErrors();
+        setUploadDoc(doc);
+    }
 
     return (
         <>
@@ -667,6 +815,235 @@ export default function Dashboard() {
                             </CardContent>
                         </Card>
                     </div>
+
+                    {/* Documents Section */}
+                    {documents && documents.length > 0 && (
+                        <Card className="mt-6">
+                            <CardHeader>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <DocumentIcon className="size-5 text-primary" />
+                                        <CardTitle className="text-base">
+                                            Mis Documentos
+                                        </CardTitle>
+                                    </div>
+                                    <Badge variant="secondary">
+                                        {documents.length}
+                                    </Badge>
+                                </div>
+                                <CardDescription>
+                                    Documentos asignados por tu administrador.
+                                    Sube los archivos requeridos.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="space-y-3">
+                                    {documents.map((doc) => (
+                                        <div
+                                            key={doc.id}
+                                            className="flex flex-col gap-3 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between"
+                                        >
+                                            <div className="flex items-start gap-3">
+                                                <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                                                    <DocumentIcon className="size-4 text-primary" />
+                                                </div>
+                                                <div className="min-w-0 space-y-1">
+                                                    <p className="text-sm font-medium text-foreground">
+                                                        {
+                                                            doc.document_type
+                                                                .nombre
+                                                        }
+                                                    </p>
+                                                    <div className="flex flex-wrap items-center gap-2">
+                                                        <span
+                                                            className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${stateColorMap[doc.document_state.color] ?? stateColorMap.gray}`}
+                                                        >
+                                                            {
+                                                                doc
+                                                                    .document_state
+                                                                    .etiqueta
+                                                            }
+                                                        </span>
+                                                        {doc.archivo_nombre && (
+                                                            <span className="truncate text-xs text-muted-foreground">
+                                                                {
+                                                                    doc.archivo_nombre
+                                                                }
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    {doc.notas &&
+                                                        doc.document_state
+                                                            .color ===
+                                                            'red' && (
+                                                            <p className="text-xs text-red-600">
+                                                                Motivo:{' '}
+                                                                {doc.notas}
+                                                            </p>
+                                                        )}
+                                                </div>
+                                            </div>
+                                            <div className="flex shrink-0 gap-2 sm:ml-4">
+                                                {doc.can_upload && (
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() =>
+                                                            openUploadDialog(
+                                                                doc,
+                                                            )
+                                                        }
+                                                    >
+                                                        <UploadIcon className="size-4" />
+                                                        {doc.has_file
+                                                            ? 'Re-subir'
+                                                            : 'Subir'}
+                                                    </Button>
+                                                )}
+                                                {doc.has_file && (
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        asChild
+                                                    >
+                                                        <a
+                                                            href={`/supplier/documents/${doc.id}/download`}
+                                                        >
+                                                            <DownloadIcon className="size-4" />
+                                                            Descargar
+                                                        </a>
+                                                    </Button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    )}
+
+                    {/* Upload Dialog */}
+                    <Dialog
+                        open={uploadDoc !== null}
+                        onOpenChange={(open) => {
+                            if (!open) {
+                                setUploadDoc(null);
+                                form.reset();
+                            }
+                        }}
+                    >
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>
+                                    {uploadDoc?.has_file
+                                        ? 'Re-subir Documento'
+                                        : 'Subir Documento'}
+                                </DialogTitle>
+                                <DialogDescription>
+                                    {uploadDoc?.document_type.nombre}
+                                </DialogDescription>
+                            </DialogHeader>
+
+                            {uploadDoc?.notas &&
+                                uploadDoc.document_state.color === 'red' && (
+                                    <Alert variant="destructive">
+                                        <AlertCircleIcon className="size-4" />
+                                        <AlertTitle>
+                                            Documento Rechazado
+                                        </AlertTitle>
+                                        <AlertDescription>
+                                            {uploadDoc.notas}
+                                        </AlertDescription>
+                                    </Alert>
+                                )}
+
+                            <form onSubmit={handleUploadSubmit}>
+                                <div className="space-y-4">
+                                    <div>
+                                        <label
+                                            htmlFor="archivo"
+                                            className="mb-2 block text-sm font-medium text-foreground"
+                                        >
+                                            Archivo
+                                        </label>
+                                        <input
+                                            ref={fileInputRef}
+                                            id="archivo"
+                                            type="file"
+                                            accept=".pdf,.jpg,.jpeg,.png"
+                                            className="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground file:mr-4 file:rounded-md file:border-0 file:bg-primary/10 file:px-3 file:py-1 file:text-sm file:font-medium file:text-primary hover:file:bg-primary/20"
+                                            onChange={(e) => {
+                                                const file =
+                                                    e.target.files?.[0] ?? null;
+                                                form.setData('archivo', file);
+                                            }}
+                                        />
+                                        <p className="mt-1 text-xs text-muted-foreground">
+                                            PDF, JPG o PNG. Tamaño máximo: 10
+                                            MB.
+                                        </p>
+                                        {form.errors.archivo && (
+                                            <p className="mt-1 text-xs text-red-600">
+                                                {form.errors.archivo}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <DialogFooter className="mt-6">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() => {
+                                            setUploadDoc(null);
+                                            form.reset();
+                                        }}
+                                        disabled={form.processing}
+                                    >
+                                        Cancelar
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        disabled={
+                                            form.processing ||
+                                            !form.data.archivo
+                                        }
+                                    >
+                                        {form.processing ? (
+                                            <>
+                                                <svg
+                                                    className="size-4 animate-spin"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <circle
+                                                        className="opacity-25"
+                                                        cx="12"
+                                                        cy="12"
+                                                        r="10"
+                                                        stroke="currentColor"
+                                                        strokeWidth="4"
+                                                    />
+                                                    <path
+                                                        className="opacity-75"
+                                                        fill="currentColor"
+                                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                                    />
+                                                </svg>
+                                                Subiendo...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <UploadIcon className="size-4" />
+                                                Subir Documento
+                                            </>
+                                        )}
+                                    </Button>
+                                </DialogFooter>
+                            </form>
+                        </DialogContent>
+                    </Dialog>
 
                     {/* Help Section */}
                     <Card className="mt-6 border-primary/20 bg-primary/5">
