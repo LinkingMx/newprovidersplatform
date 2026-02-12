@@ -1,4 +1,17 @@
 import { FormEvent, useState } from 'react';
+import { Head, Link } from '@inertiajs/react';
+import { AlertCircle, Eye, EyeOff, LoaderCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import InputError from '@/components/input-error';
 
 interface Props {
     token: string | null;
@@ -12,6 +25,12 @@ export default function SetPassword({ token, error: initialError }: Props) {
     const [showConfirm, setShowConfirm] = useState(false);
     const [processing, setProcessing] = useState(false);
     const [errors, setErrors] = useState<Record<string, string | string[]>>({});
+
+    const getError = (field: string): string | undefined => {
+        const error = errors[field];
+        if (!error) return undefined;
+        return Array.isArray(error) ? error[0] : error;
+    };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -47,14 +66,11 @@ export default function SetPassword({ token, error: initialError }: Props) {
             }
 
             if (!response.ok) {
-                // Handle different error statuses
                 if (response.status === 422) {
-                    // Validation error
                     setErrors(
                         data.errors || { password: 'Validación fallida' },
                     );
                 } else if (response.status === 419) {
-                    // CSRF token error - refresh and retry
                     window.location.reload();
                     return;
                 } else {
@@ -70,7 +86,6 @@ export default function SetPassword({ token, error: initialError }: Props) {
                 return;
             }
 
-            // Success - redirect to onboarding or dashboard
             if (data.redirect) {
                 window.location.href = data.redirect;
             } else {
@@ -85,166 +100,179 @@ export default function SetPassword({ token, error: initialError }: Props) {
 
     if (initialError) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-                <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
-                    <div className="text-center">
-                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
-                            <svg
-                                className="h-6 w-6 text-red-600"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                />
-                            </svg>
-                        </div>
-                        <h3 className="mt-4 text-lg font-medium text-gray-900">
-                            {initialError}
-                        </h3>
-                        <p className="mt-2 text-sm text-gray-500">
-                            Por favor, solicita una nueva invitación al
-                            administrador.
-                        </p>
-                        <a
-                            href="/"
-                            className="mt-6 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700"
-                        >
-                            Volver al inicio
-                        </a>
+            <>
+                <Head title="Enlace Inválido" />
+                <div className="flex min-h-screen flex-col items-center justify-center bg-background p-6 lg:p-8">
+                    <div className="w-full max-w-md space-y-6">
+                        <Card>
+                            <CardHeader className="text-center">
+                                <div className="mx-auto mb-2 flex size-12 items-center justify-center rounded-full bg-destructive/10">
+                                    <AlertCircle className="size-6 text-destructive" />
+                                </div>
+                                <CardTitle className="text-2xl">
+                                    Enlace Inválido
+                                </CardTitle>
+                                <CardDescription>
+                                    {initialError}
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-3">
+                                <p className="text-center text-sm text-muted-foreground">
+                                    Por favor, solicita una nueva invitación al
+                                    administrador.
+                                </p>
+                                <Button asChild className="w-full">
+                                    <Link href="/">Volver al inicio</Link>
+                                </Button>
+                            </CardContent>
+                        </Card>
                     </div>
                 </div>
-            </div>
+            </>
         );
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-            <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
-                <div className="mb-8 text-center">
-                    <h1 className="text-2xl font-bold text-gray-900">
-                        Establecer Contraseña
-                    </h1>
-                    <p className="mt-2 text-sm text-gray-500">
-                        Crea una contraseña segura para tu cuenta
+        <>
+            <Head title="Establecer Contraseña" />
+            <div className="flex min-h-screen flex-col items-center justify-center bg-background p-6 lg:p-8">
+                <div className="w-full max-w-md space-y-6">
+                    <Card>
+                        <CardHeader className="text-center">
+                            <CardTitle className="text-2xl">
+                                Establecer Contraseña
+                            </CardTitle>
+                            <CardDescription>
+                                Crea una contraseña segura para tu cuenta. Debe
+                                tener al menos 10 caracteres, incluir
+                                mayúsculas, números y símbolos especiales.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <InputError message={getError('general')} />
+
+                            <form onSubmit={handleSubmit} className="space-y-6">
+                                {/* Password Field */}
+                                <div className="grid gap-2">
+                                    <Label htmlFor="password">Contraseña</Label>
+                                    <div className="relative">
+                                        <Input
+                                            id="password"
+                                            type={
+                                                showPassword
+                                                    ? 'text'
+                                                    : 'password'
+                                            }
+                                            name="password"
+                                            value={password}
+                                            onChange={(e) =>
+                                                setPassword(e.target.value)
+                                            }
+                                            placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
+                                            autoComplete="new-password"
+                                            autoFocus
+                                            className="pr-10"
+                                        />
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="icon"
+                                            className="absolute top-0 right-0 h-full px-3 hover:bg-transparent"
+                                            onMouseDown={(e) => {
+                                                e.preventDefault();
+                                                setShowPassword(!showPassword);
+                                            }}
+                                            tabIndex={-1}
+                                        >
+                                            {showPassword ? (
+                                                <EyeOff className="size-4 text-muted-foreground" />
+                                            ) : (
+                                                <Eye className="size-4 text-muted-foreground" />
+                                            )}
+                                        </Button>
+                                    </div>
+                                    <InputError
+                                        message={getError('password')}
+                                    />
+                                </div>
+
+                                {/* Confirm Password Field */}
+                                <div className="grid gap-2">
+                                    <Label htmlFor="password_confirmation">
+                                        Confirmar Contraseña
+                                    </Label>
+                                    <div className="relative">
+                                        <Input
+                                            id="password_confirmation"
+                                            type={
+                                                showConfirm
+                                                    ? 'text'
+                                                    : 'password'
+                                            }
+                                            name="password_confirmation"
+                                            value={passwordConfirmation}
+                                            onChange={(e) =>
+                                                setPasswordConfirmation(
+                                                    e.target.value,
+                                                )
+                                            }
+                                            placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
+                                            autoComplete="new-password"
+                                            className="pr-10"
+                                        />
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="icon"
+                                            className="absolute top-0 right-0 h-full px-3 hover:bg-transparent"
+                                            onMouseDown={(e) => {
+                                                e.preventDefault();
+                                                setShowConfirm(!showConfirm);
+                                            }}
+                                            tabIndex={-1}
+                                        >
+                                            {showConfirm ? (
+                                                <EyeOff className="size-4 text-muted-foreground" />
+                                            ) : (
+                                                <Eye className="size-4 text-muted-foreground" />
+                                            )}
+                                        </Button>
+                                    </div>
+                                    <InputError
+                                        message={getError(
+                                            'password_confirmation',
+                                        )}
+                                    />
+                                </div>
+
+                                {/* Submit Button */}
+                                <Button
+                                    type="submit"
+                                    className="w-full"
+                                    disabled={processing}
+                                >
+                                    {processing && (
+                                        <LoaderCircle className="size-4 animate-spin" />
+                                    )}
+                                    {processing
+                                        ? 'Estableciendo contraseña...'
+                                        : 'Establecer Contraseña'}
+                                </Button>
+                            </form>
+                        </CardContent>
+                    </Card>
+
+                    <p className="text-center text-xs text-muted-foreground">
+                        Al continuar, aceptas nuestros términos y condiciones
                     </p>
+
+                    <div className="text-center">
+                        <Button asChild variant="link" size="sm">
+                            <Link href="/">&larr; Volver al inicio</Link>
+                        </Button>
+                    </div>
                 </div>
-
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Password Field */}
-                    <div>
-                        <label
-                            htmlFor="password"
-                            className="mb-1 block text-sm font-medium text-gray-700"
-                        >
-                            Contraseña
-                        </label>
-                        <div className="flex gap-2">
-                            <input
-                                id="password"
-                                type={showPassword ? 'text' : 'password'}
-                                name="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className={`flex-1 rounded-lg border px-4 py-2 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none ${
-                                    errors.password
-                                        ? 'border-red-500'
-                                        : 'border-gray-300'
-                                }`}
-                                placeholder="Mínimo 10 caracteres"
-                                autoComplete="new-password"
-                            />
-                            <button
-                                type="button"
-                                onMouseDown={(e) => {
-                                    e.preventDefault();
-                                    setShowPassword(!showPassword);
-                                }}
-                                className="rounded-lg border border-gray-300 px-3 py-2 hover:bg-gray-50"
-                                tabIndex={-1}
-                            >
-                                {showPassword ? '👁️' : '👁️‍🗨️'}
-                            </button>
-                        </div>
-                        {errors.password && (
-                            <p className="mt-1 text-sm text-red-600">
-                                {Array.isArray(errors.password)
-                                    ? errors.password[0]
-                                    : errors.password}
-                            </p>
-                        )}
-                        <p className="mt-1 text-xs text-gray-500">
-                            Mínimo 10 caracteres con mayúsculas, números y
-                            símbolos
-                        </p>
-                    </div>
-
-                    {/* Confirm Password Field */}
-                    <div>
-                        <label
-                            htmlFor="password_confirmation"
-                            className="mb-1 block text-sm font-medium text-gray-700"
-                        >
-                            Confirmar Contraseña
-                        </label>
-                        <div className="flex gap-2">
-                            <input
-                                id="password_confirmation"
-                                type={showConfirm ? 'text' : 'password'}
-                                name="password_confirmation"
-                                value={passwordConfirmation}
-                                onChange={(e) =>
-                                    setPasswordConfirmation(e.target.value)
-                                }
-                                className={`flex-1 rounded-lg border px-4 py-2 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none ${
-                                    errors.password_confirmation
-                                        ? 'border-red-500'
-                                        : 'border-gray-300'
-                                }`}
-                                placeholder="Repite tu contraseña"
-                                autoComplete="new-password"
-                            />
-                            <button
-                                type="button"
-                                onMouseDown={(e) => {
-                                    e.preventDefault();
-                                    setShowConfirm(!showConfirm);
-                                }}
-                                className="rounded-lg border border-gray-300 px-3 py-2 hover:bg-gray-50"
-                                tabIndex={-1}
-                            >
-                                {showConfirm ? '👁️' : '👁️‍🗨️'}
-                            </button>
-                        </div>
-                        {errors.password_confirmation && (
-                            <p className="mt-1 text-sm text-red-600">
-                                {Array.isArray(errors.password_confirmation)
-                                    ? errors.password_confirmation[0]
-                                    : errors.password_confirmation}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* Submit Button */}
-                    <button
-                        type="submit"
-                        disabled={processing}
-                        className="w-full rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white transition duration-200 hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                        {processing
-                            ? 'Estableciendo contraseña...'
-                            : 'Establecer Contraseña'}
-                    </button>
-                </form>
-
-                <p className="mt-6 text-center text-xs text-gray-500">
-                    Al continuar, aceptas nuestros términos y condiciones
-                </p>
             </div>
-        </div>
+        </>
     );
 }
