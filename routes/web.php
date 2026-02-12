@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Supplier\LoginController;
 use App\Http\Controllers\Supplier\OnboardingController;
 use App\Http\Controllers\Supplier\SetPasswordController;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,10 @@ Route::get('dashboard', function () {
 
 // Supplier Routes
 Route::middleware('guest:supplier')->group(function () {
+    Route::get('/supplier/login', [LoginController::class, 'show'])
+        ->name('supplier.login');
+    Route::post('/supplier/login', [LoginController::class, 'store'])
+        ->name('supplier.login.store');
     Route::get('/supplier/set-password', [SetPasswordController::class, 'show'])
         ->name('supplier.set-password');
     Route::post('/supplier/auth/set-password', [SetPasswordController::class, 'store'])

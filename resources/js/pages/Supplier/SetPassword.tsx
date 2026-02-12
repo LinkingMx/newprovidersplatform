@@ -19,7 +19,10 @@ export default function SetPassword({ token, error: initialError }: Props) {
         setErrors({});
 
         try {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+            const csrfToken =
+                document
+                    .querySelector('meta[name="csrf-token"]')
+                    ?.getAttribute('content') || '';
 
             const response = await fetch('/supplier/auth/set-password', {
                 method: 'POST',
@@ -47,13 +50,21 @@ export default function SetPassword({ token, error: initialError }: Props) {
                 // Handle different error statuses
                 if (response.status === 422) {
                     // Validation error
-                    setErrors(data.errors || { password: 'Validación fallida' });
+                    setErrors(
+                        data.errors || { password: 'Validación fallida' },
+                    );
                 } else if (response.status === 419) {
                     // CSRF token error - refresh and retry
                     window.location.reload();
                     return;
                 } else {
-                    setErrors(data.errors || { general: data.message || 'Error al procesar la solicitud' });
+                    setErrors(
+                        data.errors || {
+                            general:
+                                data.message ||
+                                'Error al procesar la solicitud',
+                        },
+                    );
                 }
                 setProcessing(false);
                 return;
@@ -74,10 +85,10 @@ export default function SetPassword({ token, error: initialError }: Props) {
 
     if (initialError) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-                <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+                <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
                     <div className="text-center">
-                        <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
                             <svg
                                 className="h-6 w-6 text-red-600"
                                 fill="none"
@@ -96,11 +107,12 @@ export default function SetPassword({ token, error: initialError }: Props) {
                             {initialError}
                         </h3>
                         <p className="mt-2 text-sm text-gray-500">
-                            Por favor, solicita una nueva invitación al administrador.
+                            Por favor, solicita una nueva invitación al
+                            administrador.
                         </p>
                         <a
                             href="/"
-                            className="mt-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
+                            className="mt-6 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700"
                         >
                             Volver al inicio
                         </a>
@@ -111,9 +123,9 @@ export default function SetPassword({ token, error: initialError }: Props) {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-            <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
-                <div className="text-center mb-8">
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+            <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
+                <div className="mb-8 text-center">
                     <h1 className="text-2xl font-bold text-gray-900">
                         Establecer Contraseña
                     </h1>
@@ -127,7 +139,7 @@ export default function SetPassword({ token, error: initialError }: Props) {
                     <div>
                         <label
                             htmlFor="password"
-                            className="block text-sm font-medium text-gray-700 mb-1"
+                            className="mb-1 block text-sm font-medium text-gray-700"
                         >
                             Contraseña
                         </label>
@@ -138,7 +150,7 @@ export default function SetPassword({ token, error: initialError }: Props) {
                                 name="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className={`flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 ${
+                                className={`flex-1 rounded-lg border px-4 py-2 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none ${
                                     errors.password
                                         ? 'border-red-500'
                                         : 'border-gray-300'
@@ -152,7 +164,7 @@ export default function SetPassword({ token, error: initialError }: Props) {
                                     e.preventDefault();
                                     setShowPassword(!showPassword);
                                 }}
-                                className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                                className="rounded-lg border border-gray-300 px-3 py-2 hover:bg-gray-50"
                                 tabIndex={-1}
                             >
                                 {showPassword ? '👁️' : '👁️‍🗨️'}
@@ -160,7 +172,9 @@ export default function SetPassword({ token, error: initialError }: Props) {
                         </div>
                         {errors.password && (
                             <p className="mt-1 text-sm text-red-600">
-                                {Array.isArray(errors.password) ? errors.password[0] : errors.password}
+                                {Array.isArray(errors.password)
+                                    ? errors.password[0]
+                                    : errors.password}
                             </p>
                         )}
                         <p className="mt-1 text-xs text-gray-500">
@@ -173,7 +187,7 @@ export default function SetPassword({ token, error: initialError }: Props) {
                     <div>
                         <label
                             htmlFor="password_confirmation"
-                            className="block text-sm font-medium text-gray-700 mb-1"
+                            className="mb-1 block text-sm font-medium text-gray-700"
                         >
                             Confirmar Contraseña
                         </label>
@@ -183,8 +197,10 @@ export default function SetPassword({ token, error: initialError }: Props) {
                                 type={showConfirm ? 'text' : 'password'}
                                 name="password_confirmation"
                                 value={passwordConfirmation}
-                                onChange={(e) => setPasswordConfirmation(e.target.value)}
-                                className={`flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 ${
+                                onChange={(e) =>
+                                    setPasswordConfirmation(e.target.value)
+                                }
+                                className={`flex-1 rounded-lg border px-4 py-2 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none ${
                                     errors.password_confirmation
                                         ? 'border-red-500'
                                         : 'border-gray-300'
@@ -198,7 +214,7 @@ export default function SetPassword({ token, error: initialError }: Props) {
                                     e.preventDefault();
                                     setShowConfirm(!showConfirm);
                                 }}
-                                className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                                className="rounded-lg border border-gray-300 px-3 py-2 hover:bg-gray-50"
                                 tabIndex={-1}
                             >
                                 {showConfirm ? '👁️' : '👁️‍🗨️'}
@@ -206,7 +222,9 @@ export default function SetPassword({ token, error: initialError }: Props) {
                         </div>
                         {errors.password_confirmation && (
                             <p className="mt-1 text-sm text-red-600">
-                                {Array.isArray(errors.password_confirmation) ? errors.password_confirmation[0] : errors.password_confirmation}
+                                {Array.isArray(errors.password_confirmation)
+                                    ? errors.password_confirmation[0]
+                                    : errors.password_confirmation}
                             </p>
                         )}
                     </div>
@@ -215,7 +233,7 @@ export default function SetPassword({ token, error: initialError }: Props) {
                     <button
                         type="submit"
                         disabled={processing}
-                        className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-lg transition duration-200"
+                        className="w-full rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white transition duration-200 hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         {processing
                             ? 'Estableciendo contraseña...'

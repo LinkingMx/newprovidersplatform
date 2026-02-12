@@ -80,10 +80,10 @@ export default function Onboarding({ supplier }: Props) {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12 px-4">
-            <div className="max-w-2xl mx-auto">
+        <div className="min-h-screen bg-gray-50 px-4 py-12">
+            <div className="mx-auto max-w-2xl">
                 {/* Header */}
-                <div className="text-center mb-8">
+                <div className="mb-8 text-center">
                     <h1 className="text-3xl font-bold text-gray-900">
                         Completa tu Perfil
                     </h1>
@@ -94,7 +94,7 @@ export default function Onboarding({ supplier }: Props) {
 
                 {/* Progress Bar */}
                 <div className="mb-8">
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="mb-2 flex items-center justify-between">
                         <span className="text-sm font-medium text-gray-700">
                             Paso {currentStep} de 3
                         </span>
@@ -102,28 +102,28 @@ export default function Onboarding({ supplier }: Props) {
                             {Math.round((currentStep / 3) * 100)}%
                         </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="h-2 w-full rounded-full bg-gray-200">
                         <div
-                            className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
+                            className="h-2 rounded-full bg-indigo-600 transition-all duration-300"
                             style={{ width: `${(currentStep / 3) * 100}%` }}
                         />
                     </div>
                 </div>
 
                 {/* Steps Indicator */}
-                <div className="grid grid-cols-3 gap-4 mb-8">
+                <div className="mb-8 grid grid-cols-3 gap-4">
                     {STEPS.map((step) => (
                         <div
                             key={step.number}
-                            className={`p-3 rounded-lg text-center transition ${
+                            className={`rounded-lg p-3 text-center transition ${
                                 currentStep === step.number
-                                    ? 'bg-indigo-100 border border-indigo-600'
+                                    ? 'border border-indigo-600 bg-indigo-100'
                                     : currentStep > step.number
-                                      ? 'bg-green-100 border border-green-600'
-                                      : 'bg-gray-100 border border-gray-300'
+                                      ? 'border border-green-600 bg-green-100'
+                                      : 'border border-gray-300 bg-gray-100'
                             }`}
                         >
-                            <div className="font-semibold text-sm text-gray-900">
+                            <div className="text-sm font-semibold text-gray-900">
                                 {step.title}
                             </div>
                             <div className="text-xs text-gray-600">
@@ -134,7 +134,10 @@ export default function Onboarding({ supplier }: Props) {
                 </div>
 
                 {/* Form */}
-                <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow p-8">
+                <form
+                    onSubmit={handleSubmit}
+                    className="rounded-lg bg-white p-8 shadow"
+                >
                     {/* STEP 1: Address */}
                     {currentStep === 1 && (
                         <div className="space-y-6">
@@ -144,7 +147,7 @@ export default function Onboarding({ supplier }: Props) {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label className="mb-2 block text-sm font-medium text-gray-700">
                                         Calle
                                     </label>
                                     <input
@@ -153,11 +156,11 @@ export default function Onboarding({ supplier }: Props) {
                                         onChange={(e) =>
                                             setData(
                                                 'address_street',
-                                                e.target.value
+                                                e.target.value,
                                             )
                                         }
                                         placeholder="Avenida Paseo de la Reforma"
-                                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 ${
+                                        className={`w-full rounded-lg border px-4 py-2 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none ${
                                             errors.address_street
                                                 ? 'border-red-500'
                                                 : 'border-gray-300'
@@ -171,7 +174,7 @@ export default function Onboarding({ supplier }: Props) {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label className="mb-2 block text-sm font-medium text-gray-700">
                                         Número
                                     </label>
                                     <input
@@ -180,11 +183,11 @@ export default function Onboarding({ supplier }: Props) {
                                         onChange={(e) =>
                                             setData(
                                                 'address_number',
-                                                e.target.value
+                                                e.target.value,
                                             )
                                         }
                                         placeholder="505"
-                                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 ${
+                                        className={`w-full rounded-lg border px-4 py-2 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none ${
                                             errors.address_number
                                                 ? 'border-red-500'
                                                 : 'border-gray-300'
@@ -199,7 +202,7 @@ export default function Onboarding({ supplier }: Props) {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="mb-2 block text-sm font-medium text-gray-700">
                                     Barrio/Colonia
                                 </label>
                                 <input
@@ -208,11 +211,11 @@ export default function Onboarding({ supplier }: Props) {
                                     onChange={(e) =>
                                         setData(
                                             'address_neighborhood',
-                                            e.target.value
+                                            e.target.value,
                                         )
                                     }
                                     placeholder="Cuauhtémoc"
-                                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 ${
+                                    className={`w-full rounded-lg border px-4 py-2 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none ${
                                         errors.address_neighborhood
                                             ? 'border-red-500'
                                             : 'border-gray-300'
@@ -227,17 +230,20 @@ export default function Onboarding({ supplier }: Props) {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label className="mb-2 block text-sm font-medium text-gray-700">
                                         Ciudad
                                     </label>
                                     <input
                                         type="text"
                                         value={data.address_city}
                                         onChange={(e) =>
-                                            setData('address_city', e.target.value)
+                                            setData(
+                                                'address_city',
+                                                e.target.value,
+                                            )
                                         }
                                         placeholder="Ciudad de México"
-                                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 ${
+                                        className={`w-full rounded-lg border px-4 py-2 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none ${
                                             errors.address_city
                                                 ? 'border-red-500'
                                                 : 'border-gray-300'
@@ -251,18 +257,21 @@ export default function Onboarding({ supplier }: Props) {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label className="mb-2 block text-sm font-medium text-gray-700">
                                         Código Postal
                                     </label>
                                     <input
                                         type="text"
                                         value={data.address_zip}
                                         onChange={(e) =>
-                                            setData('address_zip', e.target.value)
+                                            setData(
+                                                'address_zip',
+                                                e.target.value,
+                                            )
                                         }
                                         placeholder="06500"
                                         maxLength={5}
-                                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 ${
+                                        className={`w-full rounded-lg border px-4 py-2 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none ${
                                             errors.address_zip
                                                 ? 'border-red-500'
                                                 : 'border-gray-300'
@@ -277,24 +286,25 @@ export default function Onboarding({ supplier }: Props) {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="mb-2 block text-sm font-medium text-gray-700">
                                     País
                                 </label>
                                 <select
                                     value={data.address_country}
                                     onChange={(e) =>
-                                        setData('address_country', e.target.value)
+                                        setData(
+                                            'address_country',
+                                            e.target.value,
+                                        )
                                     }
-                                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 ${
+                                    className={`w-full rounded-lg border px-4 py-2 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none ${
                                         errors.address_country
                                             ? 'border-red-500'
                                             : 'border-gray-300'
                                     }`}
                                 >
                                     <option value="Mexico">México</option>
-                                    <option value="USA">
-                                        Estados Unidos
-                                    </option>
+                                    <option value="USA">Estados Unidos</option>
                                     <option value="Canada">Canadá</option>
                                 </select>
                                 {errors.address_country && (
@@ -313,11 +323,11 @@ export default function Onboarding({ supplier }: Props) {
                                 Datos Bancarios
                             </h2>
 
-                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
                                 <p className="text-sm text-blue-900">
                                     <strong>CLABE Interbancaria:</strong> Es un
-                                    código de 18 dígitos único para transferencias
-                                    bancarias en México.{' '}
+                                    código de 18 dígitos único para
+                                    transferencias bancarias en México.{' '}
                                     <a
                                         href="#"
                                         className="text-blue-600 hover:underline"
@@ -328,7 +338,7 @@ export default function Onboarding({ supplier }: Props) {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="mb-2 block text-sm font-medium text-gray-700">
                                     CLABE Interbancaria
                                 </label>
                                 <input
@@ -337,12 +347,12 @@ export default function Onboarding({ supplier }: Props) {
                                     onChange={(e) =>
                                         setData(
                                             'clabe_interbancaria',
-                                            e.target.value.replace(/\D/g, '')
+                                            e.target.value.replace(/\D/g, ''),
                                         )
                                     }
                                     placeholder="002011111111111111"
                                     maxLength={18}
-                                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 font-mono ${
+                                    className={`w-full rounded-lg border px-4 py-2 font-mono text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none ${
                                         errors.clabe_interbancaria
                                             ? 'border-red-500'
                                             : 'border-gray-300'
@@ -368,8 +378,8 @@ export default function Onboarding({ supplier }: Props) {
                             </h2>
 
                             <div className="space-y-4">
-                                <div className="bg-gray-50 rounded-lg p-4">
-                                    <h3 className="font-semibold text-gray-900 mb-2">
+                                <div className="rounded-lg bg-gray-50 p-4">
+                                    <h3 className="mb-2 font-semibold text-gray-900">
                                         Dirección
                                     </h3>
                                     <p className="text-sm text-gray-700">
@@ -377,12 +387,13 @@ export default function Onboarding({ supplier }: Props) {
                                     </p>
                                 </div>
 
-                                <div className="bg-gray-50 rounded-lg p-4">
-                                    <h3 className="font-semibold text-gray-900 mb-2">
+                                <div className="rounded-lg bg-gray-50 p-4">
+                                    <h3 className="mb-2 font-semibold text-gray-900">
                                         CLABE
                                     </h3>
-                                    <p className="text-sm font-mono text-gray-700">
-                                        {data.clabe_interbancaria.slice(0, -4)
+                                    <p className="font-mono text-sm text-gray-700">
+                                        {data.clabe_interbancaria
+                                            .slice(0, -4)
                                             .replace(/./g, '*')}
                                         {data.clabe_interbancaria.slice(-4)}
                                     </p>
@@ -397,7 +408,7 @@ export default function Onboarding({ supplier }: Props) {
                                     onChange={(e) =>
                                         setConfirmed(e.target.checked)
                                     }
-                                    className="h-4 w-4 border-gray-300 rounded text-indigo-600"
+                                    className="h-4 w-4 rounded border-gray-300 text-indigo-600"
                                 />
                                 <label
                                     htmlFor="confirm"
@@ -415,12 +426,12 @@ export default function Onboarding({ supplier }: Props) {
                     )}
 
                     {/* Navigation Buttons */}
-                    <div className="flex gap-4 mt-8">
+                    <div className="mt-8 flex gap-4">
                         <button
                             type="button"
                             onClick={handlePrev}
                             disabled={currentStep === 1 || processing}
-                            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition"
+                            className="flex-1 rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                             ← Anterior
                         </button>
@@ -430,7 +441,7 @@ export default function Onboarding({ supplier }: Props) {
                                 type="button"
                                 onClick={handleNext}
                                 disabled={processing}
-                                className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition"
+                                className="flex-1 rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                                 Siguiente →
                             </button>
@@ -438,7 +449,7 @@ export default function Onboarding({ supplier }: Props) {
                             <button
                                 type="submit"
                                 disabled={!confirmed || processing}
-                                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition"
+                                className="flex-1 rounded-lg bg-green-600 px-4 py-2 font-medium text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                                 {processing
                                     ? 'Completando...'
