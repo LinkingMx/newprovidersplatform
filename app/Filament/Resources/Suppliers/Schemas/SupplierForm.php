@@ -33,6 +33,15 @@ class SupplierForm
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->helperText('Se enviará invitación a este correo'),
+
+                        Select::make('provider_type_id')
+                            ->label('Tipo de Proveedor')
+                            ->relationship('providerType', 'nombre')
+                            ->prefixIcon('heroicon-o-cube')
+                            ->placeholder('Selecciona un tipo de proveedor')
+                            ->searchable()
+                            ->preload()
+                            ->helperText('Determina los documentos requeridos para el expediente'),
                     ])
                     ->columns(1),
 

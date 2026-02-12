@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DocumentType extends Model
@@ -23,5 +25,17 @@ class DocumentType extends Model
         return [
             'activo' => 'boolean',
         ];
+    }
+
+    public function providerTypes(): BelongsToMany
+    {
+        return $this->belongsToMany(ProviderType::class, 'document_type_provider_type')
+            ->withPivot('obligatorio')
+            ->withTimestamps();
+    }
+
+    public function supplierDocuments(): HasMany
+    {
+        return $this->hasMany(SupplierDocument::class);
     }
 }

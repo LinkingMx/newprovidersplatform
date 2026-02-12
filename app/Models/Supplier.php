@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,6 +19,7 @@ class Supplier extends Model implements Authenticatable
         'name',
         'email',
         'status',
+        'provider_type_id',
         'password_hash',
         'password_reset_token',
         'password_reset_expires_at',
@@ -35,6 +37,16 @@ class Supplier extends Model implements Authenticatable
         return [
             'password_reset_expires_at' => 'datetime',
         ];
+    }
+
+    public function providerType(): BelongsTo
+    {
+        return $this->belongsTo(ProviderType::class);
+    }
+
+    public function documents(): HasMany
+    {
+        return $this->hasMany(SupplierDocument::class);
     }
 
     public function branches(): BelongsToMany

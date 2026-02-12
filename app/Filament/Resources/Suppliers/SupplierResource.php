@@ -6,6 +6,7 @@ use App\Filament\Resources\Suppliers\Pages\CreateSupplier;
 use App\Filament\Resources\Suppliers\Pages\EditSupplier;
 use App\Filament\Resources\Suppliers\Pages\ListSuppliers;
 use App\Filament\Resources\Suppliers\RelationManagers\BranchesRelationManager;
+use App\Filament\Resources\Suppliers\RelationManagers\DocumentsRelationManager;
 use App\Filament\Resources\Suppliers\Schemas\SupplierForm;
 use App\Filament\Resources\Suppliers\Tables\SuppliersTable;
 use App\Models\Supplier;
@@ -48,6 +49,7 @@ class SupplierResource extends Resource
     {
         return [
             BranchesRelationManager::class,
+            DocumentsRelationManager::class,
         ];
     }
 

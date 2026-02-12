@@ -46,7 +46,7 @@ class ProviderTypeResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\DocumentTypesRelationManager::class,
         ];
     }
 

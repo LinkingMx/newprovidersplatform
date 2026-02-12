@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Suppliers\Pages;
 
+use App\Filament\Resources\Suppliers\Actions\AsignarDocumentosAction;
 use App\Filament\Resources\Suppliers\SupplierResource;
 use App\Models\SupplierInvitation;
 use Filament\Actions\Action;
@@ -18,6 +19,8 @@ class EditSupplier extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            AsignarDocumentosAction::make(),
+
             Action::make('resendInvitation')
                 ->label('Reenviar Invitación')
                 ->icon('heroicon-o-paper-airplane')
@@ -30,7 +33,7 @@ class EditSupplier extends EditRecord
                         Notification::make()
                             ->danger()
                             ->title('No se puede reenviar')
-                            ->subtitle('El proveedor ya está activo')
+                            ->body('El proveedor ya está activo')
                             ->send();
 
                         return;
@@ -51,7 +54,7 @@ class EditSupplier extends EditRecord
                         ->success()
                         ->icon('heroicon-o-check-circle')
                         ->title('Invitación Enviada')
-                        ->subtitle('El proveedor recibirá un email con instrucciones')
+                        ->body('El proveedor recibirá un email con instrucciones')
                         ->send();
                 }),
 
