@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { Eye, EyeOff, LoaderCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,6 +18,7 @@ interface Props {
 }
 
 export default function Login({ errors: initialErrors }: Props) {
+    const { flash } = usePage<{ flash: { status?: string } }>().props;
     const [showPassword, setShowPassword] = useState(false);
     const { data, setData, post, processing, errors } = useForm({
         email: '',
@@ -44,6 +45,12 @@ export default function Login({ errors: initialErrors }: Props) {
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
+                            {flash?.status && (
+                                <div className="mb-4 rounded-md bg-green-50 p-3 text-center text-sm font-medium text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                                    {flash.status}
+                                </div>
+                            )}
+
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 {/* Email Field */}
                                 <div className="grid gap-2">
@@ -68,9 +75,18 @@ export default function Login({ errors: initialErrors }: Props) {
 
                                 {/* Password Field */}
                                 <div className="grid gap-2">
-                                    <Label htmlFor="password">
-                                        Contrase&ntilde;a
-                                    </Label>
+                                    <div className="flex items-center justify-between">
+                                        <Label htmlFor="password">
+                                            Contrase&ntilde;a
+                                        </Label>
+                                        <Link
+                                            href="/supplier/forgot-password"
+                                            className="text-sm text-muted-foreground underline-offset-4 hover:underline"
+                                        >
+                                            &iquest;Olvidaste tu
+                                            contrase&ntilde;a?
+                                        </Link>
+                                    </div>
                                     <div className="relative">
                                         <Input
                                             id="password"

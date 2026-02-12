@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Supplier\ForgotPasswordController;
 use App\Http\Controllers\Supplier\LoginController;
 use App\Http\Controllers\Supplier\OnboardingController;
+use App\Http\Controllers\Supplier\ResetPasswordController;
 use App\Http\Controllers\Supplier\SetPasswordController;
 use App\Http\Middleware\RedirectIfSupplierAuthenticated;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +30,14 @@ Route::middleware(RedirectIfSupplierAuthenticated::class)->group(function () {
         ->name('supplier.set-password');
     Route::post('/supplier/auth/set-password', [SetPasswordController::class, 'store'])
         ->name('supplier.set-password.store');
+    Route::get('/supplier/forgot-password', [ForgotPasswordController::class, 'show'])
+        ->name('supplier.forgot-password');
+    Route::post('/supplier/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])
+        ->name('supplier.forgot-password.store');
+    Route::get('/supplier/reset-password', [ResetPasswordController::class, 'show'])
+        ->name('supplier.reset-password');
+    Route::post('/supplier/reset-password', [ResetPasswordController::class, 'reset'])
+        ->name('supplier.reset-password.store');
 });
 
 Route::middleware('auth:supplier')->group(function () {
