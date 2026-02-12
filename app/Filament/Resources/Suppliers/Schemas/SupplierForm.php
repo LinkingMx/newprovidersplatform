@@ -16,7 +16,7 @@ class SupplierForm
             ->components([
                 Section::make('Información Básica')
                     ->description('Datos de identidad del proveedor')
-                    ->icon(Heroicon::OutlineUser)
+                    ->icon(Heroicon::OutlinedUser)
                     ->schema([
                         TextInput::make('name')
                             ->label('Nombre')
@@ -38,7 +38,7 @@ class SupplierForm
 
                 Section::make('Estado')
                     ->description('Estado actual del proceso de onboarding')
-                    ->icon(Heroicon::OutlineCheckCircle)
+                    ->icon(Heroicon::OutlinedCheckCircle)
                     ->schema([
                         Select::make('status')
                             ->label('Estado')
