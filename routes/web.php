@@ -16,7 +16,7 @@ Route::get('/', function () {
 // Proveedor Dashboard
 Route::get('dashboard', function () {
     return Inertia::render('Supplier/Dashboard', [
-        'supplier' => auth('supplier')->user(),
+        'supplier' => auth('supplier')->user()->load('branches'),
     ]);
 })->middleware('auth:supplier')->name('dashboard');
 
