@@ -11,7 +11,7 @@ export default function SetPassword({ token, error: initialError }: Props) {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
     const [processing, setProcessing] = useState(false);
-    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [errors, setErrors] = useState<Record<string, string | string[]>>({});
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -139,7 +139,7 @@ export default function SetPassword({ token, error: initialError }: Props) {
                         </div>
                         {errors.password && (
                             <p className="mt-1 text-sm text-red-600">
-                                {errors.password}
+                                {Array.isArray(errors.password) ? errors.password[0] : errors.password}
                             </p>
                         )}
                         <p className="mt-1 text-xs text-gray-500">
@@ -185,7 +185,7 @@ export default function SetPassword({ token, error: initialError }: Props) {
                         </div>
                         {errors.password_confirmation && (
                             <p className="mt-1 text-sm text-red-600">
-                                {errors.password_confirmation}
+                                {Array.isArray(errors.password_confirmation) ? errors.password_confirmation[0] : errors.password_confirmation}
                             </p>
                         )}
                     </div>
