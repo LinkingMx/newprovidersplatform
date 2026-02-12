@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Suppliers\Pages;
 
 use App\Filament\Resources\Suppliers\SupplierResource;
+use App\Jobs\SendSupplierInvitationEmail;
 use App\Models\SupplierInvitation;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
@@ -28,12 +29,11 @@ class CreateSupplier extends CreateRecord
         SupplierInvitation::create([
             'supplier_id' => $supplier->id,
             'token' => $token,
-            'sent_at' => now(),
             'expires_at' => now()->addDays(7),
         ]);
 
-        // TODO: Send invitation email
-        // SupplierInvitationMailable::dispatch($supplier, $token);
+        // Dispatch job to send invitation email
+        SendSupplierInvitationEmail::dispatch($supplier);
 
         $supplier->update(['status' => 'invited']);
     }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('supplier_id')->constrained('suppliers')->cascadeOnDelete();
             $table->string('token')->unique();
-            $table->timestamp('sent_at');
+            $table->timestamp('sent_at')->nullable();
             $table->timestamp('accepted_at')->nullable();
             $table->timestamp('expires_at');
         });
