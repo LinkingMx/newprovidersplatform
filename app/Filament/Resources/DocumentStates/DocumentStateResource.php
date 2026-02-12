@@ -9,6 +9,7 @@ use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class DocumentStateResource extends Resource
 {
@@ -18,11 +19,13 @@ class DocumentStateResource extends Resource
 
     protected static ?string $navigationLabel = 'Estados de Documento';
 
+    protected static string|UnitEnum|null $navigationGroup = 'Configuración del Sistema';
+
     protected static ?string $modelLabel = 'estado de documento';
 
     protected static ?string $pluralModelLabel = 'estados de documento';
 
-    protected static ?int $navigationSort = 12;
+    protected static ?int $navigationSort = 5;
 
     public static function canViewAny(): bool
     {

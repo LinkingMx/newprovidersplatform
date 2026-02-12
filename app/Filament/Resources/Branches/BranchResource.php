@@ -15,6 +15,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use UnitEnum;
 
 class BranchResource extends Resource
 {
@@ -24,11 +25,13 @@ class BranchResource extends Resource
 
     protected static ?string $navigationLabel = 'Sucursales';
 
+    protected static string|UnitEnum|null $navigationGroup = 'Gestión de Proveedores';
+
     protected static ?string $modelLabel = 'sucursal';
 
     protected static ?string $pluralModelLabel = 'sucursales';
 
-    protected static ?int $navigationSort = 13;
+    protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema
     {

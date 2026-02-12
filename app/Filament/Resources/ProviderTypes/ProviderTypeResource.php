@@ -15,6 +15,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use UnitEnum;
 
 class ProviderTypeResource extends Resource
 {
@@ -24,11 +25,13 @@ class ProviderTypeResource extends Resource
 
     protected static ?string $navigationLabel = 'Tipos de Proveedor';
 
+    protected static string|UnitEnum|null $navigationGroup = 'Gestión de Proveedores';
+
     protected static ?string $modelLabel = 'tipo de proveedor';
 
     protected static ?string $pluralModelLabel = 'tipos de proveedor';
 
-    protected static ?int $navigationSort = 11;
+    protected static ?int $navigationSort = 3;
 
     public static function form(Schema $schema): Schema
     {

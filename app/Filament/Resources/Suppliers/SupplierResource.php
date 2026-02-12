@@ -16,6 +16,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use UnitEnum;
 
 class SupplierResource extends Resource
 {
@@ -23,11 +24,13 @@ class SupplierResource extends Resource
 
     protected static ?string $navigationLabel = 'Proveedores';
 
+    protected static string|UnitEnum|null $navigationGroup = 'Gestión de Proveedores';
+
     protected static ?string $modelLabel = 'proveedor';
 
     protected static ?string $pluralModelLabel = 'proveedores';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 1;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 

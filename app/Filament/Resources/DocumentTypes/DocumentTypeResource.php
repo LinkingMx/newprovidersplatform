@@ -15,6 +15,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use UnitEnum;
 
 class DocumentTypeResource extends Resource
 {
@@ -24,11 +25,13 @@ class DocumentTypeResource extends Resource
 
     protected static ?string $navigationLabel = 'Tipos de Documentos';
 
+    protected static string|UnitEnum|null $navigationGroup = 'Configuración del Sistema';
+
     protected static ?string $modelLabel = 'tipo de documento';
 
     protected static ?string $pluralModelLabel = 'tipos de documentos';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 4;
 
     public static function form(Schema $schema): Schema
     {
