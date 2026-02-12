@@ -1,5 +1,4 @@
 import { FormEvent, useState } from 'react';
-import { useForm } from '@inertiajs/react';
 
 interface Props {
     token: string | null;
@@ -7,18 +6,49 @@ interface Props {
 }
 
 export default function SetPassword({ token, error: initialError }: Props) {
-    const { data, setData, post, processing, errors } = useForm({
-        token: token || '',
-        password: '',
-        password_confirmation: '',
-    });
-
+    const [password, setPassword] = useState('');
+    const [passwordConfirmation, setPasswordConfirmation] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
+    const [processing, setProcessing] = useState(false);
+    const [errors, setErrors] = useState<Record<string, string>>({});
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        post('/supplier/set-password');
+        setProcessing(true);
+        setErrors({});
+
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+            const response = await fetch('/supplier/auth/set-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-Token': csrfToken,
+                },
+                body: JSON.stringify({
+                    token: token || '',
+                    password,
+                    password_confirmation: passwordConfirmation,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setErrors(data.errors || { general: 'Error al procesar la solicitud' });
+                setProcessing(false);
+                return;
+            }
+
+            // Success - redirect to dashboard or onboarding
+            window.location.href = data.redirect || '/supplier/dashboard';
+        } catch (error) {
+            setErrors({ general: 'Error de conexión' });
+            setProcessing(false);
+        }
     };
 
     if (initialError) {
@@ -85,11 +115,9 @@ export default function SetPassword({ token, error: initialError }: Props) {
                                 id="password"
                                 type={showPassword ? 'text' : 'password'}
                                 name="password"
-                                value={data.password}
-                                onChange={(e) =>
-                                    setData('password', e.target.value)
-                                }
-                                className={`flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className={`flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 ${
                                     errors.password
                                         ? 'border-red-500'
                                         : 'border-gray-300'
@@ -133,11 +161,9 @@ export default function SetPassword({ token, error: initialError }: Props) {
                                 id="password_confirmation"
                                 type={showConfirm ? 'text' : 'password'}
                                 name="password_confirmation"
-                                value={data.password_confirmation}
-                                onChange={(e) =>
-                                    setData('password_confirmation', e.target.value)
-                                }
-                                className={`flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                                value={passwordConfirmation}
+                                onChange={(e) => setPasswordConfirmation(e.target.value)}
+                                className={`flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 ${
                                     errors.password_confirmation
                                         ? 'border-red-500'
                                         : 'border-gray-300'
