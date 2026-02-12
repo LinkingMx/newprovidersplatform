@@ -22,7 +22,7 @@ test('supplier can login with valid credentials', function () {
         'password' => 'ValidPass123!',
     ]);
 
-    $response->assertRedirect(route('supplier.dashboard'));
+    $response->assertRedirect(route('dashboard'));
     $this->assertAuthenticatedAs($supplier, 'supplier');
 });
 
@@ -72,7 +72,7 @@ test('authenticated supplier is redirected from login page', function () {
     $response = $this->actingAs($supplier, 'supplier')
         ->get('/supplier/login');
 
-    $response->assertRedirect(route('supplier.dashboard'));
+    $response->assertRedirect(route('dashboard'));
 });
 
 test('supplier can logout', function () {

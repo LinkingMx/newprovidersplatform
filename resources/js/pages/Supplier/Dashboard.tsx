@@ -1,10 +1,10 @@
-import { usePage } from '@inertiajs/react';
+import { usePage, Link } from '@inertiajs/react';
 
 interface Supplier {
     id: number;
     name: string;
     email: string;
-    status: 'registered' | 'profile_completed' | 'active';
+    status: 'created' | 'invited' | 'registered' | 'profile_completed' | 'active';
     address_street: string | null;
     address_city: string | null;
     clabe_interbancaria: string | null;
@@ -13,6 +13,20 @@ interface Supplier {
 }
 
 const statusConfig = {
+    created: {
+        color: 'bg-gray-100',
+        textColor: 'text-gray-900',
+        badge: 'bg-gray-200 text-gray-800',
+        label: 'Creado',
+        description: 'Tu cuenta ha sido creada. Establece tu contraseña.',
+    },
+    invited: {
+        color: 'bg-purple-100',
+        textColor: 'text-purple-900',
+        badge: 'bg-purple-200 text-purple-800',
+        label: 'Invitado',
+        description: 'Completa el registro para activar tu cuenta.',
+    },
     registered: {
         color: 'bg-blue-100',
         textColor: 'text-blue-900',
@@ -90,22 +104,25 @@ export default function Dashboard() {
                             <span
                                 className={`text-xs font-medium ${config.textColor}`}
                             >
-                                {supplier.status === 'registered'
-                                    ? '33%'
-                                    : supplier.status === 'profile_completed'
-                                      ? '67%'
-                                      : '100%'}
+                                {supplier.status === 'created' || supplier.status === 'invited'
+                                    ? '0%'
+                                    : supplier.status === 'registered'
+                                      ? '33%'
+                                      : supplier.status === 'profile_completed'
+                                        ? '67%'
+                                        : '100%'}
                             </span>
                         </div>
                         <div className="h-2 w-full rounded-full bg-gray-200">
                             <div
                                 className={`h-2 rounded-full transition-all ${
-                                    supplier.status === 'registered'
-                                        ? 'w-1/3 bg-blue-500'
-                                        : supplier.status ===
-                                            'profile_completed'
-                                          ? 'w-2/3 bg-yellow-500'
-                                          : 'w-full bg-green-500'
+                                    supplier.status === 'created' || supplier.status === 'invited'
+                                        ? 'w-0 bg-gray-500'
+                                        : supplier.status === 'registered'
+                                          ? 'w-1/3 bg-blue-500'
+                                          : supplier.status === 'profile_completed'
+                                            ? 'w-2/3 bg-yellow-500'
+                                            : 'w-full bg-green-500'
                                 }`}
                             />
                         </div>
@@ -114,7 +131,7 @@ export default function Dashboard() {
                     {/* CTA Button */}
                     {supplier.status === 'registered' && (
                         <a
-                            href={route('supplier.onboarding')}
+                            href="/supplier/onboarding"
                             className="mt-4 inline-block rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700"
                         >
                             Completar perfil
@@ -227,14 +244,14 @@ export default function Dashboard() {
                         Acciones
                     </h3>
                     <div className="flex flex-col gap-2">
-                        <a
-                            href={route('supplier.logout')}
+                        <Link
+                            href="/supplier/auth/logout"
                             method="post"
                             as="button"
                             className="rounded-lg px-4 py-2 text-left font-medium text-red-600 transition hover:bg-red-50"
                         >
                             Cerrar Sesión
-                        </a>
+                        </Link>
                     </div>
                 </div>
 

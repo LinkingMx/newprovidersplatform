@@ -14,9 +14,12 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
+// Proveedor Dashboard
 Route::get('dashboard', function () {
-    return Inertia::render('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    return Inertia::render('Supplier/Dashboard', [
+        'supplier' => auth('supplier')->user(),
+    ]);
+})->middleware('auth:supplier')->name('dashboard');
 
 // Supplier Routes
 Route::middleware(RedirectIfSupplierAuthenticated::class)->group(function () {
@@ -35,12 +38,6 @@ Route::middleware('auth:supplier')->group(function () {
         ->name('supplier.onboarding');
     Route::post('/supplier/onboarding/submit', [OnboardingController::class, 'submit'])
         ->name('supplier.onboarding.submit');
-
-    Route::get('/supplier/dashboard', function () {
-        return Inertia::render('Supplier/Dashboard', [
-            'supplier' => auth('supplier')->user(),
-        ]);
-    })->name('supplier.dashboard');
 
     Route::post('/supplier/auth/logout', function () {
         auth('supplier')->logout();

@@ -44,7 +44,7 @@ class LoginController
 
         Auth::guard('supplier')->login($supplier);
 
-        return redirect()->route('supplier.dashboard')
+        return redirect()->route('dashboard')
             ->with('message', '¡Bienvenido de vuelta!');
     }
 }

@@ -16,7 +16,7 @@ class RedirectIfSupplierAuthenticated
     public function handle(Request $request, Closure $next): Response
     {
         if (auth('supplier')->check()) {
-            return redirect()->route('supplier.dashboard');
+            return redirect()->route('dashboard');
         }
 
         return $next($request);

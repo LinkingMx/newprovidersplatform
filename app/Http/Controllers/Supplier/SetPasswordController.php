@@ -41,7 +41,7 @@ class SetPasswordController
         }
 
         if ($invitation->supplier->isActive()) {
-            return redirect()->route('supplier.dashboard')
+            return redirect()->route('dashboard')
                 ->with('message', 'Tu cuenta ya está activa');
         }
 
@@ -76,7 +76,7 @@ class SetPasswordController
         $supplier = $invitation->supplier;
 
         if ($supplier->isActive()) {
-            return redirect()->route('supplier.dashboard');
+            return redirect()->route('dashboard');
         }
 
         // Update supplier password and status
@@ -99,7 +99,7 @@ class SetPasswordController
                 ->with('message', 'Contraseña establecida. Completa tu perfil.');
         }
 
-        return redirect()->route('supplier.dashboard')
+        return redirect()->route('dashboard')
             ->with('message', 'Bienvenido de vuelta!');
     }
 }
