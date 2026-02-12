@@ -33,19 +33,40 @@ export default function SetPassword({ token, error: initialError }: Props) {
                     password,
                     password_confirmation: passwordConfirmation,
                 }),
+                credentials: 'same-origin',
             });
 
-            const data = await response.json();
+            const contentType = response.headers.get('content-type');
+            let data: any = {};
+
+            if (contentType?.includes('application/json')) {
+                data = await response.json();
+            }
 
             if (!response.ok) {
-                setErrors(data.errors || { general: 'Error al procesar la solicitud' });
+                // Handle different error statuses
+                if (response.status === 422) {
+                    // Validation error
+                    setErrors(data.errors || { password: 'Validación fallida' });
+                } else if (response.status === 419) {
+                    // CSRF token error - refresh and retry
+                    window.location.reload();
+                    return;
+                } else {
+                    setErrors(data.errors || { general: data.message || 'Error al procesar la solicitud' });
+                }
                 setProcessing(false);
                 return;
             }
 
-            // Success - redirect to dashboard or onboarding
-            window.location.href = data.redirect || '/supplier/dashboard';
+            // Success - redirect to onboarding or dashboard
+            if (data.redirect) {
+                window.location.href = data.redirect;
+            } else {
+                window.location.href = '/supplier/onboarding';
+            }
         } catch (error) {
+            console.error('Form submission error:', error);
             setErrors({ general: 'Error de conexión' });
             setProcessing(false);
         }

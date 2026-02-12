@@ -157,7 +157,7 @@ export default function Onboarding({ supplier }: Props) {
                                             )
                                         }
                                         placeholder="Avenida Paseo de la Reforma"
-                                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 ${
                                             errors.address_street
                                                 ? 'border-red-500'
                                                 : 'border-gray-300'
@@ -184,7 +184,7 @@ export default function Onboarding({ supplier }: Props) {
                                             )
                                         }
                                         placeholder="505"
-                                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 ${
                                             errors.address_number
                                                 ? 'border-red-500'
                                                 : 'border-gray-300'
@@ -212,7 +212,7 @@ export default function Onboarding({ supplier }: Props) {
                                         )
                                     }
                                     placeholder="Cuauhtémoc"
-                                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 ${
                                         errors.address_neighborhood
                                             ? 'border-red-500'
                                             : 'border-gray-300'
@@ -237,7 +237,7 @@ export default function Onboarding({ supplier }: Props) {
                                             setData('address_city', e.target.value)
                                         }
                                         placeholder="Ciudad de México"
-                                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 ${
                                             errors.address_city
                                                 ? 'border-red-500'
                                                 : 'border-gray-300'
@@ -262,7 +262,7 @@ export default function Onboarding({ supplier }: Props) {
                                         }
                                         placeholder="06500"
                                         maxLength={5}
-                                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 ${
                                             errors.address_zip
                                                 ? 'border-red-500'
                                                 : 'border-gray-300'
@@ -285,7 +285,7 @@ export default function Onboarding({ supplier }: Props) {
                                     onChange={(e) =>
                                         setData('address_country', e.target.value)
                                     }
-                                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 ${
                                         errors.address_country
                                             ? 'border-red-500'
                                             : 'border-gray-300'
@@ -342,7 +342,7 @@ export default function Onboarding({ supplier }: Props) {
                                     }
                                     placeholder="002011111111111111"
                                     maxLength={18}
-                                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono ${
+                                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 font-mono ${
                                         errors.clabe_interbancaria
                                             ? 'border-red-500'
                                             : 'border-gray-300'
