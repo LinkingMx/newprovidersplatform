@@ -1,0 +1,58 @@
+<?php
+
+namespace App\Filament\Resources\Suppliers\Schemas;
+
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+
+class SupplierForm
+{
+    public static function configure(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                Section::make('Información Básica')
+                    ->description('Datos de identidad del proveedor')
+                    ->icon(Heroicon::OutlineUser)
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Nombre')
+                            ->prefixIcon('heroicon-o-user')
+                            ->placeholder('Nombre del Proveedor')
+                            ->required()
+                            ->maxLength(255),
+
+                        TextInput::make('email')
+                            ->label('Email')
+                            ->prefixIcon('heroicon-o-envelope')
+                            ->placeholder('proveedor@empresa.com')
+                            ->email()
+                            ->required()
+                            ->unique(ignoreRecord: true)
+                            ->helperText('Se enviará invitación a este correo'),
+                    ])
+                    ->columns(1),
+
+                Section::make('Estado')
+                    ->description('Estado actual del proceso de onboarding')
+                    ->icon(Heroicon::OutlineCheckCircle)
+                    ->schema([
+                        Select::make('status')
+                            ->label('Estado')
+                            ->options([
+                                'created' => 'Creado',
+                                'invited' => 'Invitado',
+                                'registered' => 'Registrado',
+                                'profile_completed' => 'Perfil Completo',
+                                'active' => 'Activo',
+                            ])
+                            ->disabled()
+                            ->dehydrated(false),
+                    ])
+                    ->columns(1),
+            ]);
+    }
+}

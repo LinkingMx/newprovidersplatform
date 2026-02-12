@@ -1,0 +1,68 @@
+<?php
+
+namespace App\Filament\Resources\Suppliers\Pages;
+
+use App\Filament\Resources\Suppliers\SupplierResource;
+use App\Models\SupplierInvitation;
+use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\RestoreAction;
+use Filament\Notifications\Notification;
+use Filament\Resources\Pages\EditRecord;
+
+class EditSupplier extends EditRecord
+{
+    protected static string $resource = SupplierResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('resendInvitation')
+                ->label('Reenviar Invitación')
+                ->icon('heroicon-o-paper-airplane')
+                ->color('info')
+                ->requiresConfirmation()
+                ->action(function (): void {
+                    $supplier = $this->record;
+
+                    if ($supplier->isActive()) {
+                        Notification::make()
+                            ->danger()
+                            ->title('No se puede reenviar')
+                            ->subtitle('El proveedor ya está activo')
+                            ->send();
+
+                        return;
+                    }
+
+                    $token = bin2hex(random_bytes(32));
+
+                    SupplierInvitation::create([
+                        'supplier_id' => $supplier->id,
+                        'token' => $token,
+                        'sent_at' => now(),
+                        'expires_at' => now()->addDays(7),
+                    ]);
+
+                    $supplier->update(['status' => 'invited']);
+
+                    Notification::make()
+                        ->success()
+                        ->icon('heroicon-o-check-circle')
+                        ->title('Invitación Enviada')
+                        ->subtitle('El proveedor recibirá un email con instrucciones')
+                        ->send();
+                }),
+
+            DeleteAction::make(),
+            ForceDeleteAction::make(),
+            RestoreAction::make(),
+        ];
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+}
