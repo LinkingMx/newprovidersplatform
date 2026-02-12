@@ -30,8 +30,22 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+            'primary' => [
+                50 => '246, 244, 250',
+                100 => '233, 227, 242',
+                200 => '213, 203, 229',
+                300 => '183, 166, 210',
+                400 => '147, 122, 185',
+                500 => '115, 87, 156', // Púrpura principal (ajustado para legibilidad)
+                600 => '92, 67, 129',
+                700 => '75, 54, 105',
+                800 => '64, 47, 88',
+                900 => '54, 41, 74',
+                950 => '40, 29, 65', // El púrpura oscuro del fondo del logo
+            ],
+            'gray' => Color::Slate, // Slate combina mejor con tonos púrpuras que Gray puro
             ])
+            ->font('Poppins')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
