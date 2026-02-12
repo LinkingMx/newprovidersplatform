@@ -74,7 +74,9 @@ export default function Login({ errors: initialErrors }: Props) {
                                 type={showPassword ? 'text' : 'password'}
                                 name="password"
                                 value={data.password}
-                                onChange={(e) => setData('password', e.target.value)}
+                                onChange={(e) =>
+                                    setData('password', e.target.value)
+                                }
                                 className={`flex-1 rounded-lg border px-4 py-2 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:outline-none ${
                                     errors.password
                                         ? 'border-red-500'

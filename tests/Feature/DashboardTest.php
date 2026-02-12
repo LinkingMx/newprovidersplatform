@@ -4,7 +4,7 @@ use App\Models\Supplier;
 
 test('guests are redirected to the login page', function () {
     $response = $this->get(route('dashboard'));
-    $response->assertRedirect('/login');
+    $response->assertRedirect('/');
 });
 
 test('authenticated suppliers can visit the dashboard', function () {

@@ -4,7 +4,12 @@ interface Supplier {
     id: number;
     name: string;
     email: string;
-    status: 'created' | 'invited' | 'registered' | 'profile_completed' | 'active';
+    status:
+        | 'created'
+        | 'invited'
+        | 'registered'
+        | 'profile_completed'
+        | 'active';
     address_street: string | null;
     address_city: string | null;
     clabe_interbancaria: string | null;
@@ -104,7 +109,8 @@ export default function Dashboard() {
                             <span
                                 className={`text-xs font-medium ${config.textColor}`}
                             >
-                                {supplier.status === 'created' || supplier.status === 'invited'
+                                {supplier.status === 'created' ||
+                                supplier.status === 'invited'
                                     ? '0%'
                                     : supplier.status === 'registered'
                                       ? '33%'
@@ -116,11 +122,13 @@ export default function Dashboard() {
                         <div className="h-2 w-full rounded-full bg-gray-200">
                             <div
                                 className={`h-2 rounded-full transition-all ${
-                                    supplier.status === 'created' || supplier.status === 'invited'
+                                    supplier.status === 'created' ||
+                                    supplier.status === 'invited'
                                         ? 'w-0 bg-gray-500'
                                         : supplier.status === 'registered'
                                           ? 'w-1/3 bg-blue-500'
-                                          : supplier.status === 'profile_completed'
+                                          : supplier.status ===
+                                              'profile_completed'
                                             ? 'w-2/3 bg-yellow-500'
                                             : 'w-full bg-green-500'
                                 }`}
