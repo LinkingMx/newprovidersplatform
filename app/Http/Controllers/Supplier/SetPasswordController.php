@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Supplier;
 
 use App\Models\Supplier;
 use App\Models\SupplierInvitation;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -12,7 +13,7 @@ use Inertia\Response;
 
 class SetPasswordController
 {
-    public function show(Request $request): Response
+    public function show(Request $request): Response|RedirectResponse
     {
         $token = $request->query('token');
 

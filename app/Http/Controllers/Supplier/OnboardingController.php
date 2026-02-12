@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Supplier;
 
 use App\Jobs\SupplierVerificationJob;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class OnboardingController
 {
-    public function show(Request $request): Response
+    public function show(Request $request): Response|RedirectResponse
     {
         $supplier = auth('supplier')->user();
 
