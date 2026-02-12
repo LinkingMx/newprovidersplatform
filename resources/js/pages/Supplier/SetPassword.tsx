@@ -90,13 +90,14 @@ export default function SetPassword({ token, error: initialError }: Props) {
                                 onChange={(e) =>
                                     setData('password', e.target.value)
                                 }
-                                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10 ${
                                     errors.password
                                         ? 'border-red-500'
                                         : 'border-gray-300'
                                 }`}
                                 placeholder="Mínimo 10 caracteres"
-                                disabled={processing}
+                                disabled={false}
+                                autoComplete="new-password"
                             />
                             <button
                                 type="button"
@@ -160,13 +161,14 @@ export default function SetPassword({ token, error: initialError }: Props) {
                                 onChange={(e) =>
                                     setData('password_confirmation', e.target.value)
                                 }
-                                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10 ${
                                     errors.password_confirmation
                                         ? 'border-red-500'
                                         : 'border-gray-300'
                                 }`}
                                 placeholder="Repite tu contraseña"
-                                disabled={processing}
+                                disabled={false}
+                                autoComplete="new-password"
                             />
                             <button
                                 type="button"
