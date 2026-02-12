@@ -1,6 +1,9 @@
-import { FormEvent, useState } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import { AlertCircle, Eye, EyeOff, LoaderCircle } from 'lucide-react';
+import type { FormEvent } from 'react';
+import { useState } from 'react';
+import BrandLogo from '@/components/brand-logo';
+import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -11,7 +14,6 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import InputError from '@/components/input-error';
 
 interface Props {
     token: string | null;
@@ -104,6 +106,10 @@ export default function SetPassword({ token, error: initialError }: Props) {
                 <Head title="Enlace Inválido" />
                 <div className="flex min-h-screen flex-col items-center justify-center bg-background p-6 lg:p-8">
                     <div className="w-full max-w-md space-y-6">
+                        <div className="flex justify-center">
+                            <BrandLogo className="h-12" />
+                        </div>
+
                         <Card>
                             <CardHeader className="text-center">
                                 <div className="mx-auto mb-2 flex size-12 items-center justify-center rounded-full bg-destructive/10">
@@ -137,6 +143,10 @@ export default function SetPassword({ token, error: initialError }: Props) {
             <Head title="Establecer Contraseña" />
             <div className="flex min-h-screen flex-col items-center justify-center bg-background p-6 lg:p-8">
                 <div className="w-full max-w-md space-y-6">
+                    <div className="flex justify-center">
+                        <BrandLogo className="h-12" />
+                    </div>
+
                     <Card>
                         <CardHeader className="text-center">
                             <CardTitle className="text-2xl">

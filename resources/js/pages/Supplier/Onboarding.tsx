@@ -1,6 +1,9 @@
-import { FormEvent, useState } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import { Check, LoaderCircle } from 'lucide-react';
+import type { FormEvent } from 'react';
+import { useState } from 'react';
+import BrandLogo from '@/components/brand-logo';
+import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -19,7 +22,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import InputError from '@/components/input-error';
 
 interface Props {
     supplier: {
@@ -104,6 +106,10 @@ export default function Onboarding({ supplier }: Props) {
             <Head title="Completa tu Perfil" />
             <div className="flex min-h-screen flex-col items-center justify-center bg-background p-6 lg:p-8">
                 <div className="w-full max-w-2xl space-y-6">
+                    <div className="flex justify-center">
+                        <BrandLogo className="h-12" />
+                    </div>
+
                     {/* Header */}
                     <div className="text-center">
                         <h1 className="text-3xl font-bold tracking-tight">

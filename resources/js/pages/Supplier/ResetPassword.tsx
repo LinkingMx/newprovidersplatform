@@ -1,6 +1,9 @@
-import { FormEvent, useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { Eye, EyeOff, LoaderCircle } from 'lucide-react';
+import type { FormEvent } from 'react';
+import { useState } from 'react';
+import BrandLogo from '@/components/brand-logo';
+import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -11,7 +14,6 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import InputError from '@/components/input-error';
 
 interface Props {
     token: string | null;
@@ -40,6 +42,10 @@ export default function ResetPassword({ token, email, error }: Props) {
                 <Head title="Enlace Inválido" />
                 <div className="flex min-h-screen flex-col items-center justify-center bg-background p-6 lg:p-8">
                     <div className="w-full max-w-md space-y-6">
+                        <div className="flex justify-center">
+                            <BrandLogo className="h-12" />
+                        </div>
+
                         <Card>
                             <CardHeader className="text-center">
                                 <CardTitle className="text-2xl">
@@ -74,6 +80,10 @@ export default function ResetPassword({ token, email, error }: Props) {
             <Head title="Nueva Contraseña" />
             <div className="flex min-h-screen flex-col items-center justify-center bg-background p-6 lg:p-8">
                 <div className="w-full max-w-md space-y-6">
+                    <div className="flex justify-center">
+                        <BrandLogo className="h-12" />
+                    </div>
+
                     <Card>
                         <CardHeader className="text-center">
                             <CardTitle className="text-2xl">

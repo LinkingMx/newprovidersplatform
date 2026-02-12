@@ -1,5 +1,6 @@
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { FormEvent, useRef, useState } from 'react';
+import BrandLogo from '@/components/brand-logo';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -461,6 +462,11 @@ export default function Dashboard() {
                 <header className="sticky top-0 z-10 border-b bg-card/80 backdrop-blur-sm">
                     <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
                         <div className="flex items-center gap-3">
+                            <BrandLogo className="h-8" />
+                            <Separator
+                                orientation="vertical"
+                                className="!h-6"
+                            />
                             <Avatar className="size-10 border-2 border-primary/20">
                                 <AvatarFallback className="bg-primary/10 text-sm font-semibold text-primary">
                                     {getInitials(supplier.name)}

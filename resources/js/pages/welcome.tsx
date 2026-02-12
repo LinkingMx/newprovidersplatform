@@ -1,4 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
+import BrandLogo from '@/components/brand-logo';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -15,10 +16,10 @@ export default function Welcome() {
             <div className="flex min-h-screen flex-col items-center justify-center bg-background p-6 lg:p-8">
                 <div className="w-full max-w-2xl space-y-8">
                     {/* Header */}
-                    <div className="space-y-2 text-center">
-                        <h1 className="text-3xl font-bold tracking-tight text-foreground lg:text-4xl">
-                            Portal de Proveedores
-                        </h1>
+                    <div className="space-y-4 text-center">
+                        <div className="flex justify-center">
+                            <BrandLogo className="h-14" />
+                        </div>
                         <p className="text-base text-muted-foreground lg:text-lg">
                             Bienvenido al sistema de gesti&oacute;n de
                             proveedores.
