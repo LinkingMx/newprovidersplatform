@@ -105,9 +105,9 @@ export default function Welcome() {
                                     variant="outline"
                                     className="w-full"
                                 >
-                                    <Link href="/admin/login">
+                                    <a href="/admin/login">
                                         Ingresar como Administrador
-                                    </Link>
+                                    </a>
                                 </Button>
                             </CardContent>
                         </Card>
