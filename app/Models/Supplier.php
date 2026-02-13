@@ -66,6 +66,11 @@ class Supplier extends Model implements Authenticatable
         return $this->status === 'active';
     }
 
+    public function canLogin(): bool
+    {
+        return in_array($this->status, ['registered', 'profile_completed', 'active']);
+    }
+
     public function isPending(): bool
     {
         return in_array($this->status, ['created', 'invited', 'registered']);

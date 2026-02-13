@@ -36,13 +36,19 @@ class LoginController
             ])->onlyInput('email');
         }
 
-        if (! $supplier->isActive()) {
+        if (! $supplier->canLogin()) {
             return back()->withErrors([
-                'email' => 'Tu cuenta no está activa. Por favor completa tu onboarding.',
+                'email' => 'Tu cuenta aún no está habilitada. Revisa tu correo para completar el registro.',
             ])->onlyInput('email');
         }
 
         Auth::guard('supplier')->login($supplier);
+
+        // Redirect based on supplier status
+        if ($supplier->status === 'registered') {
+            return redirect('/supplier/onboarding')
+                ->with('message', 'Completa tu perfil para continuar.');
+        }
 
         return redirect()->route('dashboard')
             ->with('message', '¡Bienvenido de vuelta!');

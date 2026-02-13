@@ -18,7 +18,6 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Support\HtmlString;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
@@ -47,9 +46,9 @@ class AdminPanelProvider extends PanelProvider
                 'gray' => Color::Slate, // Slate combina mejor con tonos púrpuras que Gray puro
             ])
             ->font('Instrument Sans')
-            ->brandLogo(new HtmlString('<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><img src="'.asset('images/logo-dark.svg').'" alt="Costeño" style="height:2.5rem" /><span style="font-size:0.875rem;font-weight:400;color:#64748b">Acceso al portal de proveedores equipo administraci&oacute;n</span></div>'))
-            ->darkModeBrandLogo(new HtmlString('<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><img src="'.asset('images/logo-light.svg').'" alt="Costeño" style="height:2.5rem" /><span style="font-size:0.875rem;font-weight:400;color:#94a3b8">Acceso al portal de proveedores equipo administraci&oacute;n</span></div>'))
-            ->brandLogoHeight('5rem')
+            ->brandLogo(asset('images/logo-dark.svg'))
+            ->darkModeBrandLogo(asset('images/logo-light.svg'))
+            ->brandLogoHeight('2rem')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
