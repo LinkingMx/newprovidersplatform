@@ -64,7 +64,8 @@ class SupplierForm
                                 ->disabled()
                                 ->dehydrated(false),
                         ])
-                        ->columns(1),
+                        ->columns(1)
+                        ->visibleOn('edit'),
 
                     Section::make('Cambiar Contraseña')
                         ->description('Asignar una nueva contraseña al proveedor')

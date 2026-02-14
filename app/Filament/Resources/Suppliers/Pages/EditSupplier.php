@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Suppliers\Pages;
 
 use App\Filament\Resources\Suppliers\Actions\AsignarDocumentosAction;
 use App\Filament\Resources\Suppliers\SupplierResource;
+use App\Jobs\SendSupplierInvitationEmail;
 use App\Models\SupplierInvitation;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
@@ -49,6 +50,8 @@ class EditSupplier extends EditRecord
                     ]);
 
                     $supplier->update(['status' => 'invited']);
+
+                    SendSupplierInvitationEmail::dispatch($supplier);
 
                     Notification::make()
                         ->success()
