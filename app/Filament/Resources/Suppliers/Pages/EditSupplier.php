@@ -24,7 +24,7 @@ class EditSupplier extends EditRecord
             Action::make('resendInvitation')
                 ->label('Reenviar Invitación')
                 ->icon('heroicon-o-paper-airplane')
-                ->color('info')
+                ->color('primary')
                 ->requiresConfirmation()
                 ->action(function (): void {
                     $supplier = $this->record;
@@ -62,6 +62,20 @@ class EditSupplier extends EditRecord
             ForceDeleteAction::make(),
             RestoreAction::make(),
         ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if (isset($data['new_password'])) {
+            $data['password_hash'] = $data['new_password'];
+            unset($data['new_password']);
+        }
+
+        return $data;
     }
 
     protected function getRedirectUrl(): string

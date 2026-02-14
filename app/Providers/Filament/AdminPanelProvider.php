@@ -28,7 +28,12 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            ->login(\App\Filament\Pages\Login::class)
+            ->passwordReset()
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
+                fn (): string => \Illuminate\Support\Facades\Blade::render('<div class="text-center"><x-filament::link href="/" icon="heroicon-m-arrow-left" icon-position="before">Volver al inicio</x-filament::link></div>'),
+            )
             ->colors([
                 'primary' => [
                     50 => '246, 244, 250',
@@ -71,7 +76,12 @@ class AdminPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->plugins([
-                FilamentShieldPlugin::make(),
+                FilamentShieldPlugin::make()
+                    ->navigationLabel('Roles')
+                    ->modelLabel('Rol')
+                    ->pluralModelLabel('Roles')
+                    ->navigationGroup('Administración')
+                    ->navigationSort(7),
             ])
             ->authMiddleware([
                 Authenticate::class,

@@ -150,11 +150,6 @@ export default function Login({ errors: initialErrors }: Props) {
                         </CardContent>
                     </Card>
 
-                    <p className="text-center text-sm text-muted-foreground">
-                        &iquest;No tienes cuenta? Espera a tu invitaci&oacute;n
-                        de registro
-                    </p>
-
                     <div className="text-center">
                         <Button asChild variant="link" size="sm">
                             <Link href="/">&larr; Volver al inicio</Link>

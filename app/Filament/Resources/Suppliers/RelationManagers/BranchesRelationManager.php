@@ -13,6 +13,8 @@ class BranchesRelationManager extends RelationManager
 {
     protected static string $relationship = 'branches';
 
+    protected static ?string $title = 'Sucursales';
+
     protected static ?string $recordTitleAttribute = 'name';
 
     public function table(Table $table): Table

@@ -48,8 +48,8 @@ class SupplierResource extends Resource
     public static function getRelations(): array
     {
         return [
-            BranchesRelationManager::class,
             DocumentsRelationManager::class,
+            BranchesRelationManager::class,
         ];
     }
 
