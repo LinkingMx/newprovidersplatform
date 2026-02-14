@@ -322,4 +322,137 @@ describe('Supplier Dashboard Documents', function () {
             ->has('documents', 0)
         );
     });
+
+    it('shows Rechazado document with notas and can_upload=true', function () {
+        $supplier = Supplier::factory()->active()->create();
+        $docType = DocumentType::factory()->create(['nombre' => 'RFC']);
+        $rechazado = DocumentState::where('nombre', 'Rechazado')->first();
+
+        SupplierDocument::factory()->uploaded()->create([
+            'supplier_id' => $supplier->id,
+            'document_type_id' => $docType->id,
+            'document_state_id' => $rechazado->id,
+            'notas' => 'Documento ilegible',
+        ]);
+
+        $response = $this->actingAs($supplier, 'supplier')
+            ->get('/dashboard');
+
+        $response->assertOk();
+        $response->assertInertia(fn ($page) => $page
+            ->component('Supplier/Dashboard')
+            ->has('documents', 1)
+            ->where('documents.0.can_upload', true)
+            ->where('documents.0.has_file', true)
+            ->where('documents.0.notas', 'Documento ilegible')
+            ->where('documents.0.document_state.color', 'red')
+        );
+    });
+
+    it('shows Aprobado document with can_upload=false', function () {
+        $supplier = Supplier::factory()->active()->create();
+        $docType = DocumentType::factory()->create(['nombre' => 'Contrato']);
+        $aprobado = DocumentState::where('nombre', 'Aprobado')->first();
+
+        SupplierDocument::factory()->uploaded()->create([
+            'supplier_id' => $supplier->id,
+            'document_type_id' => $docType->id,
+            'document_state_id' => $aprobado->id,
+        ]);
+
+        $response = $this->actingAs($supplier, 'supplier')
+            ->get('/dashboard');
+
+        $response->assertOk();
+        $response->assertInertia(fn ($page) => $page
+            ->component('Supplier/Dashboard')
+            ->has('documents', 1)
+            ->where('documents.0.can_upload', false)
+            ->where('documents.0.has_file', true)
+            ->where('documents.0.document_state.color', 'green')
+        );
+    });
+
+    it('shows En Revisión document with can_upload=false', function () {
+        $supplier = Supplier::factory()->active()->create();
+        $docType = DocumentType::factory()->create(['nombre' => 'Identificación']);
+        $enRevision = DocumentState::where('nombre', 'En Revisión')->first();
+
+        SupplierDocument::factory()->uploaded()->create([
+            'supplier_id' => $supplier->id,
+            'document_type_id' => $docType->id,
+            'document_state_id' => $enRevision->id,
+        ]);
+
+        $response = $this->actingAs($supplier, 'supplier')
+            ->get('/dashboard');
+
+        $response->assertOk();
+        $response->assertInertia(fn ($page) => $page
+            ->component('Supplier/Dashboard')
+            ->has('documents', 1)
+            ->where('documents.0.can_upload', false)
+            ->where('documents.0.has_file', true)
+            ->where('documents.0.document_state.color', 'blue')
+        );
+    });
+
+    it('shows Pendiente document with file has can_upload=true and has_file=true', function () {
+        $supplier = Supplier::factory()->active()->create();
+        $docType = DocumentType::factory()->create(['nombre' => 'Comprobante']);
+        $pendiente = DocumentState::where('nombre', 'Pendiente')->first();
+
+        SupplierDocument::factory()->uploaded()->create([
+            'supplier_id' => $supplier->id,
+            'document_type_id' => $docType->id,
+            'document_state_id' => $pendiente->id,
+        ]);
+
+        $response = $this->actingAs($supplier, 'supplier')
+            ->get('/dashboard');
+
+        $response->assertOk();
+        $response->assertInertia(fn ($page) => $page
+            ->component('Supplier/Dashboard')
+            ->has('documents', 1)
+            ->where('documents.0.can_upload', true)
+            ->where('documents.0.has_file', true)
+        );
+    });
+
+    it('shows multiple documents in different states', function () {
+        $supplier = Supplier::factory()->active()->create();
+
+        $pendiente = DocumentState::where('nombre', 'Pendiente')->first();
+        $aprobado = DocumentState::where('nombre', 'Aprobado')->first();
+        $rechazado = DocumentState::where('nombre', 'Rechazado')->first();
+
+        SupplierDocument::factory()->create([
+            'supplier_id' => $supplier->id,
+            'document_type_id' => DocumentType::factory()->create(['nombre' => 'Doc A'])->id,
+            'document_state_id' => $pendiente->id,
+        ]);
+
+        SupplierDocument::factory()->uploaded()->create([
+            'supplier_id' => $supplier->id,
+            'document_type_id' => DocumentType::factory()->create(['nombre' => 'Doc B'])->id,
+            'document_state_id' => $aprobado->id,
+        ]);
+
+        SupplierDocument::factory()->uploaded()->create([
+            'supplier_id' => $supplier->id,
+            'document_type_id' => DocumentType::factory()->create(['nombre' => 'Doc C'])->id,
+            'document_state_id' => $rechazado->id,
+            'notas' => 'Motivo de rechazo',
+        ]);
+
+        $response = $this->actingAs($supplier, 'supplier')
+            ->get('/dashboard');
+
+        $response->assertOk();
+        $response->assertInertia(fn ($page) => $page
+            ->component('Supplier/Dashboard')
+            ->has('documents', 3)
+        );
+    });
 });
