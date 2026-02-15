@@ -10,7 +10,6 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -36,21 +35,50 @@ class AdminPanelProvider extends PanelProvider
             )
             ->colors([
                 'primary' => [
-                    50 => '246, 244, 250',
-                    100 => '233, 227, 242',
-                    200 => '213, 203, 229',
-                    300 => '183, 166, 210',
-                    400 => '147, 122, 185',
-                    500 => '115, 87, 156', // Púrpura principal (ajustado para legibilidad)
-                    600 => '92, 67, 129',
-                    700 => '75, 54, 105',
-                    800 => '64, 47, 88',
-                    900 => '54, 41, 74',
-                    950 => '40, 29, 65', // El púrpura oscuro del fondo del logo
+                    50 => '253, 252, 250',
+                    100 => '250, 247, 242',
+                    200 => '245, 239, 230',
+                    300 => '235, 223, 199',  // Cream
+                    400 => '220, 201, 163',
+                    500 => '197, 160, 89',   // Gold
+                    600 => '168, 134, 61',
+                    700 => '138, 107, 47',
+                    800 => '107, 82, 36',
+                    900 => '77, 59, 26',
+                    950 => '61, 53, 42',
                 ],
-                'gray' => Color::Slate, // Slate combina mejor con tonos púrpuras que Gray puro
+                'gray' => [
+                    50 => '253, 252, 250',
+                    100 => '245, 244, 242',
+                    200 => '232, 230, 227',
+                    300 => '212, 209, 204',
+                    400 => '158, 154, 148',
+                    500 => '107, 102, 96',
+                    600 => '74, 69, 64',
+                    700 => '45, 42, 69',
+                    800 => '25, 23, 49',   // Navy
+                    900 => '18, 16, 36',
+                    950 => '13, 15, 26',
+                ],
+                'warning' => [
+                    50 => '253, 249, 240',
+                    100 => '250, 240, 219',
+                    200 => '245, 223, 179',
+                    300 => '232, 199, 122',
+                    400 => '212, 172, 94',
+                    500 => '197, 160, 89',   // Gold
+                    600 => '168, 134, 61',
+                    700 => '138, 107, 47',
+                    800 => '107, 82, 36',
+                    900 => '77, 59, 26',
+                    950 => '47, 35, 19',
+                ],
             ])
-            ->font('Instrument Sans')
+            ->font('Open Sans')
+            ->darkMode(true)
+            ->sidebarCollapsibleOnDesktop()
+            ->maxContentWidth(\Filament\Support\Enums\Width::Full)
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->brandLogo(asset('images/logo-dark.svg'))
             ->darkModeBrandLogo(asset('images/logo-light.svg'))
             ->brandLogoHeight('2rem')
