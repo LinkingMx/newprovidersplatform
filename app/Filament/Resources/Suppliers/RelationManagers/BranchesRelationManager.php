@@ -33,7 +33,10 @@ class BranchesRelationManager extends RelationManager
             ])
             ->headerActions([
                 AttachAction::make()
-                    ->label('Agregar Sucursal'),
+                    ->label('Agregar Sucursal')
+                    ->modalHeading('Vincular Sucursal')
+                    ->preloadRecordSelect()
+                    ->recordSelectSearchColumns(['name']),
             ])
             ->actions([
                 DetachAction::make()

@@ -21,7 +21,7 @@ class OnboardingController
 
         if ($supplier->isActive()) {
             return redirect()->route('dashboard')
-                ->with('message', 'Tu perfil ya está completado');
+                ->with('success', 'Tu perfil ya está completado');
         }
 
         return Inertia::render('Supplier/Onboarding', [
@@ -85,6 +85,6 @@ class OnboardingController
         dispatch(new SupplierVerificationJob($supplier));
 
         return redirect()->route('dashboard')
-            ->with('message', 'Perfil completado. Estamos verificando tu información.');
+            ->with('success', 'Perfil completado. Estamos verificando tu información.');
     }
 }
