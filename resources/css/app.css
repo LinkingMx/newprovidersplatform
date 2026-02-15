@@ -160,30 +160,3 @@
         @apply bg-background text-foreground;
     }
 }
-
-/* ============================================
-   SELA Travel Custom Utilities
-   ============================================ */
-.focus-ring-gold {
-    @apply focus:outline-none focus:ring-2 focus:ring-[#C5A059] focus:ring-offset-2;
-}
-
-.bg-gradient-navy {
-    background: linear-gradient(135deg, #0D0F1A 0%, #191731 100%);
-}
-
-.bg-gradient-cream {
-    background: linear-gradient(135deg, #F8F6F1 0%, #EBDFC7 100%);
-}
-
-.glass-navy {
-    background-color: rgba(25, 23, 49, 0.7);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(235, 223, 199, 0.1);
-}
-
-.glass-cream {
-    background-color: rgba(235, 223, 199, 0.7);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(25, 23, 49, 0.1);
-}

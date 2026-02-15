@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
-import AppLogo from './app-logo';
+import BrandLogo from './brand-logo';
 
 const mainNavItems: NavItem[] = [
     {
@@ -45,7 +45,7 @@ export function AppSidebar() {
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
                             <Link href={dashboard()} prefetch>
-                                <AppLogo />
+                                <BrandLogo className="h-8" />
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
