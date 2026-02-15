@@ -253,7 +253,7 @@ describe('Supplier Document Download', function () {
         $response->assertRedirect(route('dashboard'));
     });
 
-    it('redirects when no file has been uploaded', function () {
+    it('returns 403 when no file has been uploaded', function () {
         $supplier = Supplier::factory()->active()->create();
         $document = SupplierDocument::factory()->create([
             'supplier_id' => $supplier->id,
@@ -263,7 +263,7 @@ describe('Supplier Document Download', function () {
         $response = $this->actingAs($supplier, 'supplier')
             ->get("/supplier/documents/{$document->id}/download");
 
-        $response->assertRedirect(route('dashboard'));
+        $response->assertForbidden();
     });
 
     it('downloads file successfully with original name', function () {

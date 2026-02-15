@@ -45,8 +45,17 @@ class SupplierDocumentController
             abort(403);
         }
 
+        // Validate path is safe (no traversal) and within expected directory
+        if (
+            ! $supplierDocument->archivo_path
+            || str_contains($supplierDocument->archivo_path, '..')
+            || ! str_starts_with($supplierDocument->archivo_path, 'supplier-documents/')
+        ) {
+            abort(403);
+        }
+
         // Check file exists
-        if (! $supplierDocument->archivo_path || ! Storage::disk('local')->exists($supplierDocument->archivo_path)) {
+        if (! Storage::disk('local')->exists($supplierDocument->archivo_path)) {
             return redirect()->route('dashboard')
                 ->with('error', 'El archivo no se encontró.');
         }

@@ -24,7 +24,7 @@ class SupplierDocumentFactory extends Factory
     public function uploaded(): static
     {
         return $this->state(fn () => [
-            'archivo_path' => 'documents/'.fake()->uuid().'.pdf',
+            'archivo_path' => 'supplier-documents/'.fake()->numberBetween(1, 9999).'/'.fake()->uuid().'.pdf',
             'archivo_nombre' => fake()->word().'.pdf',
             'uploaded_at' => now(),
         ]);

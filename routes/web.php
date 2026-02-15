@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Supplier\ForgotPasswordController;
 use App\Http\Controllers\Supplier\LoginController;
+use App\Http\Controllers\Supplier\LogoutController;
 use App\Http\Controllers\Supplier\OnboardingController;
 use App\Http\Controllers\Supplier\ResetPasswordController;
 use App\Http\Controllers\Supplier\SetPasswordController;
@@ -74,15 +75,13 @@ Route::middleware('auth:supplier')->group(function () {
         ->name('supplier.onboarding.submit');
 
     Route::post('/supplier/documents/{supplierDocument}/upload', [SupplierDocumentController::class, 'upload'])
+        ->middleware('throttle:supplier-document-upload')
         ->name('supplier.documents.upload');
     Route::get('/supplier/documents/{supplierDocument}/download', [SupplierDocumentController::class, 'download'])
         ->name('supplier.documents.download');
 
-    Route::post('/supplier/auth/logout', function () {
-        auth('supplier')->logout();
-
-        return redirect('/');
-    })->name('supplier.logout');
+    Route::post('/supplier/auth/logout', LogoutController::class)
+        ->name('supplier.logout');
 });
 
 require __DIR__.'/settings.php';

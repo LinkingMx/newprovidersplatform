@@ -43,5 +43,12 @@ return Application::configure(basePath: dirname(__DIR__))
 
             return Limit::perMinute(3)->by($key);
         });
+
+        RateLimiter::for('supplier-document-upload', function (Request $request) {
+            $supplier = auth('supplier')->user();
+            $key = ($supplier?->id ?? 'guest').'|'.$request->ip();
+
+            return Limit::perMinute(10)->by($key);
+        });
     })
     ->create();
