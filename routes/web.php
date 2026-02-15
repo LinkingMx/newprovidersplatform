@@ -50,6 +50,7 @@ Route::middleware(RedirectIfSupplierAuthenticated::class)->group(function () {
     Route::get('/supplier/login', [LoginController::class, 'show'])
         ->name('supplier.login');
     Route::post('/supplier/login', [LoginController::class, 'store'])
+        ->middleware('throttle:supplier-login')
         ->name('supplier.login.store');
     Route::get('/supplier/set-password', [SetPasswordController::class, 'show'])
         ->name('supplier.set-password');
@@ -58,6 +59,7 @@ Route::middleware(RedirectIfSupplierAuthenticated::class)->group(function () {
     Route::get('/supplier/forgot-password', [ForgotPasswordController::class, 'show'])
         ->name('supplier.forgot-password');
     Route::post('/supplier/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])
+        ->middleware('throttle:supplier-forgot-password')
         ->name('supplier.forgot-password.store');
     Route::get('/supplier/reset-password', [ResetPasswordController::class, 'show'])
         ->name('supplier.reset-password');
