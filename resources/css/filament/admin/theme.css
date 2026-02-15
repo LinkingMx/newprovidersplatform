@@ -2,6 +2,10 @@
 
 @source '../../../../app/Filament/**/*';
 @source '../../../../resources/views/filament/**/*';
+@source '../../../../vendor/guava/filament-knowledge-base/src/**/*';
+@source '../../../../vendor/guava/filament-knowledge-base/resources/views/**/*';
+
+@plugin "@tailwindcss/typography";
 
 /* ============================================
    SELA Travel - Filament Admin Theme
