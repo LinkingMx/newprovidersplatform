@@ -174,6 +174,27 @@ Schema::create('users', function (Blueprint $table) {
 - **Filament Shield**: Manages admin panel permissions
 - **Routes**: Public routes in `routes/web.php`, protected with middleware
 
+### Memory MCP - Knowledge Graph (OBLIGATORIO)
+
+Este proyecto usa un Knowledge Graph persistente via MCP Docker para mantener contexto entre sesiones.
+
+**Al inicio de cada sesion:**
+- Consultar el grafo con `search_nodes` para obtener contexto del area a trabajar
+- Ejemplo: `search_nodes("Supplier")` devuelve modelo, relaciones, resources, convenciones y gotchas relevantes
+
+**Despues de cada cambio significativo (commit):**
+- Actualizar el grafo con `add_observations` para agregar info nueva a entidades existentes
+- Crear nuevas entidades con `create_entities` si se agregaron modelos, resources, features, etc.
+- Crear relaciones con `create_relations` si se establecieron nuevas dependencias
+
+**Herramientas disponibles:**
+- `search_nodes(query)` — Buscar entidades por nombre o contenido
+- `read_graph` — Leer todo el grafo
+- `create_entities` — Crear nuevas entidades con observaciones
+- `add_observations` — Agregar observaciones a entidades existentes
+- `create_relations` — Crear relaciones entre entidades
+- `delete_entities` / `delete_observations` / `delete_relations` — Limpiar info obsoleta
+
 ---
 
 <laravel-boost-guidelines>
@@ -202,10 +223,10 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - phpunit/phpunit (PHPUNIT) - v12
 - @inertiajs/react (INERTIA) - v2
 - react (REACT) - v19
-- tailwindcss (TAILWINDCSS) - v4
 - @laravel/vite-plugin-wayfinder (WAYFINDER) - v0
 - eslint (ESLINT) - v9
 - prettier (PRETTIER) - v3
+- tailwindcss (TAILWINDCSS) - v4
 
 ## Skills Activation
 
