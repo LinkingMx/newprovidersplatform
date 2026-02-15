@@ -15,6 +15,12 @@ class Supplier extends Model implements Authenticatable
     /** @use HasFactory<\Database\Factories\SupplierFactory> */
     use HasFactory, SoftDeletes;
 
+    protected $hidden = [
+        'password_hash',
+        'password_reset_token',
+        'password_reset_expires_at',
+    ];
+
     protected $fillable = [
         'name',
         'email',

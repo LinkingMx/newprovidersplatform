@@ -92,6 +92,7 @@ class SetPasswordController
 
         // Log in the supplier
         Auth::guard('supplier')->login($supplier);
+        $request->session()->regenerate();
 
         // Redirect to onboarding if not completed, else to dashboard
         if ($supplier->status === 'registered') {

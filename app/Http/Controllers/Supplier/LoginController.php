@@ -43,6 +43,7 @@ class LoginController
         }
 
         Auth::guard('supplier')->login($supplier);
+        $request->session()->regenerate();
 
         // Redirect based on supplier status
         if ($supplier->status === 'registered') {

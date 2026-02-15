@@ -41,10 +41,10 @@ class ForgotPasswordController
             }
         }
 
-        // Generate token and save
+        // Generate token, hash before storage to prevent DB compromise exposure
         $token = Str::random(64);
         $supplier->update([
-            'password_reset_token' => $token,
+            'password_reset_token' => hash('sha256', $token),
             'password_reset_expires_at' => now()->addMinutes(60),
         ]);
 
