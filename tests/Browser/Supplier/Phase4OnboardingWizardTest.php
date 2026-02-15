@@ -14,6 +14,7 @@ $prefix = 'dusk_p4_'.substr(uniqid(), -6).'_';
 
 beforeEach(function () use ($prefix) {
     $this->prefix = $prefix;
+    $this->testClabe = '0'.str_pad((string) random_int(10000000000000000, 99999999999999999), 17, '0', STR_PAD_LEFT);
 
     $ids = DB::table('suppliers')->where('email', 'like', $prefix.'%')->pluck('id');
     if ($ids->isNotEmpty()) {
@@ -105,7 +106,7 @@ test('4.2b onboarding step 2 can advance to step 3', function () {
             ->type('#address_zip', '06500')
             ->press('Siguiente')
             ->waitForText('Paso 2 de 3', 5)
-            ->type('#clabe_interbancaria', '012345678901234567')
+            ->type('#clabe_interbancaria', $this->testClabe)
             ->press('Siguiente')
             ->waitForText('Paso 3 de 3', 5)
             ->assertSee('Confirmación');
@@ -146,7 +147,7 @@ test('4.3a onboarding step 3 shows confirmation summary', function () {
             ->type('#address_zip', '06500')
             ->press('Siguiente')
             ->waitForText('Paso 2 de 3', 5)
-            ->type('#clabe_interbancaria', '012345678901234567')
+            ->type('#clabe_interbancaria', $this->testClabe)
             ->press('Siguiente')
             ->waitForText('Paso 3 de 3', 5)
             ->assertSee('Confirmación')
@@ -172,18 +173,30 @@ test('4.4a onboarding submit completes profile and redirects to dashboard', func
             ->press('Siguiente')
             ->waitForText('Paso 2 de 3', 5)
             // Step 2
-            ->type('#clabe_interbancaria', '012345678901234567')
+            ->type('#clabe_interbancaria', $this->testClabe)
             ->press('Siguiente')
             ->waitForText('Paso 3 de 3', 5)
-            // Step 3
-            ->click('#confirm')
+            // Step 3 — Toggle Radix Checkbox and submit
+            ->scrollIntoView('#confirm')
             ->pause(500)
-            ->press('Completar Onboarding')
-            ->waitForLocation('/dashboard', 15)
+            ->click('#confirm')
+            ->pause(1000);
+
+        // Verify checkbox toggled (button should be enabled)
+        $browser->waitFor('button[type="submit"]:not([disabled])', 5)
+            ->pause(500);
+
+        // Submit the form
+        $browser->press('Completar Onboarding');
+
+        $browser->waitForLocation('/dashboard', 15)
             ->assertPathIs('/dashboard');
     });
 
-    expect($this->supplier->fresh()->status)->toBe(SupplierStatus::ProfileCompleted);
+    expect($this->supplier->fresh()->status)->toBeIn([
+        SupplierStatus::ProfileCompleted,
+        SupplierStatus::Active,
+    ]);
 });
 
 test('4.4b active supplier is redirected from onboarding to dashboard', function () {

@@ -138,7 +138,7 @@ test('3.3 supplier can login after setting password', function () {
     $this->browse(function (Browser $browser) {
         $browser->visit(new LoginPage)
             ->submitLogin($this->supplier->email, 'DuskTest2024!!')
-            ->waitForLocation('/dashboard', 10)
-            ->assertPathIs('/dashboard');
+            ->waitForLocation('/supplier/onboarding', 10)
+            ->assertPathIs('/supplier/onboarding');
     });
 });

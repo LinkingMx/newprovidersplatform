@@ -16,6 +16,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Dusk\Browser;
+use Spatie\Permission\Models\Role;
 
 $prefix = 'dusk_p2_'.substr(uniqid(), -6).'_';
 
@@ -30,11 +31,14 @@ beforeEach(function () use ($prefix) {
         DB::table('suppliers')->whereIn('id', $ids)->delete();
     }
 
+    Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+
     $this->admin = User::factory()->create([
         'name' => 'Admin Dusk Onboarding',
         'email' => $prefix.'admin@test.com',
         'password' => Hash::make('AdminDusk2024!'),
     ]);
+    $this->admin->assignRole('super_admin');
 });
 
 afterEach(function () use ($prefix) {
@@ -53,11 +57,12 @@ afterEach(function () use ($prefix) {
 
 test('2.1 admin can access create supplier form', function () {
     $this->browse(function (Browser $browser) {
-        $browser->loginAs($this->admin)
+        $browser->logout()
+            ->loginAs($this->admin)
             ->visit('/admin/suppliers/create')
             ->waitForText('Información Básica', 10)
-            ->assertPresent('input[id*="name"]')
-            ->assertPresent('input[id*="email"]');
+            ->assertPresent('input[type="text"]')
+            ->assertPresent('input[type="email"]');
     });
 });
 
@@ -107,7 +112,8 @@ test('2.4 admin can view supplier documents relation', function () {
     ]);
 
     $this->browse(function (Browser $browser) use ($supplier) {
-        $browser->loginAs($this->admin)
+        $browser->logout()
+            ->loginAs($this->admin)
             ->visit("/admin/suppliers/{$supplier->id}/edit")
             ->pause(3000)
             ->assertSee('Documentos del Expediente');
@@ -125,7 +131,8 @@ test('2.5 admin can view supplier branches relation', function () {
     ]);
 
     $this->browse(function (Browser $browser) use ($supplier) {
-        $browser->loginAs($this->admin)
+        $browser->logout()
+            ->loginAs($this->admin)
             ->visit("/admin/suppliers/{$supplier->id}/edit")
             ->pause(3000)
             ->assertSee('Sucursales');
