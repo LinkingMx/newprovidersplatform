@@ -40,7 +40,7 @@ class SuppliersTable
                             ->mapWithKeys(fn (SupplierStatus $s) => [$s->color() => $s->value])
                             ->all()
                     )
-                    ->formatStateUsing(fn (string $state): string => SupplierStatus::tryFrom($state)?->label() ?? $state)
+                    ->formatStateUsing(fn (SupplierStatus|string $state): string => $state instanceof SupplierStatus ? $state->label() : (SupplierStatus::tryFrom($state)?->label() ?? $state))
                     ->sortable(),
 
                 TextColumn::make('branches_count')

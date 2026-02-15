@@ -6,14 +6,17 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationItem;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\View\PanelsRenderHook;
 use Guava\FilamentKnowledgeBase\Plugins\KnowledgeBasePlugin;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class KnowledgeBasePanelProvider extends PanelProvider
@@ -57,6 +60,20 @@ class KnowledgeBasePanelProvider extends PanelProvider
             ->darkModeBrandLogo(asset('images/logo-light.svg'))
             ->brandLogoHeight('2rem')
             ->viteTheme('resources/css/filament/knowledge-base/theme.css')
+            ->renderHook(
+                PanelsRenderHook::SIDEBAR_FOOTER,
+                fn (): string => Blade::render('filament-panels::components.sidebar.group', [
+                    'attributes' => new \Illuminate\View\ComponentAttributeBag([
+                        'class' => 'px-4 pb-4 [&_.fi-sidebar-item]:rounded-lg [&_.fi-sidebar-item]:ring-1 [&_.fi-sidebar-item]:ring-gray-950/10 dark:[&_.fi-sidebar-item]:ring-white/20',
+                    ]),
+                    'label' => null,
+                    'items' => [
+                        NavigationItem::make('Volver al Panel')
+                            ->url('/admin')
+                            ->icon('heroicon-o-arrow-uturn-left'),
+                    ],
+                ])
+            )
             ->plugins([
                 KnowledgeBasePlugin::make(),
             ])
