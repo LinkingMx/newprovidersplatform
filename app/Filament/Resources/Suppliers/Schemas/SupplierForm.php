@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Suppliers\Schemas;
 
+use App\Enums\SupplierStatus;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Group;
@@ -54,13 +55,7 @@ class SupplierForm
                         ->schema([
                             Select::make('status')
                                 ->label('Estado')
-                                ->options([
-                                    'created' => 'Creado',
-                                    'invited' => 'Invitado',
-                                    'registered' => 'Registrado',
-                                    'profile_completed' => 'Perfil Completo',
-                                    'active' => 'Activo',
-                                ])
+                                ->options(SupplierStatus::options())
                                 ->disabled()
                                 ->dehydrated(false),
                         ])

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
+use App\Models\DocumentState;
 use App\Models\Supplier;
 use App\Models\SupplierDocument;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -72,7 +73,7 @@ class SupplierDocumentPolicy
     public function upload(Supplier $supplier, SupplierDocument $supplierDocument): bool
     {
         return $supplier->id === $supplierDocument->supplier_id
-            && in_array($supplierDocument->document_state_id, [1, 4]);
+            && in_array($supplierDocument->document_state_id, DocumentState::UPLOADABLE_STATES);
     }
 
     /**

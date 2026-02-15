@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Supplier;
 
+use App\Enums\SupplierStatus;
 use App\Models\Supplier;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -46,8 +47,8 @@ class LoginController
         $request->session()->regenerate();
 
         // Redirect based on supplier status
-        if ($supplier->status === 'registered') {
-            return redirect('/supplier/onboarding')
+        if ($supplier->status === SupplierStatus::Registered) {
+            return redirect()->route('supplier.onboarding')
                 ->with('message', 'Completa tu perfil para continuar.');
         }
 

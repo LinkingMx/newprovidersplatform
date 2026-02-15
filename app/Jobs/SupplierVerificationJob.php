@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\SupplierStatus;
 use App\Models\Supplier;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -28,7 +29,7 @@ class SupplierVerificationJob implements ShouldQueue
         // TODO: Optional address verification via geolocation API
 
         // Mark supplier as active
-        $this->supplier->update(['status' => 'active']);
+        $this->supplier->update(['status' => SupplierStatus::Active]);
 
         // TODO: Send notification to supplier
         // Notification::send($this->supplier, new SupplierActivatedNotification());

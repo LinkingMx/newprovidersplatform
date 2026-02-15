@@ -7,8 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class DocumentState extends Model
 {
-    /** @use HasFactory<\Database\Factories\DocumentStateFactory> */
     use HasFactory;
+
+    public const PENDIENTE = 1;
+
+    public const EN_REVISION = 2;
+
+    public const APROBADO = 3;
+
+    public const RECHAZADO = 4;
+
+    /** @var int[] */
+    public const UPLOADABLE_STATES = [self::PENDIENTE, self::RECHAZADO];
 
     protected $fillable = [
         'nombre',

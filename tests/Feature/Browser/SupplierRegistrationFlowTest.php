@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\SupplierStatus;
 use App\Jobs\SupplierVerificationJob;
 use App\Models\Supplier;
 use App\Models\SupplierInvitation;
@@ -71,7 +72,7 @@ describe('Supplier Registration Flow', function () {
             $response->assertRedirect('/supplier/onboarding');
             $this->assertAuthenticated('supplier');
             $supplier->refresh();
-            expect($supplier->status)->toBe('registered');
+            expect($supplier->status)->toBe(SupplierStatus::Registered);
         });
 
         it('marks invitation as accepted after password set', function () {
@@ -250,7 +251,7 @@ describe('Supplier Registration Flow', function () {
 
             $response->assertRedirect('/dashboard');
             $supplier->refresh();
-            expect($supplier->status)->toBe('profile_completed');
+            expect($supplier->status)->toBe(SupplierStatus::ProfileCompleted);
             expect($supplier->address_street)->toBe('Calle Principal 123');
             expect($supplier->address_number)->toBe('123');
             expect($supplier->clabe_interbancaria)->toBe('002011111111111111');
@@ -403,7 +404,7 @@ describe('Supplier Registration Flow', function () {
 
             $passwordResponse->assertRedirect('/supplier/onboarding');
             $supplier->refresh();
-            expect($supplier->status)->toBe('registered');
+            expect($supplier->status)->toBe(SupplierStatus::Registered);
             $this->assertAuthenticated('supplier');
 
             // Step 3: Complete onboarding
@@ -421,7 +422,7 @@ describe('Supplier Registration Flow', function () {
 
             $onboardingResponse->assertRedirect('/dashboard');
             $supplier->refresh();
-            expect($supplier->status)->toBe('profile_completed');
+            expect($supplier->status)->toBe(SupplierStatus::ProfileCompleted);
             expect($supplier->address_street)->toBe('Calle Principal 456');
 
             // Step 4: Dashboard access

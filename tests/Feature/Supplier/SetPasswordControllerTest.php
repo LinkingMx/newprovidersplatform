@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\SupplierStatus;
 use App\Models\Supplier;
 use App\Models\SupplierInvitation;
 
@@ -18,7 +19,7 @@ describe('SetPasswordController', function () {
             $response->assertRedirect();
 
             $supplier->refresh();
-            expect($supplier->status)->toBe('registered');
+            expect($supplier->status)->toBe(SupplierStatus::Registered);
             expect($supplier->password_hash)->not->toBeNull();
             expect(password_verify('SecurePassword123!', $supplier->password_hash))->toBeTrue();
         });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Supplier;
 
+use App\Models\DocumentState;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SupplierDocumentUploadRequest extends FormRequest
@@ -20,8 +21,7 @@ class SupplierDocumentUploadRequest extends FormRequest
             return false;
         }
 
-        // Only allow upload when state is "Pendiente" (1) or "Rechazado" (4)
-        return in_array($document->document_state_id, [1, 4]);
+        return in_array($document->document_state_id, DocumentState::UPLOADABLE_STATES);
     }
 
     /**

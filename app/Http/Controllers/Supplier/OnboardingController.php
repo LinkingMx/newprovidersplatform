@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Supplier;
 
+use App\Enums\SupplierStatus;
 use App\Jobs\SupplierVerificationJob;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -79,7 +80,7 @@ class OnboardingController
             'address_country' => $validated['address_country'],
             'address_zip' => $validated['address_zip'],
             'clabe_interbancaria' => $validated['clabe_interbancaria'],
-            'status' => 'profile_completed',
+            'status' => SupplierStatus::ProfileCompleted,
         ]);
 
         // Enqueue verification job

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Supplier;
 
+use App\Enums\SupplierStatus;
 use App\Models\Supplier;
 use App\Models\SupplierInvitation;
 use Illuminate\Http\RedirectResponse;
@@ -55,7 +56,7 @@ class SetPasswordController
     {
         $validated = $request->validate([
             'token' => 'required|string',
-            'password' => 'required|string|min:10|confirmed|regex:/[A-Z]/|regex:/[0-9]/|regex:/[!@#$%^&*]/|confirmed',
+            'password' => 'required|string|min:10|confirmed|regex:/[A-Z]/|regex:/[0-9]/|regex:/[!@#$%^&*]/',
         ], [
             'password.required' => 'La contraseña es requerida',
             'password.min' => 'La contraseña debe tener al menos 10 caracteres',
@@ -82,7 +83,7 @@ class SetPasswordController
         // Update supplier password and status
         $supplier->update([
             'password_hash' => Hash::make($validated['password']),
-            'status' => 'registered',
+            'status' => SupplierStatus::Registered,
             'password_reset_token' => null,
             'password_reset_expires_at' => null,
         ]);
@@ -95,7 +96,7 @@ class SetPasswordController
         $request->session()->regenerate();
 
         // Redirect to onboarding if not completed, else to dashboard
-        if ($supplier->status === 'registered') {
+        if ($supplier->status === SupplierStatus::Registered) {
             return redirect()->route('supplier.onboarding')
                 ->with('message', 'Contraseña establecida. Completa tu perfil.');
         }

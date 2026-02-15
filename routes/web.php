@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Supplier\DashboardController;
 use App\Http\Controllers\Supplier\ForgotPasswordController;
 use App\Http\Controllers\Supplier\LoginController;
 use App\Http\Controllers\Supplier\LogoutController;
@@ -15,36 +16,9 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
-// Proveedor Dashboard
-Route::get('dashboard', function () {
-    $supplier = auth('supplier')->user()->load('branches');
-    $documents = $supplier->documents()
-        ->with(['documentType', 'documentState'])
-        ->get()
-        ->map(fn ($doc) => [
-            'id' => $doc->id,
-            'document_type' => [
-                'id' => $doc->documentType->id,
-                'nombre' => $doc->documentType->nombre,
-            ],
-            'document_state' => [
-                'id' => $doc->documentState->id,
-                'nombre' => $doc->documentState->nombre,
-                'etiqueta' => $doc->documentState->etiqueta,
-                'color' => $doc->documentState->color,
-            ],
-            'archivo_nombre' => $doc->archivo_nombre,
-            'has_file' => $doc->archivo_path !== null,
-            'can_upload' => in_array($doc->document_state_id, [1, 4]),
-            'notas' => $doc->notas,
-            'uploaded_at' => $doc->uploaded_at?->toISOString(),
-        ]);
-
-    return Inertia::render('Supplier/Dashboard', [
-        'supplier' => $supplier,
-        'documents' => $documents,
-    ]);
-})->middleware('auth:supplier')->name('dashboard');
+Route::get('dashboard', DashboardController::class)
+    ->middleware('auth:supplier')
+    ->name('dashboard');
 
 // Supplier Routes
 Route::middleware(RedirectIfSupplierAuthenticated::class)->group(function () {

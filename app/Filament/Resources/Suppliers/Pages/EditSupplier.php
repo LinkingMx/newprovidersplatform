@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Suppliers\Pages;
 
+use App\Enums\SupplierStatus;
 use App\Filament\Resources\Suppliers\Actions\AsignarDocumentosAction;
 use App\Filament\Resources\Suppliers\SupplierResource;
 use App\Jobs\SendSupplierInvitationEmail;
@@ -49,7 +50,7 @@ class EditSupplier extends EditRecord
                         'expires_at' => now()->addDays(7),
                     ]);
 
-                    $supplier->update(['status' => 'invited']);
+                    $supplier->update(['status' => SupplierStatus::Invited]);
 
                     SendSupplierInvitationEmail::dispatch($supplier);
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\SupplierStatus;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -41,6 +42,7 @@ class Supplier extends Model implements Authenticatable
     protected function casts(): array
     {
         return [
+            'status' => SupplierStatus::class,
             'password_reset_expires_at' => 'datetime',
         ];
     }
@@ -69,17 +71,25 @@ class Supplier extends Model implements Authenticatable
 
     public function isActive(): bool
     {
-        return $this->status === 'active';
+        return $this->status === SupplierStatus::Active;
     }
 
     public function canLogin(): bool
     {
-        return in_array($this->status, ['registered', 'profile_completed', 'active']);
+        return in_array($this->status, [
+            SupplierStatus::Registered,
+            SupplierStatus::ProfileCompleted,
+            SupplierStatus::Active,
+        ]);
     }
 
     public function isPending(): bool
     {
-        return in_array($this->status, ['created', 'invited', 'registered']);
+        return in_array($this->status, [
+            SupplierStatus::Created,
+            SupplierStatus::Invited,
+            SupplierStatus::Registered,
+        ]);
     }
 
     public function getAuthIdentifierName(): string

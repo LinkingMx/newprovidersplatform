@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Supplier;
 
 use App\Http\Requests\Supplier\SupplierDocumentUploadRequest;
+use App\Models\DocumentState;
 use App\Models\SupplierDocument;
 use App\Policies\SupplierDocumentPolicy;
 use Illuminate\Http\RedirectResponse;
@@ -29,7 +30,7 @@ class SupplierDocumentController
             'archivo_path' => $path,
             'archivo_nombre' => $file->getClientOriginalName(),
             'uploaded_at' => now(),
-            'document_state_id' => 1,
+            'document_state_id' => DocumentState::PENDIENTE,
             'notas' => null,
         ]);
 
