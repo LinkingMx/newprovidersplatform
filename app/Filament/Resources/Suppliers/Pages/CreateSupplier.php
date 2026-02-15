@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Suppliers\Pages;
 
+use App\Enums\SupplierStatus;
 use App\Filament\Resources\Suppliers\SupplierResource;
 use App\Jobs\SendSupplierInvitationEmail;
 use App\Models\SupplierInvitation;
@@ -35,7 +36,7 @@ class CreateSupplier extends CreateRecord
         // Dispatch job to send invitation email
         SendSupplierInvitationEmail::dispatch($supplier);
 
-        $supplier->update(['status' => 'invited']);
+        $supplier->update(['status' => SupplierStatus::Invited]);
     }
 
     protected function getRedirectUrl(): string

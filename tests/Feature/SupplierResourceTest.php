@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\SupplierStatus;
 use App\Models\Branch;
 use App\Models\Supplier;
 use App\Models\SupplierBranch;
@@ -35,7 +36,7 @@ test('supplier email is unique', function () {
 test('supplier has default status created', function () {
     $supplier = Supplier::factory()->create();
 
-    expect($supplier->status)->toBe('created');
+    expect($supplier->status)->toBe(SupplierStatus::Created);
 });
 
 test('supplier factory creates with correct attributes', function () {
@@ -43,26 +44,26 @@ test('supplier factory creates with correct attributes', function () {
 
     expect($supplier->name)->not->toBeEmpty();
     expect($supplier->email)->not->toBeEmpty();
-    expect($supplier->status)->toBe('created');
+    expect($supplier->status)->toBe(SupplierStatus::Created);
 });
 
 test('supplier registered factory sets status to registered', function () {
     $supplier = Supplier::factory()->registered()->create();
 
-    expect($supplier->status)->toBe('registered');
+    expect($supplier->status)->toBe(SupplierStatus::Registered);
     expect($supplier->password_hash)->not->toBeNull();
 });
 
 test('supplier invited factory sets status to invited', function () {
     $supplier = Supplier::factory()->invited()->create();
 
-    expect($supplier->status)->toBe('invited');
+    expect($supplier->status)->toBe(SupplierStatus::Invited);
 });
 
 test('supplier profileCompleted factory has all address data', function () {
     $supplier = Supplier::factory()->profileCompleted()->create();
 
-    expect($supplier->status)->toBe('profile_completed');
+    expect($supplier->status)->toBe(SupplierStatus::ProfileCompleted);
     expect($supplier->address_street)->not->toBeNull();
     expect($supplier->address_city)->not->toBeNull();
 });
@@ -70,7 +71,7 @@ test('supplier profileCompleted factory has all address data', function () {
 test('supplier active factory has clabe interbancaria', function () {
     $supplier = Supplier::factory()->active()->create();
 
-    expect($supplier->status)->toBe('active');
+    expect($supplier->status)->toBe(SupplierStatus::Active);
     expect($supplier->clabe_interbancaria)->not->toBeNull();
 });
 
@@ -197,7 +198,7 @@ test('can update supplier status', function () {
     $supplier = Supplier::factory()->create();
     $supplier->update(['status' => 'invited']);
 
-    expect($supplier->refresh()->status)->toBe('invited');
+    expect($supplier->refresh()->status)->toBe(SupplierStatus::Invited);
 });
 
 test('can soft delete supplier', function () {

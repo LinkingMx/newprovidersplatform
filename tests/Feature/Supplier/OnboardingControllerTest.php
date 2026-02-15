@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\SupplierStatus;
 use App\Jobs\SupplierVerificationJob;
 use App\Models\Supplier;
 use Illuminate\Support\Facades\Queue;
@@ -26,7 +27,7 @@ describe('OnboardingController', function () {
             $response->assertRedirect();
 
             $supplier->refresh();
-            expect($supplier->status)->toBe('profile_completed');
+            expect($supplier->status)->toBe(SupplierStatus::ProfileCompleted);
             expect($supplier->address_street)->toBe('Avenida Paseo de la Reforma');
             expect($supplier->clabe_interbancaria)->toBe('002011111111111111');
         });

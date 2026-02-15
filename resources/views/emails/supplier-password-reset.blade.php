@@ -1,5 +1,5 @@
 <x-mail::message>
-# Hola, {{ $supplier->name }}
+# <span style="color: #191731;">Hola, {{ $supplier->name }}</span>
 
 Recibimos una solicitud para restablecer la contraseña de tu cuenta de proveedor.
 
@@ -7,16 +7,18 @@ Recibimos una solicitud para restablecer la contraseña de tu cuenta de proveedo
 Restablecer Contraseña
 </x-mail::button>
 
-**Información importante:**
-- Este enlace será válido durante **60 minutos**
+**<span style="color: #191731;">Información importante:</span>**
+- Este enlace será válido durante **<span style="color: #191731;">60 minutos</span>**
 - Si no solicitaste este cambio, puedes ignorar este correo
 - Tu contraseña actual no será modificada hasta que completes el proceso
 
-Si tienes problemas con el enlace, copia y pega la siguiente URL en tu navegador:
+Si tienes problemas para hacer clic en el botón, copia y pega la siguiente URL en tu navegador:
 
-{{ $resetUrl }}
+<span class="break-all">{{ $resetUrl }}</span>
 
 ---
 
-El equipo de NewProvidersPlatform
+Gracias por ser parte de nuestros proveedores.
+
+El equipo de Costeño Group
 </x-mail::message>

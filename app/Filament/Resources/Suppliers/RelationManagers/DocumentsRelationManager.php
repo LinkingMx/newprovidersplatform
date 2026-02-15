@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\Suppliers\RelationManagers;
 
+use App\Mail\SupplierDocumentStatusMailable;
 use App\Models\DocumentState;
+use App\Models\SupplierDocument;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -10,6 +12,7 @@ use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Mail;
 
 class DocumentsRelationManager extends RelationManager
 {
@@ -57,10 +60,17 @@ class DocumentsRelationManager extends RelationManager
                     ->label('Cambiar Estado')
                     ->icon('heroicon-o-arrow-path')
                     ->color('warning')
-                    ->form([
+                    ->form(fn (SupplierDocument $record): array => [
                         Select::make('document_state_id')
                             ->label('Nuevo Estado')
-                            ->options(DocumentState::pluck('etiqueta', 'id'))
+                            ->options(function () use ($record): array {
+                                $currentState = $record->documentState;
+                                $allowed = $currentState->transiciones_permitidas ?? [];
+
+                                return DocumentState::whereIn('nombre', $allowed)
+                                    ->pluck('etiqueta', 'id')
+                                    ->all();
+                            })
                             ->prefixIcon('heroicon-o-flag')
                             ->required(),
 
@@ -69,13 +79,23 @@ class DocumentsRelationManager extends RelationManager
                             ->placeholder('Motivo del cambio de estado (opcional)')
                             ->rows(3),
                     ])
-                    ->action(function (array $data, $record): void {
+                    ->action(function (array $data, SupplierDocument $record): void {
                         $record->update([
                             'document_state_id' => $data['document_state_id'],
                             'notas' => $data['notas'],
                             'reviewed_at' => now(),
                             'reviewed_by' => auth()->id(),
                         ]);
+
+                        $newState = DocumentState::find($data['document_state_id']);
+
+                        if ($newState && in_array($newState->nombre, ['Aprobado', 'Rechazado'])) {
+                            $record->load(['supplier', 'documentType']);
+
+                            Mail::to($record->supplier->email)->send(
+                                new SupplierDocumentStatusMailable($record->supplier, $record, $newState)
+                            );
+                        }
 
                         Notification::make()
                             ->success()

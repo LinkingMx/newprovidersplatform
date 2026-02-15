@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Suppliers\Tables;
 
+use App\Enums\SupplierStatus;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -34,21 +35,12 @@ class SuppliersTable
 
                 BadgeColumn::make('status')
                     ->label('Estado')
-                    ->colors([
-                        'gray' => 'created',
-                        'yellow' => 'invited',
-                        'blue' => 'registered',
-                        'orange' => 'profile_completed',
-                        'green' => 'active',
-                    ])
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'created' => 'Creado',
-                        'invited' => 'Invitado',
-                        'registered' => 'Registrado',
-                        'profile_completed' => 'Perfil Completo',
-                        'active' => 'Activo',
-                        default => $state,
-                    })
+                    ->colors(
+                        collect(SupplierStatus::cases())
+                            ->mapWithKeys(fn (SupplierStatus $s) => [$s->color() => $s->value])
+                            ->all()
+                    )
+                    ->formatStateUsing(fn (string $state): string => SupplierStatus::tryFrom($state)?->label() ?? $state)
                     ->sortable(),
 
                 TextColumn::make('branches_count')
@@ -64,13 +56,7 @@ class SuppliersTable
             ->filters([
                 SelectFilter::make('status')
                     ->label('Por Estado')
-                    ->options([
-                        'created' => 'Creado',
-                        'invited' => 'Invitado',
-                        'registered' => 'Registrado',
-                        'profile_completed' => 'Perfil Completo',
-                        'active' => 'Activo',
-                    ]),
+                    ->options(SupplierStatus::options()),
 
                 TrashedFilter::make(),
             ])

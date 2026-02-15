@@ -1,6 +1,9 @@
-import { FormEvent, useState } from 'react';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { Eye, EyeOff, LoaderCircle } from 'lucide-react';
+import type { FormEvent } from 'react';
+import { useState } from 'react';
+import BrandLogo from '@/components/brand-logo';
+import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -11,7 +14,6 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import InputError from '@/components/input-error';
 
 interface Props {
     errors?: Record<string, string>;
@@ -35,6 +37,10 @@ export default function Login({ errors: initialErrors }: Props) {
             <Head title="Acceso de Proveedores" />
             <div className="flex min-h-screen flex-col items-center justify-center bg-background p-6 lg:p-8">
                 <div className="w-full max-w-md space-y-6">
+                    <div className="flex justify-center">
+                        <BrandLogo className="h-12" />
+                    </div>
+
                     <Card>
                         <CardHeader className="text-center">
                             <CardTitle className="text-2xl">
@@ -143,11 +149,6 @@ export default function Login({ errors: initialErrors }: Props) {
                             </form>
                         </CardContent>
                     </Card>
-
-                    <p className="text-center text-sm text-muted-foreground">
-                        &iquest;No tienes cuenta? Espera a tu invitaci&oacute;n
-                        de registro
-                    </p>
 
                     <div className="text-center">
                         <Button asChild variant="link" size="sm">

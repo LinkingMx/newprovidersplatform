@@ -1,5 +1,5 @@
 <x-mail::message>
-# Bienvenido, {{ $supplier->name }}
+# <span style="color: #191731;">Bienvenido, {{ $supplier->name }}</span>
 
 Hemos creado tu cuenta como proveedor en nuestro sistema. Para completar el registro y acceder a tu panel, necesitas establecer una contraseña.
 
@@ -7,12 +7,12 @@ Hemos creado tu cuenta como proveedor en nuestro sistema. Para completar el regi
 Establecer Contraseña
 </x-mail::button>
 
-**Información importante:**
-- Este enlace será válido durante **7 días**
+**<span style="color: #191731;">Información importante:</span>**
+- Este enlace será válido durante **<span style="color: #191731;">7 días</span>**
 - Si no estableces tu contraseña dentro de este tiempo, deberás solicitar una nueva invitación
 - Este enlace es personal y no debe ser compartido con otros
 
-**Después de establecer tu contraseña:**
+**<span style="color: #191731;">Después de establecer tu contraseña:</span>**
 1. Completa tu información de perfil
 2. Proporciona tus datos bancarios (CLABE interbancaria)
 3. Acepta los términos y condiciones
@@ -24,5 +24,5 @@ Si tienes problemas para acceder o no solicitaste esta invitación, por favor co
 
 Gracias por ser parte de nuestros proveedores.
 
-El equipo de NewProvidersPlatform
+El equipo de Costeño Group
 </x-mail::message>

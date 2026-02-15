@@ -53,4 +53,9 @@ class SupplierDocument extends Model
     {
         return $this->belongsTo(User::class, 'reviewed_by');
     }
+
+    public function canUpload(): bool
+    {
+        return in_array($this->document_state_id, DocumentState::UPLOADABLE_STATES);
+    }
 }

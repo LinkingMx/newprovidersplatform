@@ -115,34 +115,6 @@ npm run dev                                   # Development watch mode for Vite
 - **Backend Logs**: View in `storage/logs/laravel.log`
 - **React Issues**: Use React DevTools browser extension
 
-## Development Workflow (Agent + User Approval Pattern)
-
-**Standard workflow for all requests (implemented with Claude Code agent):**
-
-1. **PLANNING**: Agent generates detailed plan → User approves or requests changes
-2. **IMPLEMENTATION**: Agent writes code → Applies Pint formatting → No deviations from plan
-3. **TESTING**: Agent runs appropriate tests (Pest, Dusk, or DevTools) → Reports coverage
-4. **COMMIT**: Agent proposes commit message → User approves or suggests changes → Agent commits
-
-**Commit Message Conventions:**
-- `feat:` - New complete feature
-- `fix:` - Bug fix for specific issue
-- `refactor:` - Code reorganization without behavior change
-- `chore:` - Cleanup, dependency updates, configuration
-- All commits include: `Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>`
-
-**Test Selection by Context:**
-- Backend CRUD/Filament: Pest (Livewire) + DevTools visual verification
-- Frontend React/Inertia: Dusk + DevTools
-- Database/Models: Pest + tinker verification
-- Styling/CSS: DevTools screenshot verification
-- Multiple changes: Combine test types as needed
-
-**Minimum Standards:**
-- All changes must be tested (80%+ coverage preferred)
-- Code formatted with Pint before commit
-- Commit messages clear and descriptive
-
 ## Project-Specific Guidelines
 
 ### Filament Admin Panel

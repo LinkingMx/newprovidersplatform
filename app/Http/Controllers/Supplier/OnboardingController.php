@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Supplier;
 
+use App\Enums\SupplierStatus;
 use App\Jobs\SupplierVerificationJob;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -21,7 +23,7 @@ class OnboardingController
 
         if ($supplier->isActive()) {
             return redirect()->route('dashboard')
-                ->with('message', 'Tu perfil ya está completado');
+                ->with('success', 'Tu perfil ya está completado');
         }
 
         return Inertia::render('Supplier/Onboarding', [
@@ -54,7 +56,7 @@ class OnboardingController
             'address_city' => 'required|string|max:255',
             'address_country' => 'required|string|in:Mexico,USA,Canada',
             'address_zip' => 'required|string|regex:/^\d{5}$/',
-            'clabe_interbancaria' => 'required|string|regex:/^\d{18}$/|unique:suppliers,clabe_interbancaria',
+            'clabe_interbancaria' => ['required', 'string', 'regex:/^\d{18}$/', Rule::unique('suppliers', 'clabe_interbancaria')->ignore($supplier->id)],
             'confirm' => 'required|accepted',
         ], [
             'address_street.required' => 'La calle es requerida',
@@ -78,13 +80,13 @@ class OnboardingController
             'address_country' => $validated['address_country'],
             'address_zip' => $validated['address_zip'],
             'clabe_interbancaria' => $validated['clabe_interbancaria'],
-            'status' => 'profile_completed',
+            'status' => SupplierStatus::ProfileCompleted,
         ]);
 
         // Enqueue verification job
         dispatch(new SupplierVerificationJob($supplier));
 
         return redirect()->route('dashboard')
-            ->with('message', 'Perfil completado. Estamos verificando tu información.');
+            ->with('success', 'Perfil completado. Estamos verificando tu información.');
     }
 }

@@ -25,7 +25,7 @@ class ResetPasswordController
         }
 
         $supplier = Supplier::where('email', $email)
-            ->where('password_reset_token', $token)
+            ->where('password_reset_token', hash('sha256', $token))
             ->first();
 
         if (! $supplier) {
@@ -65,7 +65,7 @@ class ResetPasswordController
         ]);
 
         $supplier = Supplier::where('email', $validated['email'])
-            ->where('password_reset_token', $validated['token'])
+            ->where('password_reset_token', hash('sha256', $validated['token']))
             ->first();
 
         if (! $supplier) {

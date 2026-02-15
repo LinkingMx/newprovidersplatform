@@ -15,7 +15,7 @@ class AsignarDocumentosAction
         return Action::make('asignarDocumentos')
             ->label('Asignar Documentos')
             ->icon('heroicon-o-document-plus')
-            ->color('success')
+            ->color('primary')
             ->requiresConfirmation()
             ->modalHeading('Asignar Tipos de Documento')
             ->modalDescription('Se asignarán los tipos de documento configurados para el tipo de proveedor. Los documentos ya asignados serán ignorados.')

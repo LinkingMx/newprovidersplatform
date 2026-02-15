@@ -13,6 +13,8 @@ class BranchesRelationManager extends RelationManager
 {
     protected static string $relationship = 'branches';
 
+    protected static ?string $title = 'Sucursales';
+
     protected static ?string $recordTitleAttribute = 'name';
 
     public function table(Table $table): Table
@@ -31,7 +33,10 @@ class BranchesRelationManager extends RelationManager
             ])
             ->headerActions([
                 AttachAction::make()
-                    ->label('Agregar Sucursal'),
+                    ->label('Agregar Sucursal')
+                    ->modalHeading('Vincular Sucursal')
+                    ->preloadRecordSelect()
+                    ->recordSelectSearchColumns(['name']),
             ])
             ->actions([
                 DetachAction::make()

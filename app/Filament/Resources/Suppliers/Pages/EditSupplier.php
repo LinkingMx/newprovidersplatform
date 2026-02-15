@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\Suppliers\Pages;
 
+use App\Enums\SupplierStatus;
 use App\Filament\Resources\Suppliers\Actions\AsignarDocumentosAction;
 use App\Filament\Resources\Suppliers\SupplierResource;
+use App\Jobs\SendSupplierInvitationEmail;
 use App\Models\SupplierInvitation;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
@@ -24,7 +26,7 @@ class EditSupplier extends EditRecord
             Action::make('resendInvitation')
                 ->label('Reenviar Invitación')
                 ->icon('heroicon-o-paper-airplane')
-                ->color('info')
+                ->color('primary')
                 ->requiresConfirmation()
                 ->action(function (): void {
                     $supplier = $this->record;
@@ -48,7 +50,9 @@ class EditSupplier extends EditRecord
                         'expires_at' => now()->addDays(7),
                     ]);
 
-                    $supplier->update(['status' => 'invited']);
+                    $supplier->update(['status' => SupplierStatus::Invited]);
+
+                    SendSupplierInvitationEmail::dispatch($supplier);
 
                     Notification::make()
                         ->success()
@@ -62,6 +66,20 @@ class EditSupplier extends EditRecord
             ForceDeleteAction::make(),
             RestoreAction::make(),
         ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if (isset($data['new_password'])) {
+            $data['password_hash'] = $data['new_password'];
+            unset($data['new_password']);
+        }
+
+        return $data;
     }
 
     protected function getRedirectUrl(): string
