@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Supplier;
 
 use App\Http\Requests\Supplier\SupplierDocumentUploadRequest;
 use App\Models\SupplierDocument;
+use App\Policies\SupplierDocumentPolicy;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SupplierDocumentController
 {
-    public function upload(SupplierDocumentUploadRequest $request, SupplierDocument $supplierDocument): \Illuminate\Http\RedirectResponse
+    public function upload(SupplierDocumentUploadRequest $request, SupplierDocument $supplierDocument): RedirectResponse
     {
         $file = $request->file('archivo');
         $supplier = auth('supplier')->user();
@@ -35,12 +37,11 @@ class SupplierDocumentController
             ->with('message', 'Documento subido correctamente.');
     }
 
-    public function download(SupplierDocument $supplierDocument): StreamedResponse|\Illuminate\Http\RedirectResponse
+    public function download(SupplierDocument $supplierDocument): StreamedResponse|RedirectResponse
     {
         $supplier = auth('supplier')->user();
 
-        // Verify ownership
-        if (! $supplier || $supplierDocument->supplier_id !== $supplier->id) {
+        if (! $supplier || ! app(SupplierDocumentPolicy::class)->download($supplier, $supplierDocument)) {
             abort(403);
         }
 

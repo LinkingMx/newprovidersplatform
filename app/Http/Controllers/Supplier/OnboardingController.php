@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Supplier;
 use App\Jobs\SupplierVerificationJob;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -54,7 +55,7 @@ class OnboardingController
             'address_city' => 'required|string|max:255',
             'address_country' => 'required|string|in:Mexico,USA,Canada',
             'address_zip' => 'required|string|regex:/^\d{5}$/',
-            'clabe_interbancaria' => 'required|string|regex:/^\d{18}$/|unique:suppliers,clabe_interbancaria',
+            'clabe_interbancaria' => ['required', 'string', 'regex:/^\d{18}$/', Rule::unique('suppliers', 'clabe_interbancaria')->ignore($supplier->id)],
             'confirm' => 'required|accepted',
         ], [
             'address_street.required' => 'La calle es requerida',
