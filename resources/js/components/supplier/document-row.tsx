@@ -1,4 +1,16 @@
-import { Download, FileText, Upload } from 'lucide-react';
+import { router } from '@inertiajs/react';
+import { Eye, FileText, Trash2, Upload } from 'lucide-react';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import type { SupplierDocument } from '@/types/supplier';
 
@@ -26,6 +38,10 @@ export default function DocumentRow({
     onUpload,
 }: DocumentRowProps) {
     const color = doc.document_state.color;
+
+    const handleDelete = () => {
+        router.delete(`/supplier/documents/${doc.id}`);
+    };
 
     return (
         <div
@@ -59,6 +75,18 @@ export default function DocumentRow({
                 </div>
             </div>
             <div className="flex shrink-0 gap-2 sm:ml-4">
+                {doc.has_file && (
+                    <Button variant="outline" size="sm" asChild>
+                        <a
+                            href={`/supplier/documents/${doc.id}/preview`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Eye className="size-4" />
+                            Ver
+                        </a>
+                    </Button>
+                )}
                 {doc.can_upload && (
                     <Button
                         variant="outline"
@@ -69,13 +97,32 @@ export default function DocumentRow({
                         {doc.has_file ? 'Re-subir' : 'Subir'}
                     </Button>
                 )}
-                {doc.has_file && (
-                    <Button variant="ghost" size="sm" asChild>
-                        <a href={`/supplier/documents/${doc.id}/download`}>
-                            <Download className="size-4" />
-                            Descargar
-                        </a>
-                    </Button>
+                {doc.can_delete && (
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">
+                                <Trash2 className="size-4" />
+                                Eliminar
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                    ¿Eliminar documento?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    Se eliminará el archivo &quot;{doc.archivo_nombre}&quot;
+                                    de {doc.document_type.nombre}. Podrás subir uno nuevo después.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                <AlertDialogAction onClick={handleDelete} className="bg-destructive text-white hover:bg-destructive/90">
+                                    Eliminar
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 )}
             </div>
         </div>

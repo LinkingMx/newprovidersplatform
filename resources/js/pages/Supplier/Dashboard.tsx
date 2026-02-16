@@ -9,10 +9,10 @@ import {
     Pencil,
     User,
 } from 'lucide-react';
+
 import { useState } from 'react';
 import DocumentRow from '@/components/supplier/document-row';
 import ProgressStepper from '@/components/supplier/progress-stepper';
-import StatCard from '@/components/supplier/stat-card';
 import UploadDialog from '@/components/supplier/upload-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -117,40 +117,6 @@ export default function Dashboard() {
                     currentStep={currentStep}
                     supplierStatus={supplier.status}
                 />
-
-                {/* Stats Grid */}
-                <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-                    <StatCard
-                        icon={Building2}
-                        value={supplier.branches?.length ?? 0}
-                        label="Sucursales"
-                        colorScheme="blue"
-                    />
-                    <StatCard
-                        icon={FileText}
-                        value={
-                            totalDocs > 0
-                                ? `${approvedCount}/${totalDocs}`
-                                : '0'
-                        }
-                        label="Documentos"
-                        colorScheme="green"
-                    />
-                    <StatCard
-                        icon={MapPin}
-                        value={supplier.address_city ?? '—'}
-                        label="Ubicación"
-                        colorScheme="primary"
-                    />
-                    <StatCard
-                        icon={Landmark}
-                        value={
-                            supplier.clabe_interbancaria ? 'Registrada' : '—'
-                        }
-                        label="CLABE"
-                        colorScheme="amber"
-                    />
-                </div>
 
                 {/* Main Grid */}
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

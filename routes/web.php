@@ -57,8 +57,12 @@ Route::middleware('auth:supplier')->group(function () {
     Route::post('/supplier/documents/{supplierDocument}/upload', [SupplierDocumentController::class, 'upload'])
         ->middleware('throttle:supplier-document-upload')
         ->name('supplier.documents.upload');
+    Route::get('/supplier/documents/{supplierDocument}/preview', [SupplierDocumentController::class, 'preview'])
+        ->name('supplier.documents.preview');
     Route::get('/supplier/documents/{supplierDocument}/download', [SupplierDocumentController::class, 'download'])
         ->name('supplier.documents.download');
+    Route::delete('/supplier/documents/{supplierDocument}', [SupplierDocumentController::class, 'destroy'])
+        ->name('supplier.documents.destroy');
 
     Route::post('/supplier/auth/logout', LogoutController::class)
         ->name('supplier.logout');

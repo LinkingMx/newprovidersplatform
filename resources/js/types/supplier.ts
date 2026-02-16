@@ -30,6 +30,7 @@ export interface SupplierDocument {
     archivo_nombre: string | null;
     has_file: boolean;
     can_upload: boolean;
+    can_delete: boolean;
     notas: string | null;
     uploaded_at: string | null;
 }

@@ -107,7 +107,7 @@ describe('Supplier Document Upload', function () {
         expect($document->archivo_nombre)->toBe('contrato.pdf')
             ->and($document->archivo_path)->toStartWith("supplier-documents/{$supplier->id}/")
             ->and($document->uploaded_at)->not->toBeNull()
-            ->and($document->document_state_id)->toBe(1);
+            ->and($document->document_state_id)->toBe(DocumentState::EN_REVISION);
 
         Storage::disk('local')->assertExists($document->archivo_path);
     });
@@ -154,7 +154,7 @@ describe('Supplier Document Upload', function () {
         Storage::disk('local')->assertExists($document->archivo_path);
     });
 
-    it('allows re-upload after rejection and resets state to Pendiente', function () {
+    it('allows re-upload after rejection and sets state to En Revisión', function () {
         $supplier = Supplier::factory()->active()->create();
         $document = SupplierDocument::factory()->uploaded()->create([
             'supplier_id' => $supplier->id,
@@ -177,7 +177,7 @@ describe('Supplier Document Upload', function () {
 
         $document->refresh();
         expect($document->archivo_nombre)->toBe('nuevo-contrato.pdf')
-            ->and($document->document_state_id)->toBe(1) // Reset to Pendiente
+            ->and($document->document_state_id)->toBe(DocumentState::EN_REVISION)
             ->and($document->notas)->toBeNull()
             ->and($document->uploaded_at)->not->toBeNull();
 
@@ -187,11 +187,13 @@ describe('Supplier Document Upload', function () {
         Storage::disk('local')->assertExists($document->archivo_path);
     });
 
-    it('rejects upload when document is En Revisión', function () {
+    it('allows upload when document is En Revisión', function () {
+        Storage::fake('local');
+
         $supplier = Supplier::factory()->active()->create();
         $document = SupplierDocument::factory()->uploaded()->create([
             'supplier_id' => $supplier->id,
-            'document_state_id' => 2, // En Revisión
+            'document_state_id' => DocumentState::EN_REVISION,
         ]);
 
         $response = $this->actingAs($supplier, 'supplier')
@@ -199,7 +201,9 @@ describe('Supplier Document Upload', function () {
                 'archivo' => UploadedFile::fake()->create('test.pdf', 100, 'application/pdf'),
             ]);
 
-        $response->assertForbidden();
+        $response->assertRedirect('/dashboard');
+        $document->refresh();
+        expect($document->archivo_path)->not->toBeNull();
     });
 
     it('rejects upload when document is Aprobado', function () {
@@ -373,7 +377,7 @@ describe('Supplier Dashboard Documents', function () {
         );
     });
 
-    it('shows En Revisión document with can_upload=false', function () {
+    it('shows En Revisión document with can_upload=true', function () {
         $supplier = Supplier::factory()->active()->create();
         $docType = DocumentType::factory()->create(['nombre' => 'Identificación']);
         $enRevision = DocumentState::where('nombre', 'En Revisión')->first();
@@ -391,7 +395,7 @@ describe('Supplier Dashboard Documents', function () {
         $response->assertInertia(fn ($page) => $page
             ->component('Supplier/Dashboard')
             ->has('documents', 1)
-            ->where('documents.0.can_upload', false)
+            ->where('documents.0.can_upload', true)
             ->where('documents.0.has_file', true)
             ->where('documents.0.document_state.color', 'blue')
         );

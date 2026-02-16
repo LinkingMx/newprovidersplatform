@@ -58,4 +58,10 @@ class SupplierDocument extends Model
     {
         return in_array($this->document_state_id, DocumentState::UPLOADABLE_STATES);
     }
+
+    public function canDelete(): bool
+    {
+        return $this->archivo_path !== null
+            && in_array($this->document_state_id, DocumentState::DELETABLE_STATES);
+    }
 }

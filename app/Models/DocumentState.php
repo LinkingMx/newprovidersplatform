@@ -18,7 +18,10 @@ class DocumentState extends Model
     public const RECHAZADO = 4;
 
     /** @var int[] */
-    public const UPLOADABLE_STATES = [self::PENDIENTE, self::RECHAZADO];
+    public const UPLOADABLE_STATES = [self::PENDIENTE, self::EN_REVISION, self::RECHAZADO];
+
+    /** @var int[] */
+    public const DELETABLE_STATES = [self::PENDIENTE, self::EN_REVISION];
 
     protected $fillable = [
         'nombre',
