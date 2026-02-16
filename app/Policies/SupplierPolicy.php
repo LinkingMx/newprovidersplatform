@@ -1,23 +1,20 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Policies;
 
-use Illuminate\Foundation\Auth\User as AuthUser;
-use App\Models\Supplier;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Foundation\Auth\User as AuthUser;
 
 class SupplierPolicy
 {
     use HandlesAuthorization;
-    
+
     public function viewAny(AuthUser $authUser): bool
     {
         return $authUser->can('ViewAny:Supplier');
     }
 
-    public function view(AuthUser $authUser, Supplier $supplier): bool
+    public function view(AuthUser $authUser): bool
     {
         return $authUser->can('View:Supplier');
     }
@@ -27,22 +24,22 @@ class SupplierPolicy
         return $authUser->can('Create:Supplier');
     }
 
-    public function update(AuthUser $authUser, Supplier $supplier): bool
+    public function update(AuthUser $authUser): bool
     {
         return $authUser->can('Update:Supplier');
     }
 
-    public function delete(AuthUser $authUser, Supplier $supplier): bool
+    public function delete(AuthUser $authUser): bool
     {
         return $authUser->can('Delete:Supplier');
     }
 
-    public function restore(AuthUser $authUser, Supplier $supplier): bool
+    public function restore(AuthUser $authUser): bool
     {
         return $authUser->can('Restore:Supplier');
     }
 
-    public function forceDelete(AuthUser $authUser, Supplier $supplier): bool
+    public function forceDelete(AuthUser $authUser): bool
     {
         return $authUser->can('ForceDelete:Supplier');
     }
@@ -57,7 +54,7 @@ class SupplierPolicy
         return $authUser->can('RestoreAny:Supplier');
     }
 
-    public function replicate(AuthUser $authUser, Supplier $supplier): bool
+    public function replicate(AuthUser $authUser): bool
     {
         return $authUser->can('Replicate:Supplier');
     }
@@ -66,5 +63,4 @@ class SupplierPolicy
     {
         return $authUser->can('Reorder:Supplier');
     }
-
 }
