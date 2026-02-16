@@ -38,40 +38,40 @@
    ============================================ */
 
 /* --- Login Page --- */
-.fi-simple-layout {
+:root.dark .fi-simple-layout {
     background: linear-gradient(135deg, #0d0f1a, #191731) !important;
 }
 
 /* --- Cards & Sections --- */
-:is(.dark) .fi-section,
-:is(.dark) .fi-card,
-:is(.dark) .fi-wi-stats-overview-stat {
+:root.dark .fi-section,
+:root.dark .fi-card,
+:root.dark .fi-wi-stats-overview-stat {
     background-color: rgba(25, 23, 49, 0.9);
     border: 1px solid rgba(235, 223, 199, 0.1);
     animation: fadeIn 0.3s ease-out;
 }
 
 /* --- Stats Widgets --- */
-:is(.dark) .fi-wi-stats-overview-stat {
+:root.dark .fi-wi-stats-overview-stat {
     background: rgba(25, 23, 49, 0.7);
     backdrop-filter: blur(10px);
 }
 
 /* --- Topbar --- */
-:is(.dark) .fi-topbar {
+:root.dark .fi-topbar {
     background: rgba(13, 15, 26, 0.8) !important;
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(235, 223, 199, 0.1);
 }
 
 /* --- Sidebar --- */
-:is(.dark) .fi-sidebar {
+:root.dark .fi-sidebar {
     background: #0d0f1a !important;
     border-right: 1px solid rgba(235, 223, 199, 0.08);
 }
 
 /* --- Sidebar Group Labels --- */
-:is(.dark) .fi-sidebar-group-label {
+:root.dark .fi-sidebar-group-label {
     color: #c5a059 !important;
     text-transform: uppercase;
     font-size: 0.7rem;
@@ -80,18 +80,18 @@
 }
 
 /* --- Navigation Active Item --- */
-:is(.dark) .fi-sidebar-item.fi-active {
+:root.dark .fi-sidebar-item.fi-active {
     border-left: 2px solid #ebdfc7;
     background: rgba(235, 223, 199, 0.08);
 }
 
 /* --- Navigation Hover --- */
-:is(.dark) .fi-sidebar-item:hover:not(.fi-active) {
+:root.dark .fi-sidebar-item:hover:not(.fi-active) {
     background: rgba(235, 223, 199, 0.05);
 }
 
 /* --- Table Headers --- */
-:is(.dark) .fi-ta-header-cell {
+:root.dark .fi-ta-header-cell {
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-size: 0.75rem;
@@ -100,42 +100,42 @@
 }
 
 /* --- Table Row Hover --- */
-:is(.dark) .fi-ta-row:hover {
+:root.dark .fi-ta-row:hover {
     background: rgba(235, 223, 199, 0.03);
 }
 
 /* --- Table Row Selected --- */
-:is(.dark) .fi-ta-row.fi-selected {
+:root.dark .fi-ta-row.fi-selected {
     background: rgba(197, 160, 89, 0.1);
 }
 
 /* --- Primary Buttons --- */
-:is(.dark) .fi-btn-primary {
+:root.dark .fi-btn-primary {
     background-color: #ebdfc7;
     color: #191731;
 }
 
-:is(.dark) .fi-btn-primary:hover {
+:root.dark .fi-btn-primary:hover {
     background-color: #f5efe6;
     transform: translateY(-1px);
 }
 
 /* --- Focus States --- */
-:is(.dark) *:focus-visible {
+:root.dark *:focus-visible {
     --tw-ring-color: #c5a059;
     --tw-ring-offset-color: #191731;
 }
 
 /* --- Input Focus --- */
-:is(.dark) .fi-input:focus,
-:is(.dark) .fi-input:focus-within {
+:root.dark .fi-input:focus,
+:root.dark .fi-input:focus-within {
     border-color: #c5a059;
     box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.2);
 }
 
 /* --- Modal & Dropdown --- */
-:is(.dark) .fi-modal-content,
-:is(.dark) .fi-dropdown-panel {
+:root.dark .fi-modal-content,
+:root.dark .fi-dropdown-panel {
     background: #191731;
     border: 1px solid rgba(235, 223, 199, 0.1);
     backdrop-filter: blur(10px);
@@ -150,7 +150,7 @@
 }
 
 /* --- Pagination Active --- */
-:is(.dark) .fi-pagination-item.fi-active {
+:root.dark .fi-pagination-item.fi-active {
     background: #ebdfc7;
     color: #191731;
 }
@@ -160,14 +160,14 @@
    ============================================ */
 
 /* --- Login Page (Light) --- */
-:is(:not(.dark)) .fi-simple-layout {
+:root:not(.dark) .fi-simple-layout {
     background: linear-gradient(135deg, #f8f6f1, #ebdfc7) !important;
 }
 
 /* --- Cards (Light) --- */
-:is(:not(.dark)) .fi-section,
-:is(:not(.dark)) .fi-card,
-:is(:not(.dark)) .fi-wi-stats-overview-stat {
+:root:not(.dark) .fi-section,
+:root:not(.dark) .fi-card,
+:root:not(.dark) .fi-wi-stats-overview-stat {
     background: white;
     border: 1px solid rgba(25, 23, 49, 0.1);
     box-shadow: 0 1px 3px rgba(25, 23, 49, 0.05);
@@ -175,7 +175,7 @@
 }
 
 /* --- Sidebar Group Labels (Light) --- */
-:is(:not(.dark)) .fi-sidebar-group-label {
+:root:not(.dark) .fi-sidebar-group-label {
     color: #c5a059 !important;
     text-transform: uppercase;
     font-size: 0.7rem;
@@ -184,13 +184,13 @@
 }
 
 /* --- Navigation Active Item (Light) --- */
-:is(:not(.dark)) .fi-sidebar-item.fi-active {
+:root:not(.dark) .fi-sidebar-item.fi-active {
     border-left: 2px solid #191731;
     background: rgba(25, 23, 49, 0.05);
 }
 
 /* --- Table Headers (Light) --- */
-:is(:not(.dark)) .fi-ta-header-cell {
+:root:not(.dark) .fi-ta-header-cell {
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-size: 0.75rem;
@@ -199,14 +199,14 @@
 }
 
 /* --- Focus States (Light) --- */
-:is(:not(.dark)) *:focus-visible {
+:root:not(.dark) *:focus-visible {
     --tw-ring-color: #c5a059;
     --tw-ring-offset-color: white;
 }
 
 /* --- Input Focus (Light) --- */
-:is(:not(.dark)) .fi-input:focus,
-:is(:not(.dark)) .fi-input:focus-within {
+:root:not(.dark) .fi-input:focus,
+:root:not(.dark) .fi-input:focus-within {
     border-color: #c5a059;
     box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.2);
 }

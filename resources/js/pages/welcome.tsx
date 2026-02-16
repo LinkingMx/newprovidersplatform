@@ -102,13 +102,13 @@ export default function Welcome() {
                             </CardHeader>
                             <CardContent>
                                 <Button
-                                    asChild
                                     variant="outline"
                                     className="w-full"
+                                    onClick={() => {
+                                        window.location.href = '/admin';
+                                    }}
                                 >
-                                    <a href="/admin/login">
-                                        Ingresar como Administrador
-                                    </a>
+                                    Ingresar como Administrador
                                 </Button>
                             </CardContent>
                         </Card>

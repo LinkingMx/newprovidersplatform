@@ -4,9 +4,19 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Symfony\Component\HttpFoundation\Response;
 
 class HandleInertiaRequests extends Middleware
 {
+    public function handle(Request $request, \Closure $next): Response
+    {
+        if ($request->is('admin/*') || $request->is('admin') || $request->is('livewire/*')) {
+            return $next($request);
+        }
+
+        return parent::handle($request, $next);
+    }
+
     /**
      * The root template that's loaded on the first page visit.
      *
