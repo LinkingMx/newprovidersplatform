@@ -77,10 +77,19 @@ class SupplierDocumentPolicy
     }
 
     /**
-     * Supplier-side: verify document ownership for download.
+     * Supplier-side: verify document ownership for download/preview.
      */
     public function download(Supplier $supplier, SupplierDocument $supplierDocument): bool
     {
         return $supplier->id === $supplierDocument->supplier_id;
+    }
+
+    /**
+     * Supplier-side: verify ownership and deletable state.
+     */
+    public function deleteFile(Supplier $supplier, SupplierDocument $supplierDocument): bool
+    {
+        return $supplier->id === $supplierDocument->supplier_id
+            && $supplierDocument->canDelete();
     }
 }

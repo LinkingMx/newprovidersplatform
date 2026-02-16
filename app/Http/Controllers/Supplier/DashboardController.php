@@ -32,6 +32,7 @@ class DashboardController
                 'archivo_nombre' => $doc->archivo_nombre,
                 'has_file' => $doc->archivo_path !== null,
                 'can_upload' => $doc->canUpload(),
+                'can_delete' => $doc->canDelete(),
                 'notas' => $doc->notas,
                 'uploaded_at' => $doc->uploaded_at?->toISOString(),
             ]);

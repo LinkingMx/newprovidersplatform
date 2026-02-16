@@ -25,13 +25,13 @@
 
 /* --- Sidebar --- */
 :is(.dark) .fi-sidebar {
-    background: #0D0F1A !important;
+    background: #0d0f1a !important;
     border-right: 1px solid rgba(235, 223, 199, 0.08);
 }
 
 /* --- Sidebar Group Labels --- */
 :is(.dark) .fi-sidebar-group-label {
-    color: #C5A059 !important;
+    color: #c5a059 !important;
     text-transform: uppercase;
     font-size: 0.7rem;
     letter-spacing: 0.08em;
@@ -40,7 +40,7 @@
 
 /* --- Navigation Active Item --- */
 :is(.dark) .fi-sidebar-item.fi-active {
-    border-left: 2px solid #EBDFC7;
+    border-left: 2px solid #ebdfc7;
     background: rgba(235, 223, 199, 0.08);
 }
 
@@ -59,16 +59,16 @@
 /* --- Prose / Article Content --- */
 :is(.dark) .prose {
     --tw-prose-body: #d1ccc5;
-    --tw-prose-headings: #EBDFC7;
-    --tw-prose-links: #C5A059;
-    --tw-prose-bold: #EBDFC7;
+    --tw-prose-headings: #ebdfc7;
+    --tw-prose-links: #c5a059;
+    --tw-prose-bold: #ebdfc7;
     --tw-prose-counters: #9e9a94;
     --tw-prose-bullets: #9e9a94;
     --tw-prose-hr: rgba(235, 223, 199, 0.15);
-    --tw-prose-quotes: #EBDFC7;
-    --tw-prose-quote-borders: #C5A059;
+    --tw-prose-quotes: #ebdfc7;
+    --tw-prose-quote-borders: #c5a059;
     --tw-prose-captions: #9e9a94;
-    --tw-prose-code: #EBDFC7;
+    --tw-prose-code: #ebdfc7;
     --tw-prose-pre-code: #d1ccc5;
     --tw-prose-pre-bg: rgba(13, 15, 26, 0.8);
     --tw-prose-th-borders: rgba(235, 223, 199, 0.2);
@@ -77,7 +77,7 @@
 
 /* --- Focus States --- */
 :is(.dark) *:focus-visible {
-    --tw-ring-color: #C5A059;
+    --tw-ring-color: #c5a059;
     --tw-ring-offset-color: #191731;
 }
 
@@ -87,7 +87,7 @@
 
 /* --- Sidebar Group Labels (Light) --- */
 :is(:not(.dark)) .fi-sidebar-group-label {
-    color: #C5A059 !important;
+    color: #c5a059 !important;
     text-transform: uppercase;
     font-size: 0.7rem;
     letter-spacing: 0.08em;
@@ -102,6 +102,6 @@
 
 /* --- Focus States (Light) --- */
 :is(:not(.dark)) *:focus-visible {
-    --tw-ring-color: #C5A059;
+    --tw-ring-color: #c5a059;
     --tw-ring-offset-color: white;
 }

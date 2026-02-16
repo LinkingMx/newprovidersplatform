@@ -9,9 +9,8 @@
 
 @theme {
     --font-sans:
-        'Open Sans', ui-sans-serif, system-ui, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-        'Noto Color Emoji';
+        'Open Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -62,93 +61,93 @@
 
     /* SELA Travel Brand Tokens */
     --color-navy: #191731;
-    --color-cream: #EBDFC7;
-    --color-gold: #C5A059;
+    --color-cream: #ebdfc7;
+    --color-gold: #c5a059;
 }
 
 /* ============================================
    SELA Travel Design System - Light Mode
    ============================================ */
 :root {
-    --background: #F8F6F1;
+    --background: #f8f6f1;
     --foreground: #191731;
-    --card: #FFFFFF;
+    --card: #ffffff;
     --card-foreground: #191731;
-    --popover: #FFFFFF;
+    --popover: #ffffff;
     --popover-foreground: #191731;
-    --primary: #3D3870;
-    --primary-foreground: #FDFCFA;
-    --secondary: #EFE9DD;
+    --primary: #3d3870;
+    --primary-foreground: #fdfcfa;
+    --secondary: #efe9dd;
     --secondary-foreground: #191731;
-    --muted: #F5EFE6;
-    --muted-foreground: #6B6660;
-    --accent: #EFE9DD;
+    --muted: #f5efe6;
+    --muted-foreground: #6b6660;
+    --accent: #efe9dd;
     --accent-foreground: #191731;
-    --destructive: #DC2626;
-    --destructive-foreground: #FDFCFA;
-    --border: #E8E6E3;
-    --input: #E8E6E3;
-    --ring: #C5A059;
+    --destructive: #dc2626;
+    --destructive-foreground: #fdfcfa;
+    --border: #e8e6e3;
+    --input: #e8e6e3;
+    --ring: #c5a059;
     --radius: 0.625rem;
 
     /* Charts */
     --chart-1: #191731;
-    --chart-2: #3D3870;
-    --chart-3: #C5A059;
-    --chart-4: #EBDFC7;
-    --chart-5: #6B6660;
+    --chart-2: #3d3870;
+    --chart-3: #c5a059;
+    --chart-4: #ebdfc7;
+    --chart-5: #6b6660;
 
     /* Sidebar */
-    --sidebar: #F5EFE6;
+    --sidebar: #f5efe6;
     --sidebar-foreground: #191731;
     --sidebar-primary: #191731;
-    --sidebar-primary-foreground: #FDFCFA;
-    --sidebar-accent: #EFE9DD;
+    --sidebar-primary-foreground: #fdfcfa;
+    --sidebar-accent: #efe9dd;
     --sidebar-accent-foreground: #191731;
-    --sidebar-border: #E8E6E3;
-    --sidebar-ring: #C5A059;
+    --sidebar-border: #e8e6e3;
+    --sidebar-ring: #c5a059;
 }
 
 /* ============================================
    SELA Travel Design System - Dark Mode
    ============================================ */
 .dark {
-    --background: #0D0F1A;
-    --foreground: #EBDFC7;
+    --background: #0d0f1a;
+    --foreground: #ebdfc7;
     --card: #191731;
-    --card-foreground: #EBDFC7;
+    --card-foreground: #ebdfc7;
     --popover: #191731;
-    --popover-foreground: #EBDFC7;
-    --primary: #EBDFC7;
+    --popover-foreground: #ebdfc7;
+    --primary: #ebdfc7;
     --primary-foreground: #191731;
-    --secondary: #2A2650;
-    --secondary-foreground: #EBDFC7;
-    --muted: #2A2650;
-    --muted-foreground: #9E9A94;
-    --accent: #2A2650;
-    --accent-foreground: #EBDFC7;
-    --destructive: #7F1D1D;
-    --destructive-foreground: #FCA5A5;
-    --border: #2A2650;
-    --input: #2A2650;
-    --ring: #C5A059;
+    --secondary: #2a2650;
+    --secondary-foreground: #ebdfc7;
+    --muted: #2a2650;
+    --muted-foreground: #9e9a94;
+    --accent: #2a2650;
+    --accent-foreground: #ebdfc7;
+    --destructive: #7f1d1d;
+    --destructive-foreground: #fca5a5;
+    --border: #2a2650;
+    --input: #2a2650;
+    --ring: #c5a059;
 
     /* Charts */
-    --chart-1: #EBDFC7;
-    --chart-2: #C5A059;
-    --chart-3: #3D3870;
-    --chart-4: #6B6660;
-    --chart-5: #9E9A94;
+    --chart-1: #ebdfc7;
+    --chart-2: #c5a059;
+    --chart-3: #3d3870;
+    --chart-4: #6b6660;
+    --chart-5: #9e9a94;
 
     /* Sidebar */
     --sidebar: #121024;
-    --sidebar-foreground: #EBDFC7;
-    --sidebar-primary: #EBDFC7;
+    --sidebar-foreground: #ebdfc7;
+    --sidebar-primary: #ebdfc7;
     --sidebar-primary-foreground: #191731;
-    --sidebar-accent: #2A2650;
-    --sidebar-accent-foreground: #EBDFC7;
-    --sidebar-border: #2A2650;
-    --sidebar-ring: #C5A059;
+    --sidebar-accent: #2a2650;
+    --sidebar-accent-foreground: #ebdfc7;
+    --sidebar-border: #2a2650;
+    --sidebar-ring: #c5a059;
 }
 
 @layer base {

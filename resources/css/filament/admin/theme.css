@@ -39,7 +39,7 @@
 
 /* --- Login Page --- */
 .fi-simple-layout {
-    background: linear-gradient(135deg, #0D0F1A, #191731) !important;
+    background: linear-gradient(135deg, #0d0f1a, #191731) !important;
 }
 
 /* --- Cards & Sections --- */
@@ -66,13 +66,13 @@
 
 /* --- Sidebar --- */
 :is(.dark) .fi-sidebar {
-    background: #0D0F1A !important;
+    background: #0d0f1a !important;
     border-right: 1px solid rgba(235, 223, 199, 0.08);
 }
 
 /* --- Sidebar Group Labels --- */
 :is(.dark) .fi-sidebar-group-label {
-    color: #C5A059 !important;
+    color: #c5a059 !important;
     text-transform: uppercase;
     font-size: 0.7rem;
     letter-spacing: 0.08em;
@@ -81,7 +81,7 @@
 
 /* --- Navigation Active Item --- */
 :is(.dark) .fi-sidebar-item.fi-active {
-    border-left: 2px solid #EBDFC7;
+    border-left: 2px solid #ebdfc7;
     background: rgba(235, 223, 199, 0.08);
 }
 
@@ -96,7 +96,7 @@
     letter-spacing: 0.05em;
     font-size: 0.75rem;
     font-weight: 600;
-    color: #EBDFC7;
+    color: #ebdfc7;
 }
 
 /* --- Table Row Hover --- */
@@ -111,25 +111,25 @@
 
 /* --- Primary Buttons --- */
 :is(.dark) .fi-btn-primary {
-    background-color: #EBDFC7;
+    background-color: #ebdfc7;
     color: #191731;
 }
 
 :is(.dark) .fi-btn-primary:hover {
-    background-color: #F5EFE6;
+    background-color: #f5efe6;
     transform: translateY(-1px);
 }
 
 /* --- Focus States --- */
 :is(.dark) *:focus-visible {
-    --tw-ring-color: #C5A059;
+    --tw-ring-color: #c5a059;
     --tw-ring-offset-color: #191731;
 }
 
 /* --- Input Focus --- */
 :is(.dark) .fi-input:focus,
 :is(.dark) .fi-input:focus-within {
-    border-color: #C5A059;
+    border-color: #c5a059;
     box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.2);
 }
 
@@ -151,7 +151,7 @@
 
 /* --- Pagination Active --- */
 :is(.dark) .fi-pagination-item.fi-active {
-    background: #EBDFC7;
+    background: #ebdfc7;
     color: #191731;
 }
 
@@ -161,7 +161,7 @@
 
 /* --- Login Page (Light) --- */
 :is(:not(.dark)) .fi-simple-layout {
-    background: linear-gradient(135deg, #F8F6F1, #EBDFC7) !important;
+    background: linear-gradient(135deg, #f8f6f1, #ebdfc7) !important;
 }
 
 /* --- Cards (Light) --- */
@@ -176,7 +176,7 @@
 
 /* --- Sidebar Group Labels (Light) --- */
 :is(:not(.dark)) .fi-sidebar-group-label {
-    color: #C5A059 !important;
+    color: #c5a059 !important;
     text-transform: uppercase;
     font-size: 0.7rem;
     letter-spacing: 0.08em;
@@ -200,13 +200,13 @@
 
 /* --- Focus States (Light) --- */
 :is(:not(.dark)) *:focus-visible {
-    --tw-ring-color: #C5A059;
+    --tw-ring-color: #c5a059;
     --tw-ring-offset-color: white;
 }
 
 /* --- Input Focus (Light) --- */
 :is(:not(.dark)) .fi-input:focus,
 :is(:not(.dark)) .fi-input:focus-within {
-    border-color: #C5A059;
+    border-color: #c5a059;
     box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.2);
 }

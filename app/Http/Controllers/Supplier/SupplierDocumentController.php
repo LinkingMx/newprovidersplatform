@@ -25,17 +25,47 @@ class SupplierDocumentController
         // Store file privately
         $path = $file->store("supplier-documents/{$supplier->id}", 'local');
 
-        // Reset state to "Pendiente" (ID 1) and update file info
+        // Set state to "En Revisión" so admin can review the uploaded file
         $supplierDocument->update([
             'archivo_path' => $path,
             'archivo_nombre' => $file->getClientOriginalName(),
             'uploaded_at' => now(),
-            'document_state_id' => DocumentState::PENDIENTE,
+            'document_state_id' => DocumentState::EN_REVISION,
             'notas' => null,
         ]);
 
         return redirect()->route('dashboard')
             ->with('message', 'Documento subido correctamente.');
+    }
+
+    public function preview(SupplierDocument $supplierDocument): StreamedResponse|RedirectResponse
+    {
+        $supplier = auth('supplier')->user();
+
+        if (! $supplier || ! app(SupplierDocumentPolicy::class)->download($supplier, $supplierDocument)) {
+            abort(403);
+        }
+
+        if (
+            ! $supplierDocument->archivo_path
+            || str_contains($supplierDocument->archivo_path, '..')
+            || ! str_starts_with($supplierDocument->archivo_path, 'supplier-documents/')
+        ) {
+            abort(403);
+        }
+
+        if (! Storage::disk('local')->exists($supplierDocument->archivo_path)) {
+            return redirect()->route('dashboard')
+                ->with('error', 'El archivo no se encontró.');
+        }
+
+        $mimeType = Storage::disk('local')->mimeType($supplierDocument->archivo_path);
+
+        return Storage::disk('local')->response(
+            $supplierDocument->archivo_path,
+            $supplierDocument->archivo_nombre,
+            ['Content-Type' => $mimeType]
+        );
     }
 
     public function download(SupplierDocument $supplierDocument): StreamedResponse|RedirectResponse
@@ -65,5 +95,31 @@ class SupplierDocumentController
             $supplierDocument->archivo_path,
             $supplierDocument->archivo_nombre
         );
+    }
+
+    public function destroy(SupplierDocument $supplierDocument): RedirectResponse
+    {
+        $supplier = auth('supplier')->user();
+
+        if (! $supplier || ! app(SupplierDocumentPolicy::class)->deleteFile($supplier, $supplierDocument)) {
+            abort(403);
+        }
+
+        // Delete file from disk
+        if ($supplierDocument->archivo_path && Storage::disk('local')->exists($supplierDocument->archivo_path)) {
+            Storage::disk('local')->delete($supplierDocument->archivo_path);
+        }
+
+        // Reset to Pendiente so supplier can re-upload
+        $supplierDocument->update([
+            'archivo_path' => null,
+            'archivo_nombre' => null,
+            'uploaded_at' => null,
+            'document_state_id' => DocumentState::PENDIENTE,
+            'notas' => null,
+        ]);
+
+        return redirect()->route('dashboard')
+            ->with('message', 'Documento eliminado. Puedes subir uno nuevo.');
     }
 }
