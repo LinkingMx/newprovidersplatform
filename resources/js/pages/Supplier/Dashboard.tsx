@@ -1,4 +1,4 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import {
     Building2,
     CircleHelp,
@@ -6,6 +6,7 @@ import {
     Landmark,
     Mail,
     MapPin,
+    Pencil,
     User,
 } from 'lucide-react';
 import { useState } from 'react';
@@ -156,11 +157,26 @@ export default function Dashboard() {
                     {/* Personal Information */}
                     <Card className="lg:col-span-2">
                         <CardHeader>
-                            <div className="flex items-center gap-2">
-                                <User className="size-5 text-primary" />
-                                <CardTitle className="text-base">
-                                    Información Personal
-                                </CardTitle>
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <User className="size-5 text-primary" />
+                                    <CardTitle className="text-base">
+                                        Información Personal
+                                    </CardTitle>
+                                </div>
+                                {(supplier.status === 'profile_completed' ||
+                                    supplier.status === 'active') && (
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        asChild
+                                    >
+                                        <Link href="/supplier/profile/edit">
+                                            <Pencil className="size-3.5" />
+                                            Editar
+                                        </Link>
+                                    </Button>
+                                )}
                             </div>
                         </CardHeader>
                         <CardContent className="space-y-4">
@@ -199,15 +215,22 @@ export default function Dashboard() {
                                                 <div className="flex items-start gap-2">
                                                     <MapPin className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
                                                     <p className="text-sm text-foreground">
-                                                        {
-                                                            supplier.address_street
-                                                        }
+                                                        {supplier.address_street}
+                                                        {supplier.address_number &&
+                                                            ` ${supplier.address_number}`}
+                                                        {supplier.address_neighborhood && (
+                                                            <>
+                                                                <br />
+                                                                Col.{' '}
+                                                                {
+                                                                    supplier.address_neighborhood
+                                                                }
+                                                            </>
+                                                        )}
                                                         <br />
                                                         {supplier.address_city}
-                                                        {supplier.address_state &&
-                                                            `, ${supplier.address_state}`}
                                                         {supplier.address_zip &&
-                                                            ` ${supplier.address_zip}`}
+                                                            `, C.P. ${supplier.address_zip}`}
                                                         {supplier.address_country && (
                                                             <>
                                                                 <br />

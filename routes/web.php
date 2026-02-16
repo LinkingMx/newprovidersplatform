@@ -5,6 +5,7 @@ use App\Http\Controllers\Supplier\ForgotPasswordController;
 use App\Http\Controllers\Supplier\LoginController;
 use App\Http\Controllers\Supplier\LogoutController;
 use App\Http\Controllers\Supplier\OnboardingController;
+use App\Http\Controllers\Supplier\ProfileController;
 use App\Http\Controllers\Supplier\ResetPasswordController;
 use App\Http\Controllers\Supplier\SetPasswordController;
 use App\Http\Controllers\Supplier\SupplierDocumentController;
@@ -47,6 +48,11 @@ Route::middleware('auth:supplier')->group(function () {
         ->name('supplier.onboarding');
     Route::post('/supplier/onboarding/submit', [OnboardingController::class, 'submit'])
         ->name('supplier.onboarding.submit');
+
+    Route::get('/supplier/profile/edit', [ProfileController::class, 'edit'])
+        ->name('supplier.profile.edit');
+    Route::put('/supplier/profile', [ProfileController::class, 'update'])
+        ->name('supplier.profile.update');
 
     Route::post('/supplier/documents/{supplierDocument}/upload', [SupplierDocumentController::class, 'upload'])
         ->middleware('throttle:supplier-document-upload')

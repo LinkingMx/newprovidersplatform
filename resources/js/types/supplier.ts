@@ -40,8 +40,9 @@ export interface Supplier {
     email: string;
     status: SupplierStatus;
     address_street: string | null;
+    address_number: string | null;
+    address_neighborhood: string | null;
     address_city: string | null;
-    address_state: string | null;
     address_zip: string | null;
     address_country: string | null;
     clabe_interbancaria: string | null;
