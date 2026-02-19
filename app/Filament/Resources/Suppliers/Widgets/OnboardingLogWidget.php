@@ -37,17 +37,23 @@ class OnboardingLogWidget extends Widget
         }
 
         $checks = [
-            ['label' => 'Invitación enviada', 'done' => $supplier->invitations()->whereNotNull('sent_at')->exists()],
-            ['label' => 'Contraseña establecida', 'done' => $supplier->password_hash !== null],
-            ['label' => 'Perfil completado', 'done' => in_array($supplier->status, [SupplierStatus::ProfileCompleted, SupplierStatus::Active])],
-            ['label' => 'Documentos asignados', 'done' => $supplier->documents()->exists()],
-            ['label' => 'Cuenta activa', 'done' => $supplier->status === SupplierStatus::Active],
+            ['label' => 'Invitación enviada', 'icon' => 'heroicon-o-paper-airplane', 'done' => $supplier->invitations()->whereNotNull('sent_at')->exists()],
+            ['label' => 'Contraseña establecida', 'icon' => 'heroicon-o-lock-closed', 'done' => $supplier->password_hash !== null],
+            ['label' => 'Perfil completado', 'icon' => 'heroicon-o-user-circle', 'done' => in_array($supplier->status, [SupplierStatus::ProfileCompleted, SupplierStatus::Active])],
+            ['label' => 'Documentos asignados', 'icon' => 'heroicon-o-document-check', 'done' => $supplier->documents()->exists()],
+            ['label' => 'Cuenta activa', 'icon' => 'heroicon-o-check-badge', 'done' => $supplier->status === SupplierStatus::Active],
         ];
+
+        $completedCount = collect($checks)->filter(fn (array $c): bool => $c['done'])->count();
+        $progressPercent = (int) round(($completedCount / count($checks)) * 100);
 
         return [
             'invitation' => $invitationData,
             'checks' => $checks,
             'status' => $supplier->status,
+            'completedCount' => $completedCount,
+            'totalSteps' => count($checks),
+            'progressPercent' => $progressPercent,
         ];
     }
 }
