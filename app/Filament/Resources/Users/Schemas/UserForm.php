@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
@@ -41,6 +42,19 @@ class UserForm
                             ->required(fn (string $context): bool => $context === 'create')
                             ->helperText(fn (string $context): ?string => $context === 'edit' ? 'Dejar en blanco para mantener la contraseña actual' : null
                             ),
+                    ])
+                    ->columns(1),
+
+                Section::make('Roles')
+                    ->description('Asigna los roles de acceso al usuario')
+                    ->schema([
+                        Select::make('roles')
+                            ->label('Roles asignados')
+                            ->relationship(titleAttribute: 'name')
+                            ->multiple()
+                            ->preload()
+                            ->searchable()
+                            ->helperText('Los roles determinan los permisos del usuario en el panel de administración'),
                     ])
                     ->columns(1),
 
