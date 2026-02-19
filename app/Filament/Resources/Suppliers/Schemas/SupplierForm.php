@@ -48,9 +48,72 @@ class SupplierForm
                     ])
                     ->columns(1),
 
+                Section::make('Dirección')
+                    ->description('Datos de dirección capturados por el proveedor')
+                    ->icon(Heroicon::OutlinedMapPin)
+                    ->schema([
+                        TextInput::make('address_street')
+                            ->label('Calle')
+                            ->prefixIcon('heroicon-o-map-pin')
+                            ->disabled()
+                            ->dehydrated()
+                            ->placeholder('Sin capturar'),
+
+                        TextInput::make('address_number')
+                            ->label('Número')
+                            ->prefixIcon('heroicon-o-hashtag')
+                            ->disabled()
+                            ->dehydrated()
+                            ->placeholder('Sin capturar'),
+
+                        TextInput::make('address_neighborhood')
+                            ->label('Colonia')
+                            ->prefixIcon('heroicon-o-building-office')
+                            ->disabled()
+                            ->dehydrated()
+                            ->placeholder('Sin capturar'),
+
+                        TextInput::make('address_city')
+                            ->label('Ciudad')
+                            ->prefixIcon('heroicon-o-building-library')
+                            ->disabled()
+                            ->dehydrated()
+                            ->placeholder('Sin capturar'),
+
+                        TextInput::make('address_country')
+                            ->label('País')
+                            ->prefixIcon('heroicon-o-globe-americas')
+                            ->disabled()
+                            ->dehydrated()
+                            ->placeholder('Sin capturar'),
+
+                        TextInput::make('address_zip')
+                            ->label('Código Postal')
+                            ->prefixIcon('heroicon-o-envelope')
+                            ->disabled()
+                            ->dehydrated()
+                            ->placeholder('Sin capturar'),
+                    ])
+                    ->columns(2)
+                    ->visibleOn('edit'),
+
+                Section::make('Datos Bancarios')
+                    ->description('Información bancaria capturada por el proveedor')
+                    ->icon(Heroicon::OutlinedBanknotes)
+                    ->schema([
+                        TextInput::make('clabe_interbancaria')
+                            ->label('CLABE Interbancaria')
+                            ->prefixIcon('heroicon-o-credit-card')
+                            ->disabled()
+                            ->dehydrated()
+                            ->placeholder('Sin capturar'),
+                    ])
+                    ->columns(1)
+                    ->visibleOn('edit'),
+
                 Group::make([
                     Section::make('Estado')
-                        ->description('Estado actual del proceso de onboarding')
+                        ->description('Estado actual del proveedor')
                         ->icon(Heroicon::OutlinedCheckCircle)
                         ->schema([
                             Select::make('status')

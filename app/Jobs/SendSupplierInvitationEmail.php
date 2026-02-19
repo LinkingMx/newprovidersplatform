@@ -18,7 +18,7 @@ class SendSupplierInvitationEmail implements ShouldQueue
 
     public function handle(): void
     {
-        $invitation = $this->supplier->invitations()->latest()->first();
+        $invitation = $this->supplier->invitations()->latest('id')->first();
 
         if (! $invitation) {
             return;

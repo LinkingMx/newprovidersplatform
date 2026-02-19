@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Suppliers\Pages;
 use App\Enums\SupplierStatus;
 use App\Filament\Resources\Suppliers\Actions\AsignarDocumentosAction;
 use App\Filament\Resources\Suppliers\SupplierResource;
+use App\Filament\Resources\Suppliers\Widgets\OnboardingLogWidget;
 use App\Jobs\SendSupplierInvitationEmail;
 use App\Models\SupplierInvitation;
 use Filament\Actions\Action;
@@ -80,6 +81,14 @@ class EditSupplier extends EditRecord
         }
 
         return $data;
+    }
+
+    /** @return array<class-string> */
+    protected function getFooterWidgets(): array
+    {
+        return [
+            OnboardingLogWidget::class,
+        ];
     }
 
     protected function getRedirectUrl(): string

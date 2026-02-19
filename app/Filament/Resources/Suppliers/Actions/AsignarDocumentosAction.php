@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\Suppliers\Actions;
 
+use App\Mail\SupplierDocumentsAssignedMailable;
 use App\Models\DocumentState;
 use App\Models\Supplier;
 use App\Models\SupplierDocument;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Mail;
 
 class AsignarDocumentosAction
 {
@@ -75,6 +77,12 @@ class AsignarDocumentosAction
                 $message = "{$created} documento(s) asignado(s)";
                 if ($skipped > 0) {
                     $message .= ", {$skipped} ya existente(s)";
+                }
+
+                if ($created > 0) {
+                    Mail::to($record->email)->send(
+                        new SupplierDocumentsAssignedMailable($record, $created)
+                    );
                 }
 
                 Notification::make()
