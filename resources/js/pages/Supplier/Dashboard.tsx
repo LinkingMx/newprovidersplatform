@@ -260,34 +260,31 @@ export default function Dashboard() {
                     {/* Branches */}
                     <Card>
                         <CardHeader>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <Building2 className="size-5 text-primary" />
-                                    <CardTitle className="text-base">
-                                        Mis Sucursales
-                                    </CardTitle>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    {supplier.branches &&
-                                        supplier.branches.length > 0 && (
-                                            <Badge variant="secondary">
-                                                {supplier.branches.length}
-                                            </Badge>
-                                        )}
-                                    {canRequestBranch && (
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() =>
-                                                setShowBranchRequest(true)
-                                            }
-                                        >
-                                            <Plus className="size-3.5" />
-                                            Solicitar
-                                        </Button>
+                            <div className="flex items-center gap-2">
+                                <Building2 className="size-5 text-primary" />
+                                <CardTitle className="text-base">
+                                    Mis Sucursales
+                                </CardTitle>
+                                {supplier.branches &&
+                                    supplier.branches.length > 0 && (
+                                        <Badge variant="secondary">
+                                            {supplier.branches.length}
+                                        </Badge>
                                     )}
-                                </div>
                             </div>
+                            {canRequestBranch && (
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="mt-2 w-full"
+                                    onClick={() =>
+                                        setShowBranchRequest(true)
+                                    }
+                                >
+                                    <Plus className="size-3.5" />
+                                    Solicitar Sucursal
+                                </Button>
+                            )}
                         </CardHeader>
                         <CardContent>
                             {supplier.branches &&
@@ -434,23 +431,12 @@ export default function Dashboard() {
                                 </p>
                             </div>
                         </div>
-                        <div className="flex w-full gap-2 sm:w-auto">
-                            <Button variant="outline" size="sm" asChild>
-                                <a href="mailto:soporte@ejemplo.com">
-                                    <Mail className="size-4" />
-                                    Email
-                                </a>
-                            </Button>
-                            <Button variant="outline" size="sm" asChild>
-                                <a
-                                    href="https://wa.me/521234567890"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    WhatsApp
-                                </a>
-                            </Button>
-                        </div>
+                        <Button variant="outline" size="sm" asChild>
+                            <a href="mailto:administracion@grupocosteno.com">
+                                <Mail className="size-4" />
+                                Email
+                            </a>
+                        </Button>
                     </CardContent>
                 </Card>
             </SupplierLayout>

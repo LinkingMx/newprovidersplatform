@@ -328,12 +328,25 @@ export default function Onboarding({ supplier }: Props) {
                                 <div className="space-y-4">
                                     <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950/20">
                                         <p className="text-sm text-blue-900 dark:text-blue-300">
-                                            <strong>
-                                                CLABE Interbancaria:
-                                            </strong>{' '}
-                                            Es un código de 18 dígitos único
-                                            para transferencias bancarias en
-                                            México.
+                                            Tu CLABE Interbancaria (18 dígitos)
+                                            es necesaria para la correcta
+                                            programación de tus pagos. Esta
+                                            información se maneja de forma
+                                            confidencial y se utiliza
+                                            exclusivamente para realizar
+                                            transferencias a tu cuenta.
+                                        </p>
+                                        <p className="mt-2 text-xs text-blue-700 dark:text-blue-400">
+                                            Si requieres consultar nuestro aviso
+                                            de privacidad, puedes solicitarlo a
+                                            tu administrador o escribirnos a{' '}
+                                            <a
+                                                href="mailto:administracion@grupocosteno.com"
+                                                className="underline"
+                                            >
+                                                administracion@grupocosteno.com
+                                            </a>
+                                            .
                                         </p>
                                     </div>
 
@@ -396,9 +409,10 @@ export default function Onboarding({ supplier }: Props) {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-start gap-3 rounded-lg border border-primary/20 bg-primary/5 p-4">
                                         <Checkbox
                                             id="confirm"
+                                            className="mt-0.5"
                                             checked={confirmed}
                                             onCheckedChange={(checked) => {
                                                 setConfirmed(checked === true);
@@ -410,10 +424,20 @@ export default function Onboarding({ supplier }: Props) {
                                         />
                                         <Label
                                             htmlFor="confirm"
-                                            className="text-sm font-normal"
+                                            className="text-sm font-normal leading-relaxed text-foreground"
                                         >
-                                            Confirmo que toda la información es
-                                            correcta
+                                            Declaro bajo protesta de decir
+                                            verdad que toda la información
+                                            proporcionada es veraz y correcta.
+                                            Autorizo el uso de mis datos
+                                            personales, fiscales y bancarios
+                                            para los fines de alta como
+                                            proveedor, programación de pagos y
+                                            gestión administrativa. Me
+                                            comprometo a notificar cualquier
+                                            cambio en mi información y asumo la
+                                            responsabilidad por la exactitud de
+                                            los datos aquí proporcionados.
                                         </Label>
                                     </div>
                                     <InputError message={errors.confirm} />
