@@ -35,6 +35,28 @@ export interface SupplierDocument {
     uploaded_at: string | null;
 }
 
+export type BranchRequestStatus = 'pending' | 'approved' | 'rejected';
+
+export interface BranchRequest {
+    id: number;
+    branch: {
+        id: number;
+        name: string;
+    };
+    status: BranchRequestStatus;
+    status_label: string;
+    status_color: string;
+    notas_proveedor: string | null;
+    notas_admin: string | null;
+    requested_at: string | null;
+    resolved_at: string | null;
+}
+
+export interface AvailableBranch {
+    id: number;
+    name: string;
+}
+
 export interface Supplier {
     id: number;
     name: string;

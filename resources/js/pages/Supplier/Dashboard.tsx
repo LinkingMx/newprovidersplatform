@@ -7,10 +7,13 @@ import {
     Mail,
     MapPin,
     Pencil,
+    Plus,
     User,
 } from 'lucide-react';
 
 import { useState } from 'react';
+import BranchRequestDialog from '@/components/supplier/branch-request-dialog';
+import BranchRequestList from '@/components/supplier/branch-request-list';
 import DocumentRow from '@/components/supplier/document-row';
 import ProgressStepper from '@/components/supplier/progress-stepper';
 import UploadDialog from '@/components/supplier/upload-dialog';
@@ -25,7 +28,12 @@ import {
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import SupplierLayout from '@/layouts/supplier/supplier-layout';
-import type { Supplier, SupplierDocument } from '@/types/supplier';
+import type {
+    AvailableBranch,
+    BranchRequest,
+    Supplier,
+    SupplierDocument,
+} from '@/types/supplier';
 
 const statusConfig = {
     created: {
@@ -79,14 +87,23 @@ function formatDate(dateString: string): string {
 }
 
 export default function Dashboard() {
-    const { supplier, documents } = usePage<{
-        supplier: Supplier;
-        documents: SupplierDocument[];
-    }>().props;
+    const { supplier, documents, availableBranches, branchRequests } =
+        usePage<{
+            supplier: Supplier;
+            documents: SupplierDocument[];
+            availableBranches: AvailableBranch[];
+            branchRequests: BranchRequest[];
+        }>().props;
     const config = statusConfig[supplier.status];
     const currentStep = config.step;
 
     const [uploadDoc, setUploadDoc] = useState<SupplierDocument | null>(null);
+    const [showBranchRequest, setShowBranchRequest] = useState(false);
+
+    const canRequestBranch =
+        (supplier.status === 'active' ||
+            supplier.status === 'profile_completed') &&
+        availableBranches.length > 0;
 
     const approvedCount =
         documents?.filter((d) => d.document_state.color === 'green').length ??
@@ -250,12 +267,26 @@ export default function Dashboard() {
                                         Mis Sucursales
                                     </CardTitle>
                                 </div>
-                                {supplier.branches &&
-                                    supplier.branches.length > 0 && (
-                                        <Badge variant="secondary">
-                                            {supplier.branches.length}
-                                        </Badge>
+                                <div className="flex items-center gap-2">
+                                    {supplier.branches &&
+                                        supplier.branches.length > 0 && (
+                                            <Badge variant="secondary">
+                                                {supplier.branches.length}
+                                            </Badge>
+                                        )}
+                                    {canRequestBranch && (
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() =>
+                                                setShowBranchRequest(true)
+                                            }
+                                        >
+                                            <Plus className="size-3.5" />
+                                            Solicitar
+                                        </Button>
                                     )}
+                                </div>
                             </div>
                         </CardHeader>
                         <CardContent>
@@ -293,11 +324,15 @@ export default function Dashboard() {
                                         Sin sucursales asignadas
                                     </p>
                                     <p className="mt-1 text-xs text-muted-foreground/70">
-                                        Tu administrador asignará sucursales a
-                                        tu cuenta
+                                        Solicita asignación a una sucursal o
+                                        espera a que tu administrador lo haga
                                     </p>
                                 </div>
                             )}
+
+                            <BranchRequestList
+                                branchRequests={branchRequests ?? []}
+                            />
                         </CardContent>
                     </Card>
                 </div>
@@ -371,10 +406,15 @@ export default function Dashboard() {
                     </CardContent>
                 </Card>
 
-                {/* Upload Dialog */}
+                {/* Dialogs */}
                 <UploadDialog
                     document={uploadDoc}
                     onClose={() => setUploadDoc(null)}
+                />
+                <BranchRequestDialog
+                    open={showBranchRequest}
+                    onClose={() => setShowBranchRequest(false)}
+                    availableBranches={availableBranches ?? []}
                 />
 
                 {/* Help Section */}

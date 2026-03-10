@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Supplier;
 
+use App\Enums\BranchRequestStatus;
+use App\Models\Branch;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -37,9 +39,41 @@ class DashboardController
                 'uploaded_at' => $doc->uploaded_at?->toISOString(),
             ]);
 
+        $assignedBranchIds = $supplier->branches->pluck('id');
+        $pendingRequestBranchIds = $supplier->branchRequests()
+            ->where('status', BranchRequestStatus::Pending)
+            ->pluck('branch_id');
+
+        $excludedIds = $assignedBranchIds->merge($pendingRequestBranchIds)->unique();
+
+        $availableBranches = Branch::whereNotIn('id', $excludedIds)
+            ->orderBy('name')
+            ->get(['id', 'name']);
+
+        $branchRequests = $supplier->branchRequests()
+            ->with('branch:id,name')
+            ->latest('requested_at')
+            ->get()
+            ->map(fn ($br) => [
+                'id' => $br->id,
+                'branch' => [
+                    'id' => $br->branch->id,
+                    'name' => $br->branch->name,
+                ],
+                'status' => $br->status->value,
+                'status_label' => $br->status->label(),
+                'status_color' => $br->status->color(),
+                'notas_proveedor' => $br->notas_proveedor,
+                'notas_admin' => $br->notas_admin,
+                'requested_at' => $br->requested_at?->toISOString(),
+                'resolved_at' => $br->resolved_at?->toISOString(),
+            ]);
+
         return Inertia::render('Supplier/Dashboard', [
             'supplier' => $supplier,
             'documents' => $documents,
+            'availableBranches' => $availableBranches,
+            'branchRequests' => $branchRequests,
         ]);
     }
 }

@@ -69,6 +69,11 @@ class Supplier extends Model implements Authenticatable
         return $this->hasMany(SupplierInvitation::class);
     }
 
+    public function branchRequests(): HasMany
+    {
+        return $this->hasMany(BranchRequest::class);
+    }
+
     public function isActive(): bool
     {
         return $this->status === SupplierStatus::Active;

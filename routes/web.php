@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Supplier\BranchRequestController;
 use App\Http\Controllers\Supplier\DashboardController;
 use App\Http\Controllers\Supplier\ForgotPasswordController;
 use App\Http\Controllers\Supplier\LoginController;
@@ -63,6 +64,9 @@ Route::middleware('auth:supplier')->group(function () {
         ->name('supplier.documents.download');
     Route::delete('/supplier/documents/{supplierDocument}', [SupplierDocumentController::class, 'destroy'])
         ->name('supplier.documents.destroy');
+
+    Route::post('/supplier/branch-requests', [BranchRequestController::class, 'store'])
+        ->name('supplier.branch-requests.store');
 
     Route::post('/supplier/auth/logout', LogoutController::class)
         ->name('supplier.logout');
