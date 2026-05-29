@@ -85,7 +85,35 @@ export default function Onboarding({ supplier }: Props) {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         if (confirmed) {
-            post('/supplier/onboarding/submit');
+            post('/supplier/onboarding/submit', {
+                preserveScroll: true,
+                onError: (formErrors) => {
+                    const step1Fields = [
+                        'address_street',
+                        'address_number',
+                        'address_neighborhood',
+                        'address_city',
+                        'address_country',
+                        'address_zip',
+                    ];
+                    const step2Fields = ['clabe_interbancaria'];
+
+                    const errorKeys = Object.keys(formErrors);
+                    if (
+                        errorKeys.some((key) =>
+                            step1Fields.includes(key),
+                        )
+                    ) {
+                        setCurrentStep(1);
+                    } else if (
+                        errorKeys.some((key) =>
+                            step2Fields.includes(key),
+                        )
+                    ) {
+                        setCurrentStep(2);
+                    }
+                },
+            });
         }
     };
 
@@ -384,6 +412,22 @@ export default function Onboarding({ supplier }: Props) {
                             {/* STEP 3: Confirmation */}
                             {currentStep === 3 && (
                                 <div className="space-y-4">
+                                    {Object.keys(errors).length > 0 && (
+                                        <div className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-950/20">
+                                            <p className="mb-1 text-sm font-semibold text-red-900 dark:text-red-300">
+                                                Corrige los siguientes errores:
+                                            </p>
+                                            <ul className="list-inside list-disc text-sm text-red-700 dark:text-red-400">
+                                                {Object.values(errors).map(
+                                                    (error, i) => (
+                                                        <li key={i}>
+                                                            {error}
+                                                        </li>
+                                                    ),
+                                                )}
+                                            </ul>
+                                        </div>
+                                    )}
                                     <div className="space-y-3">
                                         <div className="rounded-lg bg-muted p-4">
                                             <h3 className="mb-2 text-sm font-semibold">

@@ -72,7 +72,7 @@ describe('Supplier Document Upload', function () {
         $response->assertInvalid('archivo');
     });
 
-    it('validates file size must not exceed 10MB', function () {
+    it('validates file size must not exceed 25MB', function () {
         $supplier = Supplier::factory()->active()->create();
         $document = SupplierDocument::factory()->create([
             'supplier_id' => $supplier->id,
@@ -81,7 +81,7 @@ describe('Supplier Document Upload', function () {
 
         $response = $this->actingAs($supplier, 'supplier')
             ->post("/supplier/documents/{$document->id}/upload", [
-                'archivo' => UploadedFile::fake()->create('test.pdf', 11000, 'application/pdf'),
+                'archivo' => UploadedFile::fake()->create('test.pdf', 30000, 'application/pdf'),
             ]);
 
         $response->assertInvalid('archivo');

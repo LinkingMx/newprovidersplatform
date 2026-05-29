@@ -15,6 +15,9 @@ import {
 import { Spinner } from '@/components/ui/spinner';
 import type { SupplierDocument } from '@/types/supplier';
 
+const MAX_FILE_SIZE_MB = 25;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
 interface UploadDialogProps {
     document: SupplierDocument | null;
     onClose: () => void;
@@ -33,6 +36,14 @@ export default function UploadDialog({
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
         if (!doc || !form.data.archivo) return;
+
+        if (form.data.archivo.size > MAX_FILE_SIZE_BYTES) {
+            form.setError(
+                'archivo',
+                `El archivo supera el tamaño máximo de ${MAX_FILE_SIZE_MB} MB.`,
+            );
+            return;
+        }
 
         form.post(`/supplier/documents/${doc.id}/upload`, {
             forceFormData: true,
@@ -94,11 +105,28 @@ export default function UploadDialog({
                                 className="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground file:mr-4 file:rounded-md file:border-0 file:bg-primary/10 file:px-3 file:py-1 file:text-sm file:font-medium file:text-primary hover:file:bg-primary/20"
                                 onChange={(e) => {
                                     const file = e.target.files?.[0] ?? null;
+
+                                    if (
+                                        file &&
+                                        file.size > MAX_FILE_SIZE_BYTES
+                                    ) {
+                                        form.setError(
+                                            'archivo',
+                                            `El archivo supera el tamaño máximo de ${MAX_FILE_SIZE_MB} MB.`,
+                                        );
+                                        form.setData('archivo', null);
+                                        if (fileInputRef.current) {
+                                            fileInputRef.current.value = '';
+                                        }
+                                        return;
+                                    }
+
+                                    form.clearErrors('archivo');
                                     form.setData('archivo', file);
                                 }}
                             />
                             <p className="mt-1 text-xs text-muted-foreground">
-                                PDF, JPG o PNG. Tamaño máximo: 10 MB.
+                                PDF, JPG o PNG. Tamaño máximo: 25 MB.
                             </p>
                             {form.errors.archivo && (
                                 <p className="mt-1 text-xs text-red-600 dark:text-red-400">

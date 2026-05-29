@@ -30,7 +30,7 @@ class SupplierDocumentUploadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'archivo' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:10240'],
+            'archivo' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:25600'],
         ];
     }
 
@@ -43,7 +43,7 @@ class SupplierDocumentUploadRequest extends FormRequest
             'archivo.required' => 'Debes seleccionar un archivo para subir.',
             'archivo.file' => 'El archivo no es válido.',
             'archivo.mimes' => 'El archivo debe ser PDF, JPG o PNG.',
-            'archivo.max' => 'El archivo no debe superar los 10 MB.',
+            'archivo.max' => 'El archivo no debe superar los 25 MB.',
         ];
     }
 }

@@ -4,8 +4,7 @@ namespace App\Filament\Resources\Suppliers\Pages;
 
 use App\Enums\SupplierStatus;
 use App\Filament\Resources\Suppliers\SupplierResource;
-use App\Jobs\SendSupplierInvitationEmail;
-use App\Mail\SupplierDocumentsAssignedMailable;
+use App\Mail\SupplierInvitationMailable;
 use App\Models\DocumentState;
 use App\Models\Supplier;
 use App\Models\SupplierDocument;
@@ -35,14 +34,18 @@ class CreateSupplier extends CreateRecord
     {
         $token = bin2hex(random_bytes(32));
 
-        SupplierInvitation::create([
+        $invitation = SupplierInvitation::create([
             'supplier_id' => $supplier->id,
             'token' => $token,
             'expires_at' => now()->addDays(7),
         ]);
 
-        // Dispatch job to send invitation email
-        SendSupplierInvitationEmail::dispatch($supplier);
+        // Send invitation email synchronously to ensure delivery
+        Mail::to($supplier->email)->send(
+            new SupplierInvitationMailable($supplier, $invitation)
+        );
+
+        $invitation->update(['sent_at' => now()]);
 
         $supplier->update(['status' => SupplierStatus::Invited]);
     }
@@ -75,11 +78,9 @@ class CreateSupplier extends CreateRecord
             $created++;
         }
 
-        if ($created > 0) {
-            Mail::to($supplier->email)->send(
-                new SupplierDocumentsAssignedMailable($supplier, $created)
-            );
-        }
+        // Documents email is not sent during creation — the supplier
+        // receives the invitation email first to set their password.
+        // The documents email is sent only when assigned manually later.
     }
 
     protected function getRedirectUrl(): string

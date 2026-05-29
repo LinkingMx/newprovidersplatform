@@ -13,6 +13,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class DocumentsRelationManager extends RelationManager
 {
@@ -43,7 +44,20 @@ class DocumentsRelationManager extends RelationManager
 
                 TextColumn::make('archivo_nombre')
                     ->label('Archivo')
-                    ->placeholder('Sin archivo'),
+                    ->placeholder('Sin archivo')
+                    ->icon(fn (SupplierDocument $record): ?string => $record->archivo_path ? 'heroicon-o-arrow-top-right-on-square' : null)
+                    ->color(fn (SupplierDocument $record): ?string => $record->archivo_path ? 'primary' : null)
+                    ->url(function (SupplierDocument $record): ?string {
+                        if (! $record->archivo_path) {
+                            return null;
+                        }
+
+                        return Storage::disk('s3')->temporaryUrl(
+                            $record->archivo_path,
+                            now()->addMinutes(15)
+                        );
+                    })
+                    ->openUrlInNewTab(),
 
                 TextColumn::make('fecha_vencimiento')
                     ->label('Vencimiento')
