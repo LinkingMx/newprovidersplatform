@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasActivityLogDefaults;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ProviderType extends Model
 {
     /** @use HasFactory<\Database\Factories\ProviderTypeFactory> */
-    use HasFactory, SoftDeletes;
+    use HasActivityLogDefaults, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'nombre',

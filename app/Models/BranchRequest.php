@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\BranchRequestStatus;
+use App\Traits\HasActivityLogDefaults;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BranchRequest extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasActivityLogDefaults, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'supplier_id',
