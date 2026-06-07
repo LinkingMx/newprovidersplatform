@@ -25,6 +25,7 @@ class Supplier extends Model implements Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'rfc',
         'status',
         'provider_type_id',
         'password_hash',

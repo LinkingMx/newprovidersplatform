@@ -14,6 +14,8 @@ class Branch extends Model
 
     protected $fillable = [
         'name',
+        'sap_db',
+        'sap_bplid',
     ];
 
     public function suppliers(): BelongsToMany

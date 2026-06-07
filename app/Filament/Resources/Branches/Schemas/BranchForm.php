@@ -24,6 +24,29 @@ class BranchForm
                             ->unique(ignoreRecord: true),
                     ])
                     ->columns(1),
+
+                Section::make('Integración SAP')
+                    ->description('Identificadores para sincronización con SAP. Opcionales por ahora.')
+                    ->icon('heroicon-o-cube-transparent')
+                    ->schema([
+                        TextInput::make('sap_db')
+                            ->label('SAP DB')
+                            ->prefixIcon('heroicon-o-circle-stack')
+                            ->placeholder('Nombre de la base SAP (e.g. SBO_COSTENO)')
+                            ->maxLength(100)
+                            ->nullable()
+                            ->helperText('Identificador de la base de datos SAP donde reside esta sucursal.'),
+
+                        TextInput::make('sap_bplid')
+                            ->label('SAP BPLID')
+                            ->prefixIcon('heroicon-o-building-office-2')
+                            ->placeholder('ID de Branch Place (BPLID)')
+                            ->maxLength(50)
+                            ->nullable()
+                            ->helperText('Branch Place ID de SAP Business One para esta sucursal.'),
+                    ])
+                    ->columns(2)
+                    ->collapsible(),
             ]);
     }
 }

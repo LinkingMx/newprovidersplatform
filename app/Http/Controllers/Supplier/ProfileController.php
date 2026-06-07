@@ -20,6 +20,7 @@ class ProfileController
             'supplier' => [
                 'name' => $supplier->name,
                 'email' => $supplier->email,
+                'rfc' => $supplier->rfc,
                 'address_street' => $supplier->address_street,
                 'address_number' => $supplier->address_number,
                 'address_neighborhood' => $supplier->address_neighborhood,

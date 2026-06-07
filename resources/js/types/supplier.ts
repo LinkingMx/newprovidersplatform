@@ -57,10 +57,34 @@ export interface AvailableBranch {
     name: string;
 }
 
+export interface PaymentInvoice {
+    folio: string;
+    fecha_emision: string;
+    concepto: string;
+    subtotal: number;
+    iva: number;
+    total: number;
+}
+
+export interface Payment {
+    id: string;
+    folio: string;
+    fecha_pago: string;
+    branch: { id: number; name: string };
+    numero_facturas: number;
+    monto: number;
+    metodo_pago: string;
+    cuenta_destino: string;
+    banco_destino: string;
+    referencia: string;
+    facturas: PaymentInvoice[];
+}
+
 export interface Supplier {
     id: number;
     name: string;
     email: string;
+    rfc: string | null;
     status: SupplierStatus;
     address_street: string | null;
     address_number: string | null;

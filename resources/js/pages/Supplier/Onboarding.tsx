@@ -99,16 +99,10 @@ export default function Onboarding({ supplier }: Props) {
                     const step2Fields = ['clabe_interbancaria'];
 
                     const errorKeys = Object.keys(formErrors);
-                    if (
-                        errorKeys.some((key) =>
-                            step1Fields.includes(key),
-                        )
-                    ) {
+                    if (errorKeys.some((key) => step1Fields.includes(key))) {
                         setCurrentStep(1);
                     } else if (
-                        errorKeys.some((key) =>
-                            step2Fields.includes(key),
-                        )
+                        errorKeys.some((key) => step2Fields.includes(key))
                     ) {
                         setCurrentStep(2);
                     }
@@ -420,9 +414,7 @@ export default function Onboarding({ supplier }: Props) {
                                             <ul className="list-inside list-disc text-sm text-red-700 dark:text-red-400">
                                                 {Object.values(errors).map(
                                                     (error, i) => (
-                                                        <li key={i}>
-                                                            {error}
-                                                        </li>
+                                                        <li key={i}>{error}</li>
                                                     ),
                                                 )}
                                             </ul>
@@ -468,7 +460,7 @@ export default function Onboarding({ supplier }: Props) {
                                         />
                                         <Label
                                             htmlFor="confirm"
-                                            className="text-sm font-normal leading-relaxed text-foreground"
+                                            className="text-sm leading-relaxed font-normal text-foreground"
                                         >
                                             Declaro bajo protesta de decir
                                             verdad que toda la información

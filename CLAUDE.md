@@ -31,6 +31,10 @@ npm run dev                                   # Development watch mode for Vite
 # - Admin panel: https://newprovidersplatform.test/admin
 ```
 
+## Tooling Available
+
+- **GitHub CLI (`gh`)** is installed on this machine. Use it for all GitHub operations: PRs, issues, checks, releases, repo metadata. Prefer `gh` over manual API calls or web URLs.
+
 ## Project Architecture Overview
 
 ### Backend Structure (Laravel 12)

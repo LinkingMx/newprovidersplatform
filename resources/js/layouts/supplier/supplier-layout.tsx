@@ -75,7 +75,10 @@ export default function SupplierLayout({
                                 <span className="mb-1.5 block text-xs text-muted-foreground">
                                     Apariencia
                                 </span>
-                                <AppearanceToggleTab className="w-full" iconOnly />
+                                <AppearanceToggleTab
+                                    className="w-full"
+                                    iconOnly
+                                />
                             </div>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild>

@@ -25,6 +25,18 @@ class BranchesTable
                     ->searchable()
                     ->sortable(),
 
+                TextColumn::make('sap_db')
+                    ->label('SAP DB')
+                    ->searchable()
+                    ->placeholder('—')
+                    ->toggleable(),
+
+                TextColumn::make('sap_bplid')
+                    ->label('SAP BPLID')
+                    ->searchable()
+                    ->placeholder('—')
+                    ->toggleable(),
+
                 TextColumn::make('created_at')
                     ->label('Creado')
                     ->dateTime('d M Y H:i')

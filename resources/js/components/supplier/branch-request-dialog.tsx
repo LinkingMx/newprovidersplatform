@@ -107,7 +107,7 @@ export default function BranchRequestDialog({
                             </Label>
                             <textarea
                                 id="notas_proveedor"
-                                className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                                className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
                                 rows={3}
                                 maxLength={1000}
                                 placeholder="Agrega notas o comentarios sobre tu solicitud..."

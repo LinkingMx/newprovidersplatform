@@ -41,6 +41,20 @@ class SupplierForm
                                     ->unique(ignoreRecord: true)
                                     ->helperText('Se enviará invitación a este correo'),
 
+                                TextInput::make('rfc')
+                                    ->label('RFC')
+                                    ->prefixIcon('heroicon-o-identification')
+                                    ->placeholder('ABCD010101AB1')
+                                    ->maxLength(13)
+                                    ->nullable()
+                                    ->unique(ignoreRecord: true)
+                                    ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? strtoupper(trim($state)) : null)
+                                    ->rule('regex:/^[A-ZÑ&]{3,4}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])[A-Z0-9]{3}$/i')
+                                    ->validationMessages([
+                                        'regex' => 'El RFC no tiene un formato válido.',
+                                    ])
+                                    ->helperText('Registro Federal de Contribuyentes (12 caracteres persona moral, 13 persona física). Opcional por ahora.'),
+
                                 Select::make('provider_type_id')
                                     ->label('Tipo de Proveedor')
                                     ->relationship('providerType', 'nombre')

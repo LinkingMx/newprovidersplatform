@@ -28,6 +28,7 @@ interface Props {
         Supplier,
         | 'name'
         | 'email'
+        | 'rfc'
         | 'address_street'
         | 'address_number'
         | 'address_neighborhood'
@@ -40,6 +41,7 @@ interface Props {
 
 export default function EditProfile({ supplier }: Props) {
     const { data, setData, put, processing, errors } = useForm({
+        rfc: supplier.rfc || '',
         address_street: supplier.address_street || '',
         address_number: supplier.address_number || '',
         address_neighborhood: supplier.address_neighborhood || '',
@@ -69,6 +71,42 @@ export default function EditProfile({ supplier }: Props) {
 
                 <form onSubmit={handleSubmit}>
                     <div className="space-y-6">
+                        {/* Identidad Fiscal */}
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-base">
+                                    Identidad Fiscal
+                                </CardTitle>
+                                <CardDescription>
+                                    RFC asignado por el SAT. Opcional por ahora.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="rfc">RFC</Label>
+                                    <Input
+                                        id="rfc"
+                                        type="text"
+                                        value={data.rfc}
+                                        onChange={(e) =>
+                                            setData(
+                                                'rfc',
+                                                e.target.value.toUpperCase(),
+                                            )
+                                        }
+                                        placeholder="ABCD010101AB1"
+                                        maxLength={13}
+                                        className="font-mono uppercase"
+                                    />
+                                    <InputError message={errors.rfc} />
+                                    <p className="text-xs text-muted-foreground">
+                                        12 caracteres para persona moral, 13
+                                        para persona física.
+                                    </p>
+                                </div>
+                            </CardContent>
+                        </Card>
+
                         {/* Address */}
                         <Card>
                             <CardHeader>

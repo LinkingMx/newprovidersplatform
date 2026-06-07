@@ -100,7 +100,11 @@ export default function DocumentRow({
                 {doc.can_delete && (
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-destructive hover:text-destructive"
+                            >
                                 <Trash2 className="size-4" />
                                 Eliminar
                             </Button>
@@ -111,13 +115,18 @@ export default function DocumentRow({
                                     ¿Eliminar documento?
                                 </AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Se eliminará el archivo &quot;{doc.archivo_nombre}&quot;
-                                    de {doc.document_type.nombre}. Podrás subir uno nuevo después.
+                                    Se eliminará el archivo &quot;
+                                    {doc.archivo_nombre}&quot; de{' '}
+                                    {doc.document_type.nombre}. Podrás subir uno
+                                    nuevo después.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                <AlertDialogAction onClick={handleDelete} className="bg-destructive text-white hover:bg-destructive/90">
+                                <AlertDialogAction
+                                    onClick={handleDelete}
+                                    className="bg-destructive text-white hover:bg-destructive/90"
+                                >
                                     Eliminar
                                 </AlertDialogAction>
                             </AlertDialogFooter>

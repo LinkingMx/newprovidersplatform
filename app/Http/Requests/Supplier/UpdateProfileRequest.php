@@ -16,12 +16,27 @@ class UpdateProfileRequest extends FormRequest
         return $supplier && $supplier->status->value !== 'created' && $supplier->status->value !== 'invited';
     }
 
+    protected function prepareForValidation(): void
+    {
+        $rfc = $this->input('rfc');
+        $this->merge([
+            'rfc' => filled($rfc) ? strtoupper(trim((string) $rfc)) : null,
+        ]);
+    }
+
     /**
      * @return array<string, array<mixed>>
      */
     public function rules(): array
     {
         return [
+            'rfc' => [
+                'nullable',
+                'string',
+                'max:13',
+                'regex:/^[A-ZÑ&]{3,4}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])[A-Z0-9]{3}$/i',
+                Rule::unique('suppliers', 'rfc')->ignore($this->user('supplier')->id),
+            ],
             'address_street' => ['required', 'string', 'max:255'],
             'address_number' => ['required', 'string', 'max:50'],
             'address_neighborhood' => ['required', 'string', 'max:255'],
@@ -43,6 +58,9 @@ class UpdateProfileRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'rfc.regex' => 'El RFC no tiene un formato válido.',
+            'rfc.unique' => 'Este RFC ya está registrado.',
+            'rfc.max' => 'El RFC no puede tener más de 13 caracteres.',
             'address_street.required' => 'La calle es requerida.',
             'address_number.required' => 'El número es requerido.',
             'address_neighborhood.required' => 'La colonia es requerida.',

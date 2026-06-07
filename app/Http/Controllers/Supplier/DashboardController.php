@@ -6,13 +6,14 @@ namespace App\Http\Controllers\Supplier;
 
 use App\Enums\BranchRequestStatus;
 use App\Models\Branch;
+use App\Services\Dummy\SupplierPaymentsService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class DashboardController
 {
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request, SupplierPaymentsService $payments): Response
     {
         $supplier = $request->user('supplier')->load('branches');
 
@@ -74,6 +75,7 @@ class DashboardController
             'documents' => $documents,
             'availableBranches' => $availableBranches,
             'branchRequests' => $branchRequests,
+            'payments' => $payments->forSupplier($supplier),
         ]);
     }
 }

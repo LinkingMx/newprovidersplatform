@@ -33,6 +33,13 @@ class SuppliersTable
                     ->searchable()
                     ->copyable(),
 
+                TextColumn::make('rfc')
+                    ->label('RFC')
+                    ->searchable()
+                    ->copyable()
+                    ->placeholder('—')
+                    ->toggleable(),
+
                 BadgeColumn::make('status')
                     ->label('Estado')
                     ->colors(

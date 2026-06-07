@@ -47,7 +47,7 @@ export default function BranchRequestList({
                             className="rounded-lg border bg-background p-3"
                         >
                             <div className="flex items-center justify-between gap-2">
-                                <div className="flex items-center gap-2 min-w-0">
+                                <div className="flex min-w-0 items-center gap-2">
                                     <Icon className="size-4 shrink-0 text-muted-foreground" />
                                     <span className="truncate text-sm font-medium">
                                         {request.branch.name}
@@ -65,7 +65,7 @@ export default function BranchRequestList({
                             </div>
                             {request.status === 'rejected' &&
                                 request.notas_admin && (
-                                    <p className="mt-2 text-xs text-muted-foreground border-l-2 border-red-300 pl-2 dark:border-red-700">
+                                    <p className="mt-2 border-l-2 border-red-300 pl-2 text-xs text-muted-foreground dark:border-red-700">
                                         {request.notas_admin}
                                     </p>
                                 )}
