@@ -51,7 +51,15 @@ class DocumentsRelationManager extends RelationManager
                             return null;
                         }
 
-                        return Storage::disk('s3')->temporaryUrl(
+                        $disk = config('filesystems.supplier_documents_disk', 's3');
+
+                        // En storages cloud (s3) usamos signed URL de 15 min.
+                        // En local no existe temporaryUrl — usamos la ruta interna que stream-ea.
+                        if ($disk === 'local' || $disk === 'public') {
+                            return route('filament.admin.supplier-documents.stream', ['supplierDocument' => $record->id]);
+                        }
+
+                        return Storage::disk($disk)->temporaryUrl(
                             $record->archivo_path,
                             now()->addMinutes(15)
                         );

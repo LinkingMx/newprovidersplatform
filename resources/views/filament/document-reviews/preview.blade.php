@@ -1,18 +1,23 @@
 @php
     /** @var \App\Models\SupplierDocument $record */
     $hasFile = filled($record->archivo_path);
-    $tempUrl = null;
+    $disk = config('filesystems.supplier_documents_disk', 's3');
+    $isCloud = ! in_array($disk, ['local', 'public'], true);
+
+    $url = null;
     $extension = null;
     $kind = 'unknown';
 
     if ($hasFile) {
         try {
-            $tempUrl = \Illuminate\Support\Facades\Storage::disk('s3')->temporaryUrl(
-                $record->archivo_path,
-                now()->addMinutes(15)
-            );
+            $url = $isCloud
+                ? \Illuminate\Support\Facades\Storage::disk($disk)->temporaryUrl(
+                    $record->archivo_path,
+                    now()->addMinutes(15)
+                )
+                : route('filament.admin.supplier-documents.stream', ['supplierDocument' => $record->id]);
         } catch (\Throwable) {
-            $tempUrl = null;
+            $url = null;
         }
         $extension = strtolower(pathinfo($record->archivo_nombre ?? $record->archivo_path, PATHINFO_EXTENSION));
         $kind = match ($extension) {
@@ -30,11 +35,11 @@
             <p class="text-base font-semibold text-gray-900 dark:text-white">Sin archivo</p>
             <p class="text-sm text-gray-500 dark:text-gray-400">El proveedor aún no ha subido este documento.</p>
         </div>
-    @elseif (! $tempUrl)
+    @elseif (! $url)
         <div class="flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-red-300 py-12 text-center">
             <x-filament::icon icon="heroicon-o-exclamation-triangle" class="size-10 text-red-400" />
-            <p class="text-base font-semibold">No se pudo generar la URL temporal</p>
-            <p class="text-sm text-gray-500">Revisa la configuración de S3.</p>
+            <p class="text-base font-semibold">No se pudo generar la URL del archivo</p>
+            <p class="text-sm text-gray-500">Revisa la configuración del disco.</p>
         </div>
     @else
         <div class="flex items-center justify-between gap-3">
@@ -42,7 +47,7 @@
                 <span class="font-mono text-xs">{{ $record->archivo_nombre }}</span>
             </p>
             <x-filament::link
-                :href="$tempUrl"
+                :href="$url"
                 target="_blank"
                 icon="heroicon-o-arrow-top-right-on-square"
                 icon-position="after"
@@ -53,14 +58,14 @@
 
         @if ($kind === 'pdf')
             <iframe
-                src="{{ $tempUrl }}"
+                src="{{ $url }}"
                 class="h-[70vh] w-full rounded-lg border border-gray-200 dark:border-white/10"
                 title="Preview del documento"
             ></iframe>
         @elseif ($kind === 'image')
             <div class="flex justify-center rounded-lg border border-gray-200 bg-gray-50 p-2 dark:border-white/10 dark:bg-white/5">
                 <img
-                    src="{{ $tempUrl }}"
+                    src="{{ $url }}"
                     alt="Documento"
                     class="max-h-[70vh] w-auto rounded"
                 />
@@ -73,7 +78,7 @@
                     El formato <span class="font-mono">.{{ $extension ?: '?' }}</span> no se puede previsualizar aquí.
                 </p>
                 <x-filament::link
-                    :href="$tempUrl"
+                    :href="$url"
                     target="_blank"
                     icon="heroicon-o-arrow-down-tray"
                     icon-position="after"

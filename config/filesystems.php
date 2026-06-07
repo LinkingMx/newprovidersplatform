@@ -17,6 +17,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Supplier Documents Disk
+    |--------------------------------------------------------------------------
+    |
+    | Disk used to store files uploaded by suppliers. In production this is
+    | typically 's3' (or 'supabase'); in local dev it can be 'local'.
+    | Override via SUPPLIER_DOCS_DISK env var.
+    |
+    */
+
+    'supplier_documents_disk' => env('SUPPLIER_DOCS_DISK', 's3'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Filesystem Disks
     |--------------------------------------------------------------------------
     |

@@ -51,6 +51,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo(asset('images/logo-dark.svg'))
             ->darkModeBrandLogo(asset('images/logo-light.svg'))
             ->brandLogoHeight('2.5rem')
+            ->favicon(asset('favicon.svg'))
             ->navigationGroups([
                 NavigationGroup::make('Gestión de Proveedores')
                     ->icon(Heroicon::OutlinedBriefcase),

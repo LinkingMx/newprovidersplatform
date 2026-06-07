@@ -1,25 +1,23 @@
-<x-mail::message>
-# <span style="color: #191731;">Hola, {{ $supplier->name }}</span>
+<x-omail.layout preview="Tienes documentos pendientes por subir en Costeño Providers">
+    <h1 style="margin:0 0 8px 0;font-size:22px;font-weight:600;letter-spacing:-0.3px;color:#0a0a0a;font-family:'Geist','Helvetica Neue',Helvetica,Arial,sans-serif;">
+        Hola, {{ $supplier->name }}
+    </h1>
+    <p style="margin:0 0 18px 0;font-size:14.5px;line-height:1.6;color:#374151;font-family:'Geist','Helvetica Neue',Helvetica,Arial,sans-serif;">
+        Se te han asignado <strong>{{ $documentCount }} documento(s)</strong> que necesitas subir para completar tu expediente de proveedor.
+    </p>
 
-Se te han asignado **<span style="color: #191731;">{{ $documentCount }} documento(s)</span>** que necesitas subir para completar tu expediente de proveedor.
+    <x-omail.button :href="$dashboardUrl">Ir a mi panel</x-omail.button>
 
-**<span style="color: #191731;">Pasos a seguir:</span>**
-1. Ingresa a tu panel de proveedor
-2. Dirígete a la sección de **Documentos**
-3. Sube cada uno de los documentos solicitados
-4. Espera la revisión y aprobación de nuestro equipo
+    <x-omail.section title="Pasos a seguir">
+        <ol style="margin:0;padding-left:20px;font-size:13.5px;line-height:1.7;color:#374151;font-family:'Geist','Helvetica Neue',Helvetica,Arial,sans-serif;">
+            <li>Ingresa a tu panel de proveedor.</li>
+            <li>Dirígete a la sección <strong>Documentos</strong>.</li>
+            <li>Sube cada uno de los documentos solicitados.</li>
+            <li>Espera la revisión y aprobación de nuestro equipo.</li>
+        </ol>
+    </x-omail.section>
 
-<x-mail::button :url="$dashboardUrl">
-Ir a mi Panel
-</x-mail::button>
-
-Es importante que subas tus documentos lo antes posible para que podamos completar la validación de tu expediente.
-
-Si tienes preguntas o necesitas asistencia, por favor contacta a nuestro equipo de soporte.
-
----
-
-Gracias por ser parte de nuestros proveedores.
-
-El equipo de Costeño Group
-</x-mail::message>
+    <p style="margin:18px 0 0 0;font-size:13px;line-height:1.6;color:#6b7280;font-family:'Geist','Helvetica Neue',Helvetica,Arial,sans-serif;">
+        Sube tus documentos lo antes posible para que podamos completar la validación de tu expediente.
+    </p>
+</x-omail.layout>
