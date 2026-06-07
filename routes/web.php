@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\SupplierDocumentStreamController;
 use App\Http\Controllers\Supplier\BranchRequestController;
 use App\Http\Controllers\Supplier\DashboardController;
 use App\Http\Controllers\Supplier\ForgotPasswordController;
@@ -71,5 +72,11 @@ Route::middleware('auth:supplier')->group(function () {
     Route::post('/supplier/auth/logout', LogoutController::class)
         ->name('supplier.logout');
 });
+
+// Admin stream endpoint for previewing supplier-uploaded documents.
+// Used when the configured disk does not support temporaryUrl (local/public).
+Route::get('/admin/supplier-documents/{supplierDocument}/stream', SupplierDocumentStreamController::class)
+    ->middleware('auth')
+    ->name('filament.admin.supplier-documents.stream');
 
 require __DIR__.'/settings.php';

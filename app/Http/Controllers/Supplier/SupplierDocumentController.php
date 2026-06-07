@@ -12,7 +12,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SupplierDocumentController
 {
-    private const DISK = 's3';
+    private function disk(): string
+    {
+        return config('filesystems.supplier_documents_disk', 's3');
+    }
 
     public function upload(SupplierDocumentUploadRequest $request, SupplierDocument $supplierDocument): RedirectResponse
     {
@@ -20,12 +23,12 @@ class SupplierDocumentController
         $supplier = auth('supplier')->user();
 
         // Delete previous file if re-uploading (rejected document)
-        if ($supplierDocument->archivo_path && Storage::disk(self::DISK)->exists($supplierDocument->archivo_path)) {
-            Storage::disk(self::DISK)->delete($supplierDocument->archivo_path);
+        if ($supplierDocument->archivo_path && Storage::disk($this->disk())->exists($supplierDocument->archivo_path)) {
+            Storage::disk($this->disk())->delete($supplierDocument->archivo_path);
         }
 
         // Store file privately
-        $path = $file->store("supplier-documents/{$supplier->id}", self::DISK);
+        $path = $file->store("supplier-documents/{$supplier->id}", $this->disk());
 
         // Set state to "En Revisión" so admin can review the uploaded file
         $supplierDocument->update([
@@ -56,14 +59,14 @@ class SupplierDocumentController
             abort(403);
         }
 
-        if (! Storage::disk(self::DISK)->exists($supplierDocument->archivo_path)) {
+        if (! Storage::disk($this->disk())->exists($supplierDocument->archivo_path)) {
             return redirect()->route('dashboard')
                 ->with('error', 'El archivo no se encontró.');
         }
 
-        $mimeType = Storage::disk(self::DISK)->mimeType($supplierDocument->archivo_path);
+        $mimeType = Storage::disk($this->disk())->mimeType($supplierDocument->archivo_path);
 
-        return Storage::disk(self::DISK)->response(
+        return Storage::disk($this->disk())->response(
             $supplierDocument->archivo_path,
             $supplierDocument->archivo_nombre,
             ['Content-Type' => $mimeType]
@@ -88,12 +91,12 @@ class SupplierDocumentController
         }
 
         // Check file exists
-        if (! Storage::disk(self::DISK)->exists($supplierDocument->archivo_path)) {
+        if (! Storage::disk($this->disk())->exists($supplierDocument->archivo_path)) {
             return redirect()->route('dashboard')
                 ->with('error', 'El archivo no se encontró.');
         }
 
-        return Storage::disk(self::DISK)->download(
+        return Storage::disk($this->disk())->download(
             $supplierDocument->archivo_path,
             $supplierDocument->archivo_nombre
         );
@@ -108,8 +111,8 @@ class SupplierDocumentController
         }
 
         // Delete file from disk
-        if ($supplierDocument->archivo_path && Storage::disk(self::DISK)->exists($supplierDocument->archivo_path)) {
-            Storage::disk(self::DISK)->delete($supplierDocument->archivo_path);
+        if ($supplierDocument->archivo_path && Storage::disk($this->disk())->exists($supplierDocument->archivo_path)) {
+            Storage::disk($this->disk())->delete($supplierDocument->archivo_path);
         }
 
         // Reset to Pendiente so supplier can re-upload
