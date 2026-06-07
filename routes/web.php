@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ImpersonateSupplierController;
 use App\Http\Controllers\Admin\SupplierDocumentStreamController;
 use App\Http\Controllers\Supplier\BranchRequestController;
 use App\Http\Controllers\Supplier\DashboardController;
@@ -72,6 +73,15 @@ Route::middleware('auth:supplier')->group(function () {
     Route::post('/supplier/auth/logout', LogoutController::class)
         ->name('supplier.logout');
 });
+
+// Admin impersonation — start requires admin auth + permission, stop is open
+// so the supplier guard can be cleared even if admin session expired.
+Route::post('/admin/suppliers/{supplier}/impersonate', [ImpersonateSupplierController::class, 'start'])
+    ->middleware('auth')
+    ->name('admin.suppliers.impersonate.start');
+
+Route::post('/impersonate/stop', [ImpersonateSupplierController::class, 'stop'])
+    ->name('admin.suppliers.impersonate.stop');
 
 // Admin stream endpoint for previewing supplier-uploaded documents.
 // Used when the configured disk does not support temporaryUrl (local/public).
