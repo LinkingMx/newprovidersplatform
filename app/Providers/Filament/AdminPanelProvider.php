@@ -3,13 +3,18 @@
 namespace App\Providers\Filament;
 
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use Filament\FontProviders\GoogleFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Support\Colors\Color;
+use Filament\Support\Enums\Width;
+use Filament\Support\Icons\Heroicon;
 use Filament\Widgets\AccountWidget;
 use Guava\FilamentKnowledgeBase\Plugins\KnowledgeBaseCompanionPlugin;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -34,54 +39,27 @@ class AdminPanelProvider extends PanelProvider
                 fn (): string => \Illuminate\Support\Facades\Blade::render('<div class="text-center"><x-filament::link href="/" icon="heroicon-m-arrow-left" icon-position="before">Volver al inicio</x-filament::link></div>'),
             )
             ->colors([
-                'primary' => [
-                    50 => '253, 252, 250',
-                    100 => '250, 247, 242',
-                    200 => '245, 239, 230',
-                    300 => '235, 223, 199',  // Cream
-                    400 => '220, 201, 163',
-                    500 => '197, 160, 89',   // Gold
-                    600 => '168, 134, 61',
-                    700 => '138, 107, 47',
-                    800 => '107, 82, 36',
-                    900 => '77, 59, 26',
-                    950 => '61, 53, 42',
-                ],
-                'gray' => [
-                    50 => '253, 252, 250',
-                    100 => '245, 244, 242',
-                    200 => '232, 230, 227',
-                    300 => '212, 209, 204',
-                    400 => '158, 154, 148',
-                    500 => '107, 102, 96',
-                    600 => '74, 69, 64',
-                    700 => '45, 42, 69',
-                    800 => '25, 23, 49',   // Navy
-                    900 => '18, 16, 36',
-                    950 => '13, 15, 26',
-                ],
-                'warning' => [
-                    50 => '253, 249, 240',
-                    100 => '250, 240, 219',
-                    200 => '245, 223, 179',
-                    300 => '232, 199, 122',
-                    400 => '212, 172, 94',
-                    500 => '197, 160, 89',   // Gold
-                    600 => '168, 134, 61',
-                    700 => '138, 107, 47',
-                    800 => '107, 82, 36',
-                    900 => '77, 59, 26',
-                    950 => '47, 35, 19',
-                ],
+                'primary' => Color::Slate,
+                'gray' => Color::Slate,
             ])
-            ->font('Open Sans')
+            ->font('Geist', provider: GoogleFontProvider::class)
             ->darkMode(true)
             ->sidebarCollapsibleOnDesktop()
-            ->maxContentWidth(\Filament\Support\Enums\Width::Full)
+            ->maxContentWidth(Width::Full)
             ->viteTheme('resources/css/filament/admin/theme.css')
+            ->brandName('Portal de Proveedores')
             ->brandLogo(asset('images/logo-dark.svg'))
             ->darkModeBrandLogo(asset('images/logo-light.svg'))
-            ->brandLogoHeight('2rem')
+            ->brandLogoHeight('2.5rem')
+            ->navigationGroups([
+                NavigationGroup::make('Gestión de Proveedores')
+                    ->icon(Heroicon::OutlinedBriefcase),
+                NavigationGroup::make('Administración')
+                    ->icon(Heroicon::OutlinedFingerPrint),
+                NavigationGroup::make('Configuración del Sistema')
+                    ->icon(Heroicon::OutlinedWrenchScrewdriver)
+                    ->collapsed(),
+            ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
