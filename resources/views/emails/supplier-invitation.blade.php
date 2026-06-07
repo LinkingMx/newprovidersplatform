@@ -1,28 +1,31 @@
-<x-mail::message>
-# <span style="color: #191731;">Bienvenido, {{ $supplier->name }}</span>
+<x-omail.layout preview="Activa tu cuenta de proveedor en Costeño Providers">
+    <h1 style="margin:0 0 8px 0;font-size:22px;font-weight:600;letter-spacing:-0.3px;color:#0a0a0a;font-family:'Geist','Helvetica Neue',Helvetica,Arial,sans-serif;">
+        Bienvenido, {{ $supplier->name }}
+    </h1>
+    <p style="margin:0 0 18px 0;font-size:14.5px;line-height:1.6;color:#374151;font-family:'Geist','Helvetica Neue',Helvetica,Arial,sans-serif;">
+        Hemos creado tu cuenta como proveedor en <strong>Costeño Providers</strong>. Para completar el registro y acceder a tu panel, necesitas establecer una contraseña.
+    </p>
 
-Hemos creado tu cuenta como proveedor en nuestro sistema. Para completar el registro y acceder a tu panel, necesitas establecer una contraseña.
+    <x-omail.button :href="$invitationUrl">Establecer contraseña</x-omail.button>
 
-<x-mail::button :url="$invitationUrl">
-Establecer Contraseña
-</x-mail::button>
+    <x-omail.section title="Información importante" subtitle="Lo que debes saber antes de continuar">
+        <ul style="margin:0;padding-left:20px;font-size:13.5px;line-height:1.7;color:#374151;font-family:'Geist','Helvetica Neue',Helvetica,Arial,sans-serif;">
+            <li>Este enlace es válido durante <strong>7 días</strong>.</li>
+            <li>Si no estableces tu contraseña en ese tiempo, deberás solicitar una nueva invitación.</li>
+            <li>El enlace es personal — no lo compartas.</li>
+        </ul>
+    </x-omail.section>
 
-**<span style="color: #191731;">Información importante:</span>**
-- Este enlace será válido durante **<span style="color: #191731;">7 días</span>**
-- Si no estableces tu contraseña dentro de este tiempo, deberás solicitar una nueva invitación
-- Este enlace es personal y no debe ser compartido con otros
+    <x-omail.section title="Después de establecer tu contraseña">
+        <ol style="margin:0;padding-left:20px;font-size:13.5px;line-height:1.7;color:#374151;font-family:'Geist','Helvetica Neue',Helvetica,Arial,sans-serif;">
+            <li>Completa tu información de perfil.</li>
+            <li>Proporciona tus datos bancarios (CLABE interbancaria).</li>
+            <li>Acepta los términos y condiciones.</li>
+            <li>¡Tu cuenta estará lista para usar!</li>
+        </ol>
+    </x-omail.section>
 
-**<span style="color: #191731;">Después de establecer tu contraseña:</span>**
-1. Completa tu información de perfil
-2. Proporciona tus datos bancarios (CLABE interbancaria)
-3. Acepta los términos y condiciones
-4. ¡Tu cuenta estará lista para usar!
-
-Si tienes problemas para acceder o no solicitaste esta invitación, por favor contacta a nuestro equipo de soporte.
-
----
-
-Gracias por ser parte de nuestros proveedores.
-
-El equipo de Costeño Group
-</x-mail::message>
+    <p style="margin:24px 0 0 0;font-size:13px;line-height:1.6;color:#6b7280;font-family:'Geist','Helvetica Neue',Helvetica,Arial,sans-serif;">
+        Si no solicitaste esta invitación o tienes problemas para acceder, contacta a nuestro equipo de soporte.
+    </p>
+</x-omail.layout>
