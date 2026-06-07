@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Controllers\Admin\ImpersonateSupplierController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,6 +59,32 @@ class HandleInertiaRequests extends Middleware
                 'success' => $request->session()->get('success'),
                 'error' => $request->session()->get('error'),
             ],
+            'impersonating' => fn () => $this->resolveImpersonating($request),
+        ];
+    }
+
+    /**
+     * @return array{admin: array{name: string, email: string}, supplier: array{name: string, email: string}, stopUrl: string}|null
+     */
+    private function resolveImpersonating(Request $request): ?array
+    {
+        $impersonatorId = $request->session()->get(ImpersonateSupplierController::SESSION_KEY);
+
+        if (! $impersonatorId) {
+            return null;
+        }
+
+        $admin = User::find($impersonatorId);
+        $supplier = $request->user('supplier');
+
+        if (! $admin || ! $supplier) {
+            return null;
+        }
+
+        return [
+            'admin' => ['name' => $admin->name, 'email' => $admin->email],
+            'supplier' => ['name' => $supplier->name, 'email' => $supplier->email],
+            'stopUrl' => route('admin.suppliers.impersonate.stop'),
         ];
     }
 }

@@ -1,5 +1,5 @@
-import { Link } from '@inertiajs/react';
-import { LogOut } from 'lucide-react';
+import { Link, router, usePage } from '@inertiajs/react';
+import { Eye, LogOut } from 'lucide-react';
 import type { PropsWithChildren } from 'react';
 import AppearanceToggleTab from '@/components/appearance-tabs';
 import BrandLogo from '@/components/brand-logo';
@@ -19,6 +19,12 @@ interface SupplierLayoutProps {
     supplier: Supplier;
 }
 
+interface Impersonating {
+    admin: { name: string; email: string };
+    supplier: { name: string; email: string };
+    stopUrl: string;
+}
+
 function getInitials(name: string): string {
     return name
         .split(' ')
@@ -32,8 +38,43 @@ export default function SupplierLayout({
     children,
     supplier,
 }: PropsWithChildren<SupplierLayoutProps>) {
+    const { impersonating } = usePage<{ impersonating: Impersonating | null }>()
+        .props;
+
     return (
         <div className="min-h-screen bg-background">
+            {/* Impersonation Banner */}
+            {impersonating && (
+                <div className="sticky top-0 z-20 bg-rose-600 text-white shadow">
+                    <div className="mx-auto flex max-w-5xl flex-col items-start gap-2 px-4 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+                        <div className="flex items-center gap-2 text-sm">
+                            <Eye className="size-4 shrink-0" />
+                            <span>
+                                <strong>
+                                    Viendo como {impersonating.supplier.name}
+                                </strong>
+                                <span className="opacity-80">
+                                    {' '}
+                                    · Admin: {impersonating.admin.name} (
+                                    {impersonating.admin.email})
+                                </span>
+                            </span>
+                        </div>
+                        <Button
+                            type="button"
+                            variant="secondary"
+                            size="sm"
+                            onClick={() =>
+                                router.post(impersonating.stopUrl, {}, {})
+                            }
+                            className="bg-white text-rose-700 hover:bg-rose-50"
+                        >
+                            Salir de la vista
+                        </Button>
+                    </div>
+                </div>
+            )}
+
             {/* Sticky Header */}
             <header className="sticky top-0 z-10 border-b bg-card/80 backdrop-blur-sm">
                 <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
