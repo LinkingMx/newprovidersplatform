@@ -7,206 +7,63 @@
 
 @plugin "@tailwindcss/typography";
 
-/* ============================================
-   SELA Travel - Filament Admin Theme
-   Navy/Cream/Gold Design System
-   ============================================ */
+/**
+ * Portal de Proveedores — tema Filament alineado al front (tweakcn slate).
+ * Color (Slate) y fuente (Geist) se configuran en AdminPanelProvider.
+ * Aquí solo el radius del front (0.625rem) y utilidades.
+ */
 
-/* ---------- Animations ---------- */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+@theme {
+    --radius-sm: calc(0.625rem - 4px);
+    --radius-md: calc(0.625rem - 2px);
+    --radius-lg: 0.625rem;
+    --radius-xl: calc(0.625rem + 4px);
 }
 
-/* ---------- Global Transitions ---------- */
-.fi-btn,
-.fi-link,
-.fi-sidebar-item,
-.fi-ta-row,
-.fi-badge {
-    transition: all 0.15s ease-in-out;
+/* Tarjetas de igual alto (usada en grids de secciones). */
+.equal-height-cards .fi-sc-section,
+.equal-height-cards .fi-section {
+    height: 100%;
 }
 
-/* ============================================
-   DARK MODE (default)
-   ============================================ */
-
-/* --- Login Page --- */
-:root.dark .fi-simple-layout {
-    background: linear-gradient(135deg, #0d0f1a, #191731) !important;
+.fi-sc-section > .fi-section {
+    flex: 1;
 }
 
-/* --- Cards & Sections --- */
-:root.dark .fi-section,
-:root.dark .fi-card,
-:root.dark .fi-wi-stats-overview-stat {
-    background-color: rgba(25, 23, 49, 0.9);
-    border: 1px solid rgba(235, 223, 199, 0.1);
-    animation: fadeIn 0.3s ease-out;
+/**
+ * Modo oscuro alineado al front (tweakcn slate). Filament dark usa los shades
+ * más oscuros del ramp (gray-950/900 ≈ casi negro); subimos las superficies a
+ * los tokens slate medios del front. Jerarquía: body < sidebar < card < elevado.
+ */
+.dark {
+    --fi-bg: oklch(0.2292 0.0304 259.0329);        /* background */
+    --fi-sidebar: oklch(0.2452 0.0305 256.8649);   /* sidebar */
+    --fi-card: oklch(0.2610 0.0307 254.7604);      /* card */
+    --fi-elevated: oklch(0.2897 0.0338 255.7937);  /* popover (modales/dropdowns) */
+    --fi-input: oklch(0.3205 0.0336 253.9373);     /* input */
 }
 
-/* --- Stats Widgets --- */
-:root.dark .fi-wi-stats-overview-stat {
-    background: rgba(25, 23, 49, 0.7);
-    backdrop-filter: blur(10px);
+.dark .fi-body {
+    background-color: var(--fi-bg);
 }
 
-/* --- Topbar --- */
-:root.dark .fi-topbar {
-    background: rgba(13, 15, 26, 0.8) !important;
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(235, 223, 199, 0.1);
+.dark .fi-sidebar,
+.dark .fi-topbar {
+    background-color: var(--fi-sidebar);
 }
 
-/* --- Sidebar --- */
-:root.dark .fi-sidebar {
-    background: #0d0f1a !important;
-    border-right: 1px solid rgba(235, 223, 199, 0.08);
+.dark .fi-section,
+.dark .fi-ta-ctn,
+.dark .fi-simple-main {
+    background-color: var(--fi-card);
 }
 
-/* --- Sidebar Group Labels --- */
-:root.dark .fi-sidebar-group-label {
-    color: #c5a059 !important;
-    text-transform: uppercase;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    font-weight: 600;
+.dark .fi-modal-window,
+.dark .fi-dropdown-panel {
+    background-color: var(--fi-elevated);
 }
 
-/* --- Navigation Active Item --- */
-:root.dark .fi-sidebar-item.fi-active {
-    border-left: 2px solid #ebdfc7;
-    background: rgba(235, 223, 199, 0.08);
-}
-
-/* --- Navigation Hover --- */
-:root.dark .fi-sidebar-item:hover:not(.fi-active) {
-    background: rgba(235, 223, 199, 0.05);
-}
-
-/* --- Table Headers --- */
-:root.dark .fi-ta-header-cell {
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #ebdfc7;
-}
-
-/* --- Table Row Hover --- */
-:root.dark .fi-ta-row:hover {
-    background: rgba(235, 223, 199, 0.03);
-}
-
-/* --- Table Row Selected --- */
-:root.dark .fi-ta-row.fi-selected {
-    background: rgba(197, 160, 89, 0.1);
-}
-
-/* --- Primary Buttons --- */
-:root.dark .fi-btn-primary {
-    background-color: #ebdfc7;
-    color: #191731;
-}
-
-:root.dark .fi-btn-primary:hover {
-    background-color: #f5efe6;
-    transform: translateY(-1px);
-}
-
-/* --- Focus States --- */
-:root.dark *:focus-visible {
-    --tw-ring-color: #c5a059;
-    --tw-ring-offset-color: #191731;
-}
-
-/* --- Input Focus --- */
-:root.dark .fi-input:focus,
-:root.dark .fi-input:focus-within {
-    border-color: #c5a059;
-    box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.2);
-}
-
-/* --- Modal & Dropdown --- */
-:root.dark .fi-modal-content,
-:root.dark .fi-dropdown-panel {
-    background: #191731;
-    border: 1px solid rgba(235, 223, 199, 0.1);
-    backdrop-filter: blur(10px);
-}
-
-/* --- Badges --- */
-.fi-badge {
-    text-transform: uppercase;
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-}
-
-/* --- Pagination Active --- */
-:root.dark .fi-pagination-item.fi-active {
-    background: #ebdfc7;
-    color: #191731;
-}
-
-/* ============================================
-   LIGHT MODE
-   ============================================ */
-
-/* --- Login Page (Light) --- */
-:root:not(.dark) .fi-simple-layout {
-    background: linear-gradient(135deg, #f8f6f1, #ebdfc7) !important;
-}
-
-/* --- Cards (Light) --- */
-:root:not(.dark) .fi-section,
-:root:not(.dark) .fi-card,
-:root:not(.dark) .fi-wi-stats-overview-stat {
-    background: white;
-    border: 1px solid rgba(25, 23, 49, 0.1);
-    box-shadow: 0 1px 3px rgba(25, 23, 49, 0.05);
-    animation: fadeIn 0.3s ease-out;
-}
-
-/* --- Sidebar Group Labels (Light) --- */
-:root:not(.dark) .fi-sidebar-group-label {
-    color: #c5a059 !important;
-    text-transform: uppercase;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    font-weight: 600;
-}
-
-/* --- Navigation Active Item (Light) --- */
-:root:not(.dark) .fi-sidebar-item.fi-active {
-    border-left: 2px solid #191731;
-    background: rgba(25, 23, 49, 0.05);
-}
-
-/* --- Table Headers (Light) --- */
-:root:not(.dark) .fi-ta-header-cell {
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #191731;
-}
-
-/* --- Focus States (Light) --- */
-:root:not(.dark) *:focus-visible {
-    --tw-ring-color: #c5a059;
-    --tw-ring-offset-color: white;
-}
-
-/* --- Input Focus (Light) --- */
-:root:not(.dark) .fi-input:focus,
-:root:not(.dark) .fi-input:focus-within {
-    border-color: #c5a059;
-    box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.2);
+.dark .fi-input,
+.dark .fi-input-wrapper {
+    background-color: var(--fi-input);
 }
