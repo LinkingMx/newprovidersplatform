@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\HasActivityLogDefaults;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class DocumentState extends Model
 {
-    use HasFactory;
+    use HasActivityLogDefaults, HasFactory;
 
     public const PENDIENTE = 1;
 

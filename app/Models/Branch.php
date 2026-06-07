@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasActivityLogDefaults;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Branch extends Model
 {
     /** @use HasFactory<\Database\Factories\BranchFactory> */
-    use HasFactory, SoftDeletes;
+    use HasActivityLogDefaults, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',

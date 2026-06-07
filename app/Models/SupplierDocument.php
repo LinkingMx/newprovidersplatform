@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasActivityLogDefaults;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class SupplierDocument extends Model
 {
     /** @use HasFactory<\Database\Factories\SupplierDocumentFactory> */
-    use HasFactory, SoftDeletes;
+    use HasActivityLogDefaults, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'supplier_id',

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\SupplierStatus;
+use App\Traits\HasActivityLogDefaults;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Supplier extends Model implements Authenticatable
 {
     /** @use HasFactory<\Database\Factories\SupplierFactory> */
-    use HasFactory, SoftDeletes;
+    use HasActivityLogDefaults, HasFactory, SoftDeletes;
 
     protected $hidden = [
         'password_hash',
