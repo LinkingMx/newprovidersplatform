@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\Suppliers\RelationManagers;
 
-use App\Mail\SupplierDocumentStatusMailable;
 use App\Models\DocumentState;
 use App\Models\SupplierDocument;
+use App\Services\DocumentReviewService;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -12,7 +12,6 @@ use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class DocumentsRelationManager extends RelationManager
@@ -93,23 +92,8 @@ class DocumentsRelationManager extends RelationManager
                             ->placeholder('Motivo del cambio de estado (opcional)')
                             ->rows(3),
                     ])
-                    ->action(function (array $data, SupplierDocument $record): void {
-                        $record->update([
-                            'document_state_id' => $data['document_state_id'],
-                            'notas' => $data['notas'],
-                            'reviewed_at' => now(),
-                            'reviewed_by' => auth()->id(),
-                        ]);
-
-                        $newState = DocumentState::find($data['document_state_id']);
-
-                        if ($newState && in_array($newState->nombre, ['Aprobado', 'Rechazado'])) {
-                            $record->load(['supplier', 'documentType']);
-
-                            Mail::to($record->supplier->email)->send(
-                                new SupplierDocumentStatusMailable($record->supplier, $record, $newState)
-                            );
-                        }
+                    ->action(function (array $data, SupplierDocument $record, DocumentReviewService $service): void {
+                        $service->changeState($record, (int) $data['document_state_id'], $data['notas'] ?? null);
 
                         Notification::make()
                             ->success()
