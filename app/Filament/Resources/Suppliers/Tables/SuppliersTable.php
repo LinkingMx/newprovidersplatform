@@ -70,7 +70,12 @@ class SuppliersTable
             ->headerActions([
                 ExportAction::make()
                     ->label('Exportar')
-                    ->exporter(SupplierExporter::class),
+                    ->exporter(SupplierExporter::class)
+                    // El disco 's3' apunta al bucket de Supabase Storage, que tiene
+                    // whitelist de MIME types y rechaza los archivos de trabajo del
+                    // export (headers.csv, etc. con 415 Unsupported Media Type).
+                    // Estos son archivos temporales, no documentos de proveedores.
+                    ->fileDisk('local'),
             ])
             ->filters([
                 SelectFilter::make('status')

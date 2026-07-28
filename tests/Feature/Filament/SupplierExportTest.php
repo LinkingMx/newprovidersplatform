@@ -68,4 +68,9 @@ test('exporting suppliers creates an export record with the correct row count an
     expect($export)->not->toBeNull();
     expect($export->successful_rows)->toBe(Supplier::count());
     expect($export->exporter)->toBe(SupplierExporter::class);
+
+    // El export debe forzar disco 'local': el default de filesystems ('s3' en
+    // producción, apunta al bucket de Supabase Storage) rechaza los archivos
+    // de trabajo del export con 415 Unsupported Media Type.
+    expect($export->file_disk)->toBe('local');
 });
