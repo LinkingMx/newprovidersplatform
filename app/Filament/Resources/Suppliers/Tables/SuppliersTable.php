@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Suppliers\Tables;
 
 use App\Enums\SupplierStatus;
+use App\Filament\Exports\SupplierExporter;
 use App\Http\Controllers\Admin\ImpersonateSupplierController;
 use App\Models\Supplier;
 use Filament\Actions\Action;
@@ -10,6 +11,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ExportAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreAction;
@@ -64,6 +66,11 @@ class SuppliersTable
                     ->label('Registrado')
                     ->dateTime('d M Y H:i')
                     ->sortable(),
+            ])
+            ->headerActions([
+                ExportAction::make()
+                    ->label('Exportar')
+                    ->exporter(SupplierExporter::class),
             ])
             ->filters([
                 SelectFilter::make('status')
