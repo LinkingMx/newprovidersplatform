@@ -52,4 +52,11 @@ class SupplierExporter extends Exporter
 
         return $body;
     }
+
+    public function getJobConnection(): ?string
+    {
+        // Corre el job de exportación en la misma request en lugar de encolarlo,
+        // para que el archivo quede listo de inmediato (sin depender del worker).
+        return 'sync';
+    }
 }
